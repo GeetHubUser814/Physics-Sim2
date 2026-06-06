@@ -1,11 +1,4 @@
 .mainTitle{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-.mainTitle header{
-  position: absolute;
-  top: 30vh;
-  font-size: 10vh;
+  border: solid 0.25vh;
+  width: max-content;
 }

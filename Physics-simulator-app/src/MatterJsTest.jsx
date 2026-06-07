@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 
 
-function PhysicsSimulation(){
+const PhysicsSimulation = () => {
   const sceneRef = useRef(null);
   const engineRef = useRef(Matter.Engine.create());
 
@@ -63,7 +63,7 @@ function PhysicsSimulation(){
   return(
     <div className="physCanvas">
       <div ref={sceneRef}/>
-      <div className="canvasButtons">
+      <div className="button-55">
         <button onClick={() => scaleBoxes(0.8)}>Smaller Boxes</button>
         <button onClick={() => scaleBoxes(1.2)}>Bigger Boxes</button>
       </div>

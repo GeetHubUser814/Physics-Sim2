@@ -2,3 +2,33 @@
   border: solid 0.25vh;
   width: max-content;
 }
+.physCanvas{
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  position: absolute;
+  top: 15vh;
+}
+.canvasButtons{
+  position: absolute;
+  top: 65vh;
+}
+.canvasButtons button{
+  margin: 3vh;
+  font-size:2vh;
+  font-weight: bolder;
+  border: 1vh solid;
+  border-color: rgb(72, 215, 255);
+  letter-spacing: 0.2vh;
+  padding: 1.5vh;
+  background-color: rgb(163, 235, 255);
+  color: rgb(0, 119, 255);
+  transition: all 0.4s;
+}
+.canvasButtons button:hover{
+  transform: scale(105%) translateY(-0.2vh);
+  color: rgb(163, 235, 255);
+  background-color: rgb(0, 119, 255);
+  border-color: rgb(0, 92, 197);
+  cursor: pointer;
+}

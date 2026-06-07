@@ -1,8 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 
-const PhysicsSimulation = () => {
+
+function PhysicsSimulation(){
   const sceneRef = useRef(null);
+  const engineRef = useRef(Matter.Engine.create());
+
+  const boxesRef = useRef([]);
 
   useEffect(() => {
     // 1. Module aliases
@@ -20,18 +24,21 @@ const PhysicsSimulation = () => {
       element: sceneRef.current,
       engine: engine,
       options: {
-        width: 400,
-        height: 400,
+        width: 600,
+        height: 600,
         wireframes: false, // Set to false to see colors/textures
       },
     });
-
+      
     // 4. Create bodies (a bouncing box and a static ground)
-    const box = Bodies.rectangle(200, 200, 80, 80);
-    const ground = Bodies.rectangle(300, 300, 800, 20, { isStatic: true });
+    const box1 = Bodies.rectangle(200, 200, 80, 80);
+    const box2 = Bodies.rectangle(400, 200, 80, 80);
+    const ground = Bodies.rectangle(300, 500, 800, 20, { isStatic: true });
+
+    boxesRef.current = [box1, box2];
 
     // Add all of the bodies to the world
-    Composite.add(engine.world, [box, ground]);
+    Composite.add(engine.world, [...boxesRef.current, ground]);
 
     // 5. Run the engine and renderer
     const runner = Runner.create();
@@ -41,11 +48,27 @@ const PhysicsSimulation = () => {
     // 6. Cleanup on unmount
     return () => {
       Render.stop(render);
+      Composite.clear(engine.world);
       Engine.clear(engine);
+      render.canvas.remove();
     };
   }, []);
 
-  return <div ref={sceneRef} />;
-};
+  const scaleBoxes = (factor) => {
+    boxesRef.current.forEach((box) => {
+      Matter.Body.scale(box, factor, factor)
+    })
+  }
+
+  return(
+    <div className="physCanvas">
+      <div ref={sceneRef}/>
+      <div className="canvasButtons">
+        <button onClick={() => scaleBoxes(0.8)}>Smaller Boxes</button>
+        <button onClick={() => scaleBoxes(1.2)}>Bigger Boxes</button>
+      </div>
+    </div>
+  );
+}
 
 export default PhysicsSimulation;

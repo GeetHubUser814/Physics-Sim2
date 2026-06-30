@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import Matter from 'matter-js';
 
 const KinematicsMatter = () => {
-    const sceneRef = useRef(null);
+    const sceneRef = useRef(null);    
 
     useEffect(() => {
         const {Engine, Render, Runner, Bodies, Composite} = Matter;

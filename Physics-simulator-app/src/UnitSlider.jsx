@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 
 function UnitSlider(){
     const [isAnimating, setIsAnimating] = useState(true);
+
     return(
         <div className={isAnimating ? 'sliderAnimate' : 'sliderNotAnimate'}>
             <div className="unitSliderDiv">

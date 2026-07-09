@@ -1,10 +1,13 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Matter from 'matter-js';
 
 const KinematicsMatter = () => {
     const sceneRef = useRef(null);    
 
     useEffect(() => {
+
+        window.addEventListener("kinCanvas", kinCanvasHS);
+
         const {Engine, Render, Runner, Bodies, Composite} = Matter;
 
         const engine = Engine.create();
@@ -31,6 +34,7 @@ const KinematicsMatter = () => {
         Render.run(render);
 
         return () => {
+            window.removeEventListener("kinCanvas", kinCanvasHS);
             Runner.stop(runner);
             Render.stop(render);
             Composite.clear(engine.world, false);
@@ -40,8 +44,27 @@ const KinematicsMatter = () => {
         }
     }, []);
 
+    const showHide = useRef(true);
+    const kinCanvasHS = () => {
+        if(showHide.current){
+            showHide.current = false;
+        }else{
+            showHide.current = true;
+        }
+        setCanvasDisplay(showHide.current);
+    };
+
+    const [isHidden, setCanvasDisplay] = useState(true);
+    const canvasStyle = {
+        display: isHidden ? "none" : "flex",
+        justifyContent: "center",
+        justifySelf: "center",
+        position: "absolute",
+        top: "8vh",
+    }
+    
     return(
-        <div className="physCanvas">
+        <div className="physCanvas" style={canvasStyle}>
             <div ref={sceneRef}/>
         </div>
     );

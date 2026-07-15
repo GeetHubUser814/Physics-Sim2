@@ -2,17 +2,17 @@ import React, {useState} from 'react';
 
 function UnitSlider(){
     const [isAnimating, setIsAnimating] = useState(true);
+    const showHideKin = new CustomEvent("kinCanvas", {detail: {sender: "parent"}});
+    const showHideForce = new CustomEvent("forceCanvas", {detail: {sender: "parent"}});
 
     const kinematicsCanvas = () => {
-        const showHideKin = new CustomEvent("kinCanvas");
         window.dispatchEvent(showHideKin);
     };
 
     const forceCanvas = () => {
-        const showHideForce = new CustomEvent("forceCanvas");
         window.dispatchEvent(showHideForce);
     };
-
+    
     return(
         <div className={isAnimating ? 'sliderAnimate' : 'sliderNotAnimate'}>
             <div className="unitSliderDiv">

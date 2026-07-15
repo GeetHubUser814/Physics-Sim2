@@ -44,17 +44,22 @@ const KinematicsMatter = () => {
         }
     }, []);
 
-    const showHide = useRef(true);
-    const kinCanvasHS = () => {
+    const showHide = useRef(false);
+    const kinCanvasHS = (event) => {
+        console.log("kinTrig");
+        let sender = event.detail;
         if(showHide.current){
             showHide.current = false;
-        }else{
-            showHide.current = true;
+            const showHideForce = new CustomEvent("forceCanvas", {detail: {sender: "sibling"}});
+            window.dispatchEvent(showHideForce);
+        }
+        if(sender === "parent"){
+            console.log("im from parent");
         }
         setCanvasDisplay(showHide.current);
     };
 
-    const [isHidden, setCanvasDisplay] = useState(true);
+    const [isHidden, setCanvasDisplay] = useState(false);
     const canvasStyle = {
         display: isHidden ? "none" : "flex",
         justifyContent: "center",

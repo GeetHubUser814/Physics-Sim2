@@ -51,10 +51,11 @@ const ForceMatter = () => {
 
     const showHide = useRef(true);
     const forceCanvasHS = () => {
+        console.log("forceTrig");
         if(showHide.current){
             showHide.current = false;
-        }else{
-            showHide.current = true;
+            const showHideKin = new CustomEvent("kinCanvas");
+            window.dispatchEvent(showHideKin);
         }
         setCanvasDisplay(showHide.current);
     };

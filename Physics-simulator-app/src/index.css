@@ -3,6 +3,7 @@
   width: max-content;
   position: absolute;
   right: 1vh;
+  color: white;
 }
 .physCanvas{
   display: flex;
@@ -12,54 +13,10 @@
   top: 8vh;
 }
 body{
-  background-color: rgb(201, 146, 213);
-}
- .button-55{
-  position: absolute;
-  top: 65vh;
-}
-.button-55 button{
-  margin: 3vh;
-  align-self: center;
-  background-color: #fff;
-  background-image: none;
-  background-position: 0 90%;
-  background-repeat: repeat no-repeat;
-  background-size: 4px 3px;
-  border-radius: 15px 225px 255px 15px 15px 255px 225px 15px;
-  border-style: solid;
-  border-width: 2px;
-  box-shadow: rgba(0, 0, 0, .2) 15px 28px 25px -18px;
-  box-sizing: border-box;
-  color: #41403e;
-  cursor: pointer;
-  display: inline-block;
-  font-family: Neucha, sans-serif;
-  font-size: 1rem;
-  line-height: 23px;
-  outline: none;
-  padding: .75rem;
-  text-decoration: none;
-  transition: all 235ms ease-in-out;
-  border-bottom-left-radius: 15px 255px;
-  border-bottom-right-radius: 225px 15px;
-  border-top-left-radius: 255px 15px;
-  border-top-right-radius: 15px 225px;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-}
-
-.button-55 button:hover {
-  box-shadow: rgba(0, 0, 0, .3) 2px 8px 8px -5px;
-  transform: translate3d(0, 2px, 0);
-}
-
-.button-55 button:focus {
-  box-shadow: rgba(0, 0, 0, .3) 2px 8px 4px -6px;
+  background-color: rgb(66, 35, 119);
 }
 .unitSliderDiv{
-  background-color: purple;
+  background-color: rgb(83, 24, 135);
   position: absolute;
   top: 0vh;
   height: 100vh;
@@ -75,32 +32,34 @@ body{
   width: 105vh;
   height: 3.5vh;
   transform: rotate(90deg);
-  background-color: rgb(212, 52, 201);
+  background-color: rgb(118, 36, 190);
   border: none;
   color: white;
   font-size: 2vh;
   font-family: monospace;
   font-weight: bold;
   letter-spacing: 0.5vh;
-    transition: all 0.1s;
+  transition: all 0.2s;
 }
 .unitBtn{
-  background-color: rgb(159, 45, 152);
+  background-color: rgb(83, 24, 135);
   color: white;
-  width: 30vh;
-  padding: 1vh;
+  width: 45vh;
+  height: 20vh;
+  padding: 4.5vh;
   border: none;
-  border-radius: 1.5vh;
-  font-size: 2vh;
+  font-size: 2.2vh;
+  letter-spacing: 0.3vh;
   font-family: monospace;
-  transition: all 0.25s;
+  transition: all 0.15s;
+  text-align: left;
 }
 .unitBtn:hover{
-  background-color: rgb(176, 71, 169);
+  background-color: rgb(101, 31, 162);
   cursor: pointer;
 }
 .slideOpener:hover{
-  background-color: rgb(242, 73, 231);
+  background-color: rgb(144, 43, 233);
   cursor: pointer;
 }
 @keyframes shrink{
@@ -125,4 +84,20 @@ body{
 .sliderAnimate .unitSliderDiv{
   left:-44vh;
   animation: 0.4s shrink;
+}
+.dash{
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  position: absolute;
+  top: 63vh;
+  width: 150vh;
+  height: 30vh;
+  background-color: rgb(111, 60, 199);
+  color: white;
+  font-family: monospace;
+  font-size: 5vh;
+  border: 2vh solid;
+  border-radius: 3vh;
+  border-color: rgb(139, 95, 214);
 }

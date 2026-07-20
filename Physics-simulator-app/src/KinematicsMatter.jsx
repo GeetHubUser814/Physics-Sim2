@@ -8,8 +8,11 @@ const KinematicsMatter = () => {
 
         window.addEventListener("kinCanvas", kinCanvasHS);
 
-        const {Engine, Render, Runner, Bodies, Composite} = Matter;
+        window.addEventListener("fromForceBtn", otherHide);
+        window.addEventListener("fromWEPBtn", otherHide);
+        window.addEventListener("fromLinearMBtn", otherHide);
 
+        const {Engine, Render, Runner, Bodies, Composite} = Matter;
         const engine = Engine.create();
 
         const render = Render.create({
@@ -19,7 +22,7 @@ const KinematicsMatter = () => {
                 width: 1100,
                 height: 500,
                 wireframes: false,
-                background: 'purple',
+                background: 'rgb(105, 48, 174)',
             },
         });
 
@@ -44,19 +47,19 @@ const KinematicsMatter = () => {
         }
     }, []);
 
-    const showHide = useRef(false);
-    const kinCanvasHS = (event) => {
-        console.log("kinTrig");
-        let sender = event.detail;
-        if(showHide.current){
-            showHide.current = false;
-            const showHideForce = new CustomEvent("forceCanvas", {detail: {sender: "sibling"}});
-            window.dispatchEvent(showHideForce);
+    const canvasHidden = useRef(false);
+    const kinCanvasHS = () => {
+        if(canvasHidden.current){
+            canvasHidden.current = false;
         }
-        if(sender === "parent"){
-            console.log("im from parent");
+        setCanvasDisplay(canvasHidden.current);
+    };
+
+    const otherHide = () => {
+        if(!canvasHidden.current){
+            canvasHidden.current = true;
         }
-        setCanvasDisplay(showHide.current);
+        setCanvasDisplay(canvasHidden.current);
     };
 
     const [isHidden, setCanvasDisplay] = useState(false);

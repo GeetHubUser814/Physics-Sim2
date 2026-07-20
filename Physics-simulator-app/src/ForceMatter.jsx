@@ -8,6 +8,10 @@ const ForceMatter = () => {
 
         window.addEventListener("forceCanvas", forceCanvasHS);
 
+        window.addEventListener("fromKinBtn", otherHide);
+        window.addEventListener("fromWEPBtn", otherHide);
+        window.addEventListener("fromLinearMBtn", otherHide);
+
         const {Engine, Render, Runner, Bodies, Composite} = Matter;
 
         const engine = Engine.create();
@@ -19,7 +23,7 @@ const ForceMatter = () => {
                 width: 1100,
                 height: 500,
                 wireframes: false,
-                background: 'purple',
+                background: 'rgb(70, 44, 125)',
             },
         });
 
@@ -49,16 +53,21 @@ const ForceMatter = () => {
         }
     }, []);
 
-    const showHide = useRef(true);
+    const canvasHidden = useRef(true);
     const forceCanvasHS = () => {
-        console.log("forceTrig");
-        if(showHide.current){
-            showHide.current = false;
-            const showHideKin = new CustomEvent("kinCanvas");
-            window.dispatchEvent(showHideKin);
+        if(canvasHidden.current){
+            canvasHidden.current = false;
         }
-        setCanvasDisplay(showHide.current);
+        setCanvasDisplay(canvasHidden.current);
     };
+
+    const otherHide = () => {
+        if(!canvasHidden.current){
+            canvasHidden.current = true;
+        }
+        setCanvasDisplay(canvasHidden.current);
+    };
+
 
     const [isHidden, setCanvasDisplay] = useState(true);
     const canvasStyle = {

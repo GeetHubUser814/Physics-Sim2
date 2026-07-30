@@ -25,7 +25,6 @@ const KinematicsMatter = () => {
                 background: 'rgb(105, 48, 174)',
             },
         });
-
         const ball = Bodies.circle(150, 200, 10);
         const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
         const elevation = Bodies.rectangle(0, 400, 500, 400, {isStatic: true});

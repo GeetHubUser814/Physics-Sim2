@@ -27,7 +27,7 @@ const ForceMatter = () => {
             },
         });
 
-        const ball = Bodies.circle(500, 0, 10);
+        const ball = Bodies.circle(380, 240, 10);
         const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
         const rampPoints = [
             {x: 0, y: 700},

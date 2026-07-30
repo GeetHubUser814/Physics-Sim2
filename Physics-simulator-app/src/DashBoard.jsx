@@ -1,16 +1,9 @@
 import React, {useState, useEffect} from 'react';
 
 function DashBoard(){
-    useEffect(() => {
-        window.addEventListener("kinCanvas", hideFunc("kinematics"));
-        window.addEventListener("forceCanvas", hideFunc("force"));
-        window.addEventListener("WEPCanvas", hideFunc("work"));
-        window.addEventListener("LinearMCanvas", hideFunc("linear"));
-    }, []);
 
     const [hideName, setHideName] = useState("kinematics");
-    const hideFunc = (String) => {
-        console.log(String);
+    const hideFunc = (event, String) => {
         if(String === "kinematics"){
             setHideName(String);
         }else if(String === "force"){
@@ -21,6 +14,25 @@ function DashBoard(){
             setHideName(String);
         }
     };
+    const kinematicsHide = (e) => hideFunc(e, "kinematics");
+    const forceHide = (e) => hideFunc(e, "force");
+    const workHide = (e) => hideFunc(e, "work");
+    const linearHide = (e) => hideFunc(e, "linear");
+
+    useEffect(() => {
+        window.addEventListener("kinCanvas", kinematicsHide);
+        window.addEventListener("forceCanvas", forceHide);
+        window.addEventListener("WEPCanvas", workHide);
+        window.addEventListener("LinearMCanvas", linearHide);
+
+        return () => {
+            window.removeEventListener("kinCanvas", kinematicsHide);
+            window.removeEventListener("forceCanvas", forceHide);
+            window.removeEventListener("WEPCanvas", workHide);
+            window.removeEventListener("LinearMCanvas", linearHide);
+        }
+    }, []);
+
 
     const kStyle = {position: "absolute", display: hideName === "kinematics" ? "flex" : "none"};
     const fStyle = {position: "absolute", display: hideName === "force" ? "flex" : "none"};

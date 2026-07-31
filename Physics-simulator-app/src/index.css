@@ -85,12 +85,31 @@ body{
   left:-44vh;
   animation: 0.4s shrink;
 }
-.dash{
+.dashClose{
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  position: absolute;
+  top: 64vh;
+  left: 3vw;
+  width: 1vh;
+  height: 30vh;
+  background-color: rgb(111, 60, 199);
+  color: white;
+  font-family: monospace;
+  font-size: 0vh;
+  border: 1vh solid;
+  border-radius: 2vh;
+  border-color: rgb(139, 95, 214);
+  transition: all 0.4s ease-in-out;
+}
+.dashOpen{
   display: flex;
   justify-content: center;
   justify-self: center;
   position: absolute;
   top: 63vh;
+  left: 3vw;
   width: 150vh;
   height: 30vh;
   background-color: rgb(111, 60, 199);
@@ -100,4 +119,25 @@ body{
   border: 2vh solid;
   border-radius: 3vh;
   border-color: rgb(139, 95, 214);
+  transition: all 0.4s ease-in-out;
+}
+.startBtn{
+  position: absolute;
+  top: 76.5vh;
+  right: 5vh;
+  font-size: 1.25vw;
+  padding: 1vh;
+  font-family: monospace;
+  border: 1vh solid;
+  border-radius: 1vh;
+  background-color: rgb(111, 60, 199);
+  border-color: rgb(139, 95, 214);
+  color: white;
+  transition: all, 1s ease-in-out;
+}
+.startBtn:hover{
+  cursor: pointer;
+  transform: scale(125%) rotate(720deg);
+  background-color: rgb(123, 78, 201);
+  border-color: rgb(162, 129, 218);
 }

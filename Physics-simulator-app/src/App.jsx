@@ -6,6 +6,7 @@ import ForceMatter from './ForceMatter.jsx';
 import WEPMatter from './WEPMatter.jsx';
 import LinearMMatter from './LinearMMatter.jsx';
 import DashBoard from './DashBoard.jsx';
+import StartButton from './StartButton.jsx';
 
 function App() {
   return(
@@ -17,6 +18,7 @@ function App() {
       <LinearMMatter/>
       <DashBoard/>
       <UnitSlider/>
+      <StartButton/>
     </>
   );
 }

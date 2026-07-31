@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 function DashBoard(){
 
     const [hideName, setHideName] = useState("kinematics");
+    const [isOpen, setIsOpen] = useState(true);
     const hideFunc = (event, String) => {
         if(String === "kinematics"){
             setHideName(String);
@@ -39,7 +40,7 @@ function DashBoard(){
     const wStyle = {position: "absolute", display: hideName === "work" ? "flex" : "none"};
     const lStyle = {position: "absolute", display: hideName === "linear" ? "flex" : "none"};
     return(
-        <div className='dash'>
+        <div className={isOpen ? "dashOpen" : "dashClose"} onClick={() => setIsOpen(!isOpen)}>
             <p style={kStyle}>Kinematics</p>
             <p style={fStyle}>Force</p>
             <p style={wStyle}>Work, Energy, Power</p>

@@ -90,18 +90,21 @@ body{
   justify-content: center;
   justify-self: center;
   position: absolute;
-  top: 64vh;
+  top: 94vh;
   left: 3vw;
-  width: 1vh;
-  height: 30vh;
+  width: 150vh;
+  height: 0.01vh;
   background-color: rgb(111, 60, 199);
   color: white;
   font-family: monospace;
   font-size: 0vh;
-  border: 1vh solid;
-  border-radius: 2vh;
+  border: 2vh solid;
+  border-radius: 3vh;
   border-color: rgb(139, 95, 214);
-  transition: all 0.4s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.dashClose p button{
+  display: none;
 }
 .dashOpen{
   display: flex;
@@ -119,7 +122,7 @@ body{
   border: 2vh solid;
   border-radius: 3vh;
   border-color: rgb(139, 95, 214);
-  transition: all 0.4s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 .startBtn{
   position: absolute;
@@ -138,6 +141,63 @@ body{
 .startBtn:hover{
   cursor: pointer;
   transform: scale(125%) rotate(720deg);
+  background-color: rgb(255, 255, 255);
+  border-color: rgb(162, 129, 218);
+}
+.dashBtn{
+  position: absolute;
+  top: -4vh;
+  right: 27vw;
+  font-size: 1.25vw;
+  padding: 1vh;
+  font-family: monospace;
+  border: 1vh solid;
+  border-radius: 1vh;
+  background-color: rgb(111, 60, 199);
+  border-color: rgb(139, 95, 214);
+  color: white;
+  transition: all, 0.15s ease-in-out;
+}
+.dashBtn:hover{
+  cursor: pointer;
+  transform: scale(110%);
   background-color: rgb(123, 78, 201);
   border-color: rgb(162, 129, 218);
+}
+.dashArrowOpen{
+  position: absolute;
+  font-size: 0vh;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  top: -1.95vh;
+  width: 10vw;
+  height: 1.9vh;
+  background-color: rgb(124, 75, 210);
+  transition: all, 0.05s ease-in-out;
+}
+.dashArrowClose{
+  position: absolute;
+  font-size: 2.3vh;
+  font-weight: bold;
+  font-size: 5vh;
+  display: flex;
+  justify-content: center;
+  top: -1.95vh;
+  width: 10vw;
+  height: 3.85vh;
+  background-color: rgb(124, 75, 210);
+  transition: all, 0.05s ease-in-out;
+}
+.dashArrowOpen::after{
+  content: attr(data-label);
+  font-size: 2.3vh;
+}
+.dashArrowOpen:hover{
+  cursor: pointer;
+  background-color: rgb(127, 82, 207);
+}
+.dashArrowClose:hover{
+  cursor: pointer;
+  background-color: rgb(127, 82, 207);
 }

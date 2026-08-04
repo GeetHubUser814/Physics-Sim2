@@ -40,8 +40,11 @@ function DashBoard(){
     const wStyle = {position: "absolute", display: hideName === "work" ? "flex" : "none"};
     const lStyle = {position: "absolute", display: hideName === "linear" ? "flex" : "none"};
     return(
-        <div className={isOpen ? "dashOpen" : "dashClose"} onClick={() => setIsOpen(!isOpen)}>
-            <p style={kStyle}>Kinematics</p>
+        <div className={isOpen ? "dashOpen" : "dashClose"}>
+            <div className={isOpen ? "dashArrowOpen" : "dashArrowClose"} data-label="˅" onClick={() => setIsOpen(!isOpen)}>˄</div>
+            <p style={kStyle}>
+                <button className="dashBtn">Projectile</button>
+            </p>
             <p style={fStyle}>Force</p>
             <p style={wStyle}>Work, Energy, Power</p>
             <p style={lStyle}>Linear Momentum</p>

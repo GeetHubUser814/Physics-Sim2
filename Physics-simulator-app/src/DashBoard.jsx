@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import DashKinematics from './DashKinematics';
 
 function DashBoard(){
 
@@ -34,6 +35,13 @@ function DashBoard(){
         }
     }, []);
 
+    const [insideDashShow, setInsideDashShow] = useState(true);
+    function hideShowDash(){
+        setIsOpen(!isOpen);
+        const dashOpenClose = new CustomEvent("dashOpenClose");
+        window.dispatchEvent(dashOpenClose);
+    }
+
 
     const kStyle = {position: "absolute", display: hideName === "kinematics" ? "flex" : "none"};
     const fStyle = {position: "absolute", display: hideName === "force" ? "flex" : "none"};
@@ -41,10 +49,10 @@ function DashBoard(){
     const lStyle = {position: "absolute", display: hideName === "linear" ? "flex" : "none"};
     return(
         <div className={isOpen ? "dashOpen" : "dashClose"}>
-            <div className={isOpen ? "dashArrowOpen" : "dashArrowClose"} data-label="˅" onClick={() => setIsOpen(!isOpen)}>˄</div>
-            <p style={kStyle}>
-                <button className="dashBtn">Projectile</button>
-            </p>
+            <div className={isOpen ? "dashArrowOpen" : "dashArrowClose"} data-label="˅" onClick={hideShowDash}>˄</div>
+            <div style={kStyle}>
+                <DashKinematics />
+            </div>
             <p style={fStyle}>Force</p>
             <p style={wStyle}>Work, Energy, Power</p>
             <p style={lStyle}>Linear Momentum</p>

@@ -101,7 +101,7 @@ body{
   border: 2vh solid;
   border-radius: 3vh;
   border-color: rgb(139, 95, 214);
-  transition: all 0.2s ease-in-out;
+  transition: all 0.15s ease-in-out;
 }
 .dashClose p button{
   display: none;
@@ -122,7 +122,7 @@ body{
   border: 2vh solid;
   border-radius: 3vh;
   border-color: rgb(139, 95, 214);
-  transition: all 0.2s ease-in-out;
+  transition: all 0.15s ease-in-out;
 }
 .startBtn{
   position: absolute;
@@ -141,12 +141,12 @@ body{
 .startBtn:hover{
   cursor: pointer;
   transform: scale(125%) rotate(720deg);
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(123, 78, 201);
   border-color: rgb(162, 129, 218);
 }
 .dashBtn{
   position: absolute;
-  top: -4vh;
+  top: 2vh;
   right: 27vw;
   font-size: 1.25vw;
   padding: 1vh;
@@ -200,4 +200,34 @@ body{
 .dashArrowClose:hover{
   cursor: pointer;
   background-color: rgb(127, 82, 207);
+}
+.projectileDash{
+  position: absolute;
+  font-size: 2vh;
+  width: 150vh;
+  height: 20vh;
+  left: -75vh;
+  top: 10vh;
+  font-family: monospace;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.projectileForm{
+  position: relative;
+  top: 5vh;
+  height: max-content;
+  border: 0.2vh solid;
+  border-radius: 1vh;
+  padding: 1vh;
+}
+.projectileForm input{
+  width: 10vh;
+}
+.bigKinematicsDashHide{
+  display: flex;
+}
+.bigKinematicsDashHide{
+  display: none;
 }

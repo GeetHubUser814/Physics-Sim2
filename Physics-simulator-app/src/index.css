@@ -145,7 +145,8 @@ body{
   border-color: rgb(162, 129, 218);
 }
 .dashBtn{
-  position: absolute;
+  position: relative;
+  margin-left: 1vh;
   top: 2vh;
   right: 27vw;
   font-size: 1.25vw;
@@ -201,12 +202,12 @@ body{
   cursor: pointer;
   background-color: rgb(127, 82, 207);
 }
-.projectileDash{
+.kinematicsDash{
   position: absolute;
   font-size: 2vh;
   width: 150vh;
   height: 20vh;
-  left: -75vh;
+  left: -61vh;
   top: 10vh;
   font-family: monospace;
   font-weight: bold;
@@ -214,7 +215,7 @@ body{
   justify-content: space-evenly;
   flex-wrap: wrap;
 }
-.projectileForm{
+.dashForm{
   position: relative;
   top: 5vh;
   height: max-content;
@@ -222,12 +223,10 @@ body{
   border-radius: 1vh;
   padding: 1vh;
 }
-.projectileForm input{
+.dashForm input{
   width: 10vh;
 }
-.bigKinematicsDashHide{
+.kinematicsBtns{
   display: flex;
-}
-.bigKinematicsDashHide{
-  display: none;
+  justify-content: space-evenly;
 }

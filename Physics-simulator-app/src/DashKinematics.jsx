@@ -100,9 +100,35 @@ function DashKinematics() {
             )}
             {(isOpen && isOpenSolve) && (
             <div className="kinematicsDash">
+                <p className="solveFor">Solve For: </p>
                 <div className="dashForm">
-                    <label htmlFor="SOLVE">SOLVE:</label>
-                    <input type="number" id="SOLVE" name="SOLVE"></input>
+                    <label htmlFor="solveRange">Range</label>
+                    <input type="radio" id="solveRange" name="solveKinematics"/>
+                </div>
+
+                <div className="dashForm">
+                    <label htmlFor="solveMaxHeight">Max Height</label>
+                    <input type="radio" id="solveMaxHeight" name="solveKinematics"/>
+                </div>
+
+                <div className="dashForm">
+                    <label htmlFor="solveTime">Time in the Air</label>
+                    <input type="radio" id="solveTime" name="solveKinematics"/>
+                </div>
+
+                <div className="dashForm">
+                    <label htmlFor="solveInitialVelocity">Initial Velocity</label>
+                    <input type="radio" id="solveInitialVelocity" name="solveKinematics"/>
+                </div>
+
+               <div className="dashForm">
+                    <label htmlFor="solveFinalVelocity">Final Velocity</label>
+                    <input type="radio" id="solveFinalVelocity" name="solveKinematics"/>
+                </div>
+
+                <div className="dashForm">
+                    <label htmlFor="solveAngle">Angle of Launch</label>
+                    <input type="radio" id="solveAngle" name="solveKinematics"/>
                 </div>
             </div>
             )}

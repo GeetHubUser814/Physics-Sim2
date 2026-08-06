@@ -204,10 +204,10 @@ body{
 }
 .kinematicsDash{
   position: absolute;
-  font-size: 2vh;
+  font-size: 1.75vh;
   width: 150vh;
   height: 20vh;
-  left: -61vh;
+  left: -47vh;
   top: 10vh;
   font-family: monospace;
   font-weight: bold;
@@ -217,7 +217,7 @@ body{
 }
 .dashForm{
   position: relative;
-  top: 5vh;
+  top: 4vh;
   height: max-content;
   border: 0.2vh solid;
   border-radius: 1vh;
@@ -229,4 +229,9 @@ body{
 .kinematicsBtns{
   display: flex;
   justify-content: space-evenly;
+  margin-left: 10vh;
+}
+.solveFor{
+  position: absolute;
+  top: -2vh;
 }

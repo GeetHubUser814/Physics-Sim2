@@ -242,3 +242,22 @@ body{
   top: -2vh;
   font-size: 2vh;
 }
+.nextBtn button{
+  position: relative;
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 1.75vh;
+  top: 4vh;
+  height: max-content;
+  border: 0.2vh solid;
+  border-radius: 1vh;
+  padding: 1vh;
+  background-color: rgb(103, 48, 198);
+  color: white;
+  transition: 0.15s ease-in-out;
+}
+.nextBtn button:hover{
+  cursor: pointer;
+  transform: scale(110%);
+  background-color: rgb(123, 78, 201);
+}

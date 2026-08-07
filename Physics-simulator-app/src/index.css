@@ -206,7 +206,7 @@ body{
   position: absolute;
   font-size: 1.75vh;
   width: 150vh;
-  height: 20vh;
+  height: 16vh;
   left: -47vh;
   top: 10vh;
   font-family: monospace;
@@ -222,9 +222,15 @@ body{
   border: 0.2vh solid;
   border-radius: 1vh;
   padding: 1vh;
+  background-color: rgb(103, 48, 198);
 }
 .dashForm input{
   width: 10vh;
+  font-family: monospace;
+  font-size: 1.75vh;
+}
+.dashForm input:focus{
+  color: rgb(144, 80, 255);
 }
 .kinematicsBtns{
   display: flex;
@@ -234,4 +240,5 @@ body{
 .solveFor{
   position: absolute;
   top: -2vh;
+  font-size: 2vh;
 }

@@ -6,6 +6,8 @@ function DashKinematics() {
     const [isOpenProjectile, setIsOpenProjectile] = useState(false);
     const [isOpenSolve, setIsOpenSolve] = useState(false);
     const [isOpenOneDMotion, setIsOpenOneDMotion] = useState(false);
+    const [isOpenSolveProjectile, setIsOpenSolveProjectile] = useState(false);
+    const[isOpenSolveOneD, setIsOpenSolveOneD] = useState(false);
 
     function dashOpenClose(){
         setIsOpen((prev) => !prev);
@@ -13,25 +15,52 @@ function DashKinematics() {
 
     function projectileBtn(){
         setIsOpenProjectile((prev) => !prev);
-        if(isOpenSolve || isOpenOneDMotion){
+        if(isOpenSolve || isOpenOneDMotion || isOpenSolveProjectile || isOpenSolveOneD){
             setIsOpenSolve(false);
             setIsOpenOneDMotion(false);
+            setIsOpenSolveProjectile(false);
+            setIsOpenSolveOneD(false);
         }
     }
 
     function oneDMotionBtn (){
         setIsOpenOneDMotion((prev) => !prev);
-        if(isOpenProjectile || isOpenSolve){
+        if(isOpenProjectile || isOpenSolve || isOpenSolveProjectile || isOpenSolveOneD){
             setIsOpenSolve(false);
             setIsOpenProjectile(false);
+            setIsOpenSolveProjectile(false);
+            setIsOpenSolveOneD(false);
+
         }
     }
 
     function solveBtn(){
         setIsOpenSolve((prev) => !prev);
-        if(isOpenProjectile || isOpenOneDMotion){
+        if(isOpenProjectile || isOpenOneDMotion || isOpenSolveProjectile || isOpenSolveOneD){
             setIsOpenProjectile(false);
             setIsOpenOneDMotion(false);
+            setIsOpenSolveProjectile(false);
+            setIsOpenSolveOneD(false);
+        }
+    }
+
+    function solveProjectileBtn(){
+        setIsOpenSolveProjectile((prev) => !prev);
+        if(isOpenProjectile || isOpenOneDMotion || isOpenSolve || isOpenSolveOneD){
+            setIsOpenProjectile(false);
+            setIsOpenSolve(false);
+            setIsOpenOneDMotion(false);
+            setIsOpenSolveOneD(false);
+        }
+    }
+
+    function solveOneDBtn(){
+        setIsOpenSolveOneD((prev) => !prev);
+        if(isOpenProjectile || isOpenOneDMotion || isOpenSolve || isOpenSolveProjectile){
+            setIsOpenProjectile(false);
+            setIsOpenSolve(false);
+            setIsOpenOneDMotion(false);
+            setIsOpenSolveProjectile(false);
         }
     }
 
@@ -47,7 +76,7 @@ function DashKinematics() {
         <div>
             {isOpen && (
                 <div className="kinematicsBtns">
-                    <button className="dashBtn" onClick={projectileBtn}>Projectile</button>
+                    <button className="dashBtn" onClick={projectileBtn}>Projectile Motion</button>
                     <button className="dashBtn" onClick={oneDMotionBtn}>1D Motion</button>
                     <button className="dashBtn" onClick={solveBtn}>Solve</button>
                 </div>
@@ -56,31 +85,31 @@ function DashKinematics() {
             <div className="kinematicsDash">
                 <div className="dashForm">
                     <label htmlFor="elevation">Elevation:(m)</label>
-                    <input type="number" id="elevation" name="elevation" placeholder="50"></input>
+                    <input type="number" id="elevation" name="elevation" placeholder="50" min="0" max="100"></input>
                 </div>
 
                 <div className="dashForm">
                     <label htmlFor="velocity">Velocity(m/s):</label>
-                    <input type="number" id="velocity" name="velocity"></input>
+                    <input type="number" id="velocity" name="velocity" placeholder="50" min="0" max="100"></input>
                 </div>
 
                 <div className="dashForm">
                     <label htmlFor="mass">Mass(kg):</label>
-                    <input type="number" id="mass" name="mass"></input>
+                    <input type="number" id="mass" name="mass" placeholder="50" min="0" max="100"></input>
                 </div>
 
                 <div className="dashForm">
                     <label htmlFor="angle">Angle of Launch(deg):</label>
-                    <input type="number" id="angle" name="angle"></input>
+                    <input type="number" id="angle" name="angle" placeholder="45" min="0" max="90"></input>
                 </div>
 
                 <div className="dashForm">
                     <label htmlFor="gravity">Acceleration due to Gravity(m/s<sup>2</sup>):</label>
-                    <input type="number" id="gravity" name="gravity"></input>
+                    <input type="number" id="gravity" name="gravity" placeholder="20" min="0.1" max="40"></input>
                 </div>
 
                 <div className="nextBtn">
-                    <button>Next</button>
+                    <button className="dashBtn">Next</button>
                 </div>
             </div>
             )}
@@ -88,12 +117,12 @@ function DashKinematics() {
             <div className="kinematicsDash">
                 <div className="dashForm">
                     <label htmlFor="initialVelocity">Initial velocity(m/s):</label>
-                    <input type="number" id="initialVeloctiy" name="initialVeloctiy"></input>
+                    <input type="number" id="initialVeloctiy" name="initialVeloctiy" placeholder="50" min="0" max="100"></input>
                 </div>
 
                 <div className="dashForm">
                     <label htmlFor="acceleration">Acceleration(m/s<sup>2</sup>):</label>
-                    <input type="number" id="acceleration" name="acceleration"></input>
+                    <input type="number" id="acceleration" name="acceleration" placeholder="20" min="0" max="40"></input>
                 </div>
 
                 <div className="dashForm">
@@ -102,7 +131,7 @@ function DashKinematics() {
                 </div>
 
                 <div className="nextBtn">
-                    <button>Next</button>
+                    <button className="dashBtn">Next</button>
                 </div>
             </div>
             )}
@@ -110,18 +139,71 @@ function DashKinematics() {
             <div className="kinematicsDash">
                 <p className="solveFor">Solve For: </p>
 
-                <div className="dashForm">
-                    <label htmlFor="solveForProjectiles">Projectile</label>
-                    <input type="radio" id="solveForProjectiles" name="solveFor"/>
-                </div>
-
-                <div className="dashForm">
-                    <label htmlFor="solveForOneDMotion">1D Motion</label>
-                    <input type="radio" id="solveForOneDMotion" name="solveFor"/>
+                <div className="solveForBack">
+                    <button className="dashBtn" onClick={solveProjectileBtn}>Projectile Motion</button>
                 </div>
                 
-                <div className="nextBtn">
-                    <button onClick={solveNext}>Next</button>
+                <div className="solveForBack">
+                    <button className="dashBtn" onClick={solveOneDBtn}>1D Motion</button>
+                </div>
+
+
+
+            </div>
+            )}
+
+            {(isOpen && isOpenSolveProjectile) && (
+            <div className="kinematicsDash">
+               <p className="solveFor">Solve For: </p>
+
+                <div className="solveForBack">
+                    <button className="dashBtn">Range(m)</button>
+                </div>
+                
+                <div className="solveForBack">
+                    <button className="dashBtn">Max Height(m)</button>
+                </div>
+
+                <div className="solveForBack">
+                    <button className="dashBtn">Time in the Air(s)</button>
+                </div>
+                
+                <div className="solveForBack">
+                    <button className="dashBtn">Initial Velocity(m/s)</button>
+                </div>
+
+                <div className="solveForBack">
+                    <button className="dashBtn">Final Velocity(m/s)</button>
+                </div>
+                
+                <div className="solveForBack">
+                    <button className="dashBtn">Angle of Launch(deg)</button>
+                </div>
+            </div>
+            )}
+
+            {(isOpen && isOpenSolveOneD) && (
+            <div className="kinematicsDash">
+               <p className="solveFor">Solve For: </p>
+
+                <div className="solveForBack">
+                    <button className="dashBtn">Displacement(m)</button>
+                </div>
+                
+                <div className="solveForBack">
+                    <button className="dashBtn">Distance(m)</button>
+                </div>
+
+                <div className="solveForBack">
+                    <button className="dashBtn">Time(s)</button>
+                </div>
+                
+                <div className="solveForBack">
+                    <button className="dashBtn">Initial Velocity(m/s)</button>
+                </div>
+
+                <div className="solveForBack">
+                    <button className="dashBtn">Final Velocity(m/s)</button>
                 </div>
             </div>
             )}
@@ -131,36 +213,3 @@ function DashKinematics() {
 
 export default DashKinematics
 
-
-/*
-               <p className="solveFor">Solve For: </p>
-                <div className="dashForm">
-                    <label htmlFor="solveRange">Range(m)</label>
-                    <input type="radio" id="solveRange" name="solveKinematics"/>
-                </div>
-
-                <div className="dashForm">
-                    <label htmlFor="solveMaxHeight">Max Height(m)</label>
-                    <input type="radio" id="solveMaxHeight" name="solveKinematics"/>
-                </div>
-
-                <div className="dashForm">
-                    <label htmlFor="solveTime">Time in the Air(s)</label>
-                    <input type="radio" id="solveTime" name="solveKinematics"/>
-                </div>
-
-                <div className="dashForm">
-                    <label htmlFor="solveInitialVelocity">Initial Velocity(m/s)</label>
-                    <input type="radio" id="solveInitialVelocity" name="solveKinematics"/>
-                </div>
-
-               <div className="dashForm">
-                    <label htmlFor="solveFinalVelocity">Final Velocity(m/s)</label>
-                    <input type="radio" id="solveFinalVelocity" name="solveKinematics"/>
-                </div>
-
-                <div className="dashForm">
-                    <label htmlFor="solveAngle">Angle of Launch(deg)</label>
-                    <input type="radio" id="solveAngle" name="solveKinematics"/>
-                </div>
-*/

@@ -90,7 +90,7 @@ body{
   justify-content: center;
   justify-self: center;
   position: absolute;
-  top: 94vh;
+  top: 95vh;
   left: 3vw;
   width: 150vh;
   height: 0.01vh;
@@ -114,7 +114,7 @@ body{
   top: 63vh;
   left: 3vw;
   width: 150vh;
-  height: 30vh;
+  height: 32vh;
   background-color: rgb(111, 60, 199);
   color: white;
   font-family: monospace;
@@ -147,8 +147,6 @@ body{
 .dashBtn{
   position: relative;
   margin-left: 1vh;
-  top: 2vh;
-  right: 27vw;
   font-size: 1.25vw;
   padding: 1vh;
   font-family: monospace;
@@ -204,18 +202,18 @@ body{
 }
 .kinematicsDash{
   position: absolute;
-  font-size: 1.75vh;
   width: 150vh;
   height: 16vh;
-  left: -47vh;
+  left: -40vh;
   top: 10vh;
-  font-family: monospace;
-  font-weight: bold;
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
 }
 .dashForm{
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 1.75vh;
   position: relative;
   top: 4vh;
   height: max-content;
@@ -236,28 +234,22 @@ body{
   display: flex;
   justify-content: space-evenly;
   margin-left: 10vh;
+  position: relative;
+  top: 3vh;
+  left: -30vh;
 }
 .solveFor{
   position: absolute;
-  top: -2vh;
+  top: -1vh;
   font-size: 2vh;
+  font-weight: bolder;
 }
 .nextBtn button{
-  position: relative;
-  font-family: monospace;
-  font-weight: bold;
-  font-size: 1.75vh;
-  top: 4vh;
-  height: max-content;
-  border: 0.2vh solid;
-  border-radius: 1vh;
-  padding: 1vh;
-  background-color: rgb(103, 48, 198);
-  color: white;
-  transition: 0.15s ease-in-out;
+  position: absolute;
+  top: 13vh;
+  right: 3vh;
 }
-.nextBtn button:hover{
-  cursor: pointer;
-  transform: scale(110%);
-  background-color: rgb(123, 78, 201);
+.solveForBack{
+  position: relative;
+  top: 5vh;
 }

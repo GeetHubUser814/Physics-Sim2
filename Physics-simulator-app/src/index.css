@@ -126,9 +126,9 @@ body{
 }
 .startBtn{
   position: absolute;
-  top: 76.5vh;
-  right: 5vh;
-  font-size: 1.25vw;
+  left: 80vw;
+  top: 10vh;
+  font-size: 3vh;
   padding: 1vh;
   font-family: monospace;
   border: 1vh solid;
@@ -147,7 +147,7 @@ body{
 .dashBtn{
   position: relative;
   margin-left: 1vh;
-  font-size: 1.25vw;
+  font-size: 2.5vh;
   padding: 1vh;
   font-family: monospace;
   border: 1vh solid;
@@ -159,7 +159,7 @@ body{
 }
 .dashBtn:hover{
   cursor: pointer;
-  transform: scale(110%);
+  transform: scale(105%);
   background-color: rgb(123, 78, 201);
   border-color: rgb(162, 129, 218);
 }
@@ -200,56 +200,51 @@ body{
   cursor: pointer;
   background-color: rgb(127, 82, 207);
 }
-.kinematicsDash{
-  position: absolute;
-  width: 150vh;
-  height: 16vh;
-  left: -40vh;
-  top: 10vh;
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-}
-.dashForm{
-  font-family: monospace;
-  font-weight: bold;
-  font-size: 1.75vh;
-  position: relative;
-  top: 4vh;
-  height: max-content;
-  border: 0.2vh solid;
-  border-radius: 1vh;
-  padding: 1vh;
-  background-color: rgb(103, 48, 198);
-}
-.dashForm input{
-  width: 10vh;
-  font-family: monospace;
-  font-size: 1.75vh;
-}
-.dashForm input:focus{
-  color: rgb(144, 80, 255);
-}
 .kinematicsBtns{
+  position: relative;
+  top: 0.5vh;
+  width: 145vh;
+  left: 5vh;
+}
+.containerForm{
+  height: 25vh;
+  width: 145vh;
   display: flex;
-  justify-content: space-evenly;
-  margin-left: 10vh;
-  position: relative;
-  top: 3vh;
-  left: -30vh;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 3vh;
 }
-.solveFor{
+.inputDiv{
+  border: 0.1vh solid;
+  font-size: 2.5vh;
+  height: max-content;
+  padding: 1vh;
+  font-family: monospace;
+  border: 1vh solid;
+  border-radius: 1vh;
+  background-color: rgb(111, 60, 199);
+  border-color: rgb(139, 95, 214);
+  color: white;
+}
+.inputDiv input[type = "number"]{
+  width: 10vh;
+}
+.submitBtn{
+  font-family: monospace;
+  border: 1vh solid;
+  border-radius: 1vh;
+  background-color: rgb(111, 60, 199);
+  border-color: rgb(139, 95, 214);
+  padding: 1vh;
+  color: white;
   position: absolute;
-  top: -1vh;
-  font-size: 2vh;
-  font-weight: bolder;
+  top: 25vh;
+  left: 135vh;
+  transition: all, 0.15s ease-in-out;
 }
-.nextBtn button{
-  position: absolute;
-  top: 13vh;
-  right: 3vh;
-}
-.solveForBack{
-  position: relative;
-  top: 5vh;
+.submitBtn:hover{
+  cursor: pointer;
+  transform: scale(105%);
+  background-color: rgb(123, 78, 201);
+  border-color: rgb(162, 129, 218);
 }

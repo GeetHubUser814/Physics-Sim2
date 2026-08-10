@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
+import {useNumberStore} from "./useNumberStore";
 
 function DashKinematics() {
 
@@ -8,14 +9,6 @@ function DashKinematics() {
     const [isOpenOneDMotion, setIsOpenOneDMotion] = useState(false);
     const [isOpenSolveProjectile, setIsOpenSolveProjectile] = useState(false);
     const[isOpenSolveOneD, setIsOpenSolveOneD] = useState(false);
-
-    /*SIMULATION STUFF*/
-    const[elevation_p, setElevation_p] = useState(0);
-    const[velocity_p, setVelocity_p] = useState(0);
-
-    function handleChange(event){
-        setElevation_p(event.target.value);
-    }
 
 
     function dashOpenClose(){
@@ -81,6 +74,33 @@ function DashKinematics() {
         }
     }, []);
 
+    const [projectileSim, setProjectileSim] = useState({
+        elevation: 20,
+        velocity: 10,
+        mass: 1,
+        launchAngle: 45,
+        gravAcceleration: 9.8,
+    });
+
+    const handleInputChange = (e) => {
+        const {name, value, type} = e.target;
+
+        const finalValue = type === 'number' ? Number(value) : value;
+
+        setProjectileSim((prevProjectileSim) => ({
+            ...prevProjectileSim,
+            [name]: finalValue,
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        console.log(projectileSim);
+    };
+
+
+
     return(
         <div>
             {isOpen && (
@@ -91,71 +111,67 @@ function DashKinematics() {
                 </div>
             )}
             {(isOpen && isOpenProjectile) && (
-            <div className="kinematicsDash">
-                <div className="dashForm">
-                    <label htmlFor="elevation">Elevation:(m)</label>
-                    <input type="number" id="elevation" name="elevation" placeholder="50" min="0" max="100" value={elevation_p} onChange={handleChange}></input>
+            <form className="containerForm" onSubmit={handleSubmit}>
+                <div className="inputDiv">
+                    <label>elevation: </label>
+                    <input
+                    type="number"
+                    name="elevation"
+                    value={projectileSim.elevation}
+                    onChange={handleInputChange}
+                    />
                 </div>
 
-                <div className="dashForm">
-                    <label htmlFor="velocity">Velocity(m/s):</label>
-                    <input type="number" id="velocity" name="velocity" placeholder="50" min="0" max="100"></input>
+                <div className="inputDiv">
+                    <label>velocity: </label>
+                    <input
+                    type="number"
+                    name="velocity"
+                    value={projectileSim.velocity}
+                    onChange={handleInputChange}
+                    />
                 </div>
 
-                <div className="dashForm">
-                    <label htmlFor="mass">Mass(kg):</label>
-                    <input type="number" id="mass" name="mass" placeholder="50" min="0" max="100"></input>
+                <div className="inputDiv">
+                    <label>mass: </label>
+                    <input
+                    type="number"
+                    name="mass"
+                    value={projectileSim.mass}
+                    onChange={handleInputChange}
+                    />
                 </div>
 
-                <div className="dashForm">
-                    <label htmlFor="angle">Angle of Launch(deg):</label>
-                    <input type="number" id="angle" name="angle" placeholder="45" min="0" max="90"></input>
+                <div className="inputDiv">
+                    <label>angle of launch: </label>
+                    <input
+                    type="number"
+                    name="launchAngle"
+                    value={projectileSim.launchAngle}
+                    onChange={handleInputChange}
+                    />
                 </div>
 
-                <div className="dashForm">
-                    <label htmlFor="gravity">Acceleration due to Gravity(m/s<sup>2</sup>):</label>
-                    <input type="number" id="gravity" name="gravity" placeholder="20" min="0.1" max="40"></input>
+                <div className="inputDiv">
+                    <label>acceleration due to gravity: </label>
+                    <input
+                    type="number"
+                    name="gravAcceleration"
+                    value={projectileSim.gravAcceleration}
+                    onChange={handleInputChange}
+                    />
                 </div>
-
-                <div className="nextBtn">
-                    <button className="dashBtn" onClick={() => {console.log(elevation)}}>Next</button>
-                </div>
-            </div>
+                
+                <button className="submitBtn" type="submit">Submit</button>
+            </form>
             )}
             {(isOpen && isOpenOneDMotion) && (
             <div className="kinematicsDash">
-                <div className="dashForm">
-                    <label htmlFor="initialVelocity">Initial velocity(m/s):</label>
-                    <input type="number" id="initialVeloctiy" name="initialVeloctiy" placeholder="50" min="0" max="100"></input>
-                </div>
 
-                <div className="dashForm">
-                    <label htmlFor="acceleration">Acceleration(m/s<sup>2</sup>):</label>
-                    <input type="number" id="acceleration" name="acceleration" placeholder="20" min="0" max="40"></input>
-                </div>
-
-                <div className="dashForm">
-                    <label htmlFor="accelerationDirection">Accleration is in the same Direction as Velocity:</label>
-                    <input type="checkbox" id="accelerationDirection" name="accelerationDirection"></input>
-                </div>
-
-                <div className="nextBtn">
-                    <button className="dashBtn">Next</button>
-                </div>
             </div>
             )}
             {(isOpen && isOpenSolve) && (
             <div className="kinematicsDash">
-                <p className="solveFor">Solve For: </p>
-
-                <div className="solveForBack">
-                    <button className="dashBtn" onClick={solveProjectileBtn}>Projectile Motion</button>
-                </div>
-                
-                <div className="solveForBack">
-                    <button className="dashBtn" onClick={solveOneDBtn}>1D Motion</button>
-                </div>
-
 
 
             </div>
@@ -216,9 +232,24 @@ function DashKinematics() {
                 </div>
             </div>
             )}
+                
+            <button className="startBtn">Start Simulation</button>
         </div>
     );
 }
 
 export default DashKinematics
 
+/*
+Projectile Motion-
+    elevation, velocity, mass, angle of launch, acceleration due to gravity
+1D Motion-
+    velocity, acceleration, acceleration in the same direction of velocity, time
+Sovle-
+    Projectile-
+        range, max height, time in the air, initial velocity, final velocity, angle of launch
+    1D Motion-
+        Displacement, Distance, Time, Initial Velocity, Final Velocity, Acceleration
+
+
+*/

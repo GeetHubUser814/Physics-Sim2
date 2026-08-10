@@ -9,6 +9,15 @@ function DashKinematics() {
     const [isOpenSolveProjectile, setIsOpenSolveProjectile] = useState(false);
     const[isOpenSolveOneD, setIsOpenSolveOneD] = useState(false);
 
+    /*SIMULATION STUFF*/
+    const[elevation_p, setElevation_p] = useState(0);
+    const[velocity_p, setVelocity_p] = useState(0);
+
+    function handleChange(event){
+        setElevation_p(event.target.value);
+    }
+
+
     function dashOpenClose(){
         setIsOpen((prev) => !prev);
     }
@@ -85,7 +94,7 @@ function DashKinematics() {
             <div className="kinematicsDash">
                 <div className="dashForm">
                     <label htmlFor="elevation">Elevation:(m)</label>
-                    <input type="number" id="elevation" name="elevation" placeholder="50" min="0" max="100"></input>
+                    <input type="number" id="elevation" name="elevation" placeholder="50" min="0" max="100" value={elevation_p} onChange={handleChange}></input>
                 </div>
 
                 <div className="dashForm">
@@ -109,7 +118,7 @@ function DashKinematics() {
                 </div>
 
                 <div className="nextBtn">
-                    <button className="dashBtn">Next</button>
+                    <button className="dashBtn" onClick={() => {console.log(elevation)}}>Next</button>
                 </div>
             </div>
             )}

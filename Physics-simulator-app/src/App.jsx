@@ -6,7 +6,6 @@ import ForceMatter from './ForceMatter.jsx';
 import WEPMatter from './WEPMatter.jsx';
 import LinearMMatter from './LinearMMatter.jsx';
 import DashBoard from './DashBoard.jsx';
-import test from './test.jsx';
 
 function App() {
   return(

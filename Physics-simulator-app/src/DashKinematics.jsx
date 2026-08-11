@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
+import { useProjectileStore } from './ProjectileSimStore';
 
 function DashKinematics() {
 
@@ -73,12 +74,27 @@ function DashKinematics() {
         }
     }, []);
 
+
+
+/*sim stuff*/
+    const storeProjectileSim = useProjectileStore((state) => state.projectileSim);
+    const updateProjectileSim = useProjectileStore((state) => state.updateProjectileSim);
+    const setStoreProjectileSim = useProjectileStore((state) => state.setStoreProjectileSim);
+
     const [projectileSim, setProjectileSim] = useState({
-        elevation: 20,
+        elevation: 400,
         velocity: 10,
         mass: 1,
         launchAngle: 45,
         gravAcceleration: 9.8,
+    });
+
+    const [submitReceipt, setSubmitReceipt] = useState({
+        elevation: 400,
+        velocity: 10,
+        mass: 1,
+        launchAngle: 45,
+        gravAcceleration: 9.8
     });
 
     const handleInputChange = (e) => {
@@ -95,8 +111,12 @@ function DashKinematics() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        console.log(projectileSim);
+        setSubmitReceipt(projectileSim);
     };
+
+    function startSimulation(){
+        setStoreProjectileSim(submitReceipt);
+    }
 
 
 
@@ -231,8 +251,34 @@ function DashKinematics() {
                 </div>
             </div>
             )}
-                
-            <button className="startBtn">Start Simulation</button>
+            
+            <div className="submitReceipt" /*draggable="true" onDragEnd={handleDragEnd}
+            style={{
+                position: 'absolute',
+                left: '${position.x}px',
+                top: `${position.y}px`,
+                cursor: 'grab',
+                width: '10vw',
+                height: '30vh',
+                position: 'absolute',
+                fontSize: '2vh',
+                padding: '1vh',
+                fontFamily: 'monospace',
+                border: '1vh solid',
+                borderRadius: '1vh',
+                backgroundColor: 'rgb(111, 60, 199)',
+                borderColor: 'rgb(139, 95, 214)',
+                color: 'white',
+                cursor: 'grab',
+                userSelect: 'none'
+            }}*/>
+                <p>elevation: {submitReceipt.elevation}</p>
+                <p>velocity:{submitReceipt.velocity}</p>
+                <p>mass:{submitReceipt.mass}</p>
+                <p>angle of launch:{submitReceipt.launchAngle}</p>
+                <p>acceleration due to gravity:{submitReceipt.gravAcceleration}</p>
+            </div>
+            <button className="startBtn" onClick={startSimulation}>Start Simulation</button>
         </div>
     );
 }

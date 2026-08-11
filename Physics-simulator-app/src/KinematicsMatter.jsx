@@ -1,8 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
 import Matter from 'matter-js';
+import { useProjectileStore } from './ProjectileSimStore';
 
 const KinematicsMatter = () => {
-    const sceneRef = useRef(null);    
+    const sceneRef = useRef(null);  
+    
+    const storeProjectileSim = useProjectileStore((state) => state.projectileSim);
 
     useEffect(() => {
 
@@ -27,7 +30,7 @@ const KinematicsMatter = () => {
         });
         const ball = Bodies.circle(150, 200, 10);
         const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
-        const elevation = Bodies.rectangle(0, 400, 500, 400, {isStatic: true});
+        const elevation = Bodies.rectangle(0, 475, 500, storeProjectileSim.elevation, {isStatic: true});
 
         Composite.add(engine.world, [ball, floor, elevation]);
         
@@ -44,7 +47,7 @@ const KinematicsMatter = () => {
             render.canvas.remove();
             render.textures = {};
         }
-    }, []);
+    }, [storeProjectileSim.elevation]);
 
     const canvasHidden = useRef(false);
     const kinCanvasHS = () => {

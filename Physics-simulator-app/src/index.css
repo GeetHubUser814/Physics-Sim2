@@ -1,3 +1,7 @@
+body{
+  background-image: url(assets/purple.avif);
+}
+
 .mainTitle{
   border: solid 0.25vh;
   width: max-content;

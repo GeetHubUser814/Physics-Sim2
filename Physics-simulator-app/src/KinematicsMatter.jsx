@@ -4,6 +4,11 @@ import { useProjectileStore } from './ProjectileSimStore';
 
 const KinematicsMatter = () => {
     const sceneRef = useRef(null);  
+    const engineRef = useRef(null);
+    const runnerRef = useRef(null);
+    const ballRef = useRef(null);
+
+    const [isRunning, setIsRunning] = useState(false);
     
     const storeProjectileSim = useProjectileStore((state) => state.projectileSim);
 
@@ -15,8 +20,12 @@ const KinematicsMatter = () => {
         window.addEventListener("fromWEPBtn", otherHide);
         window.addEventListener("fromLinearMBtn", otherHide);
 
-        const {Engine, Render, Runner, Bodies, Composite} = Matter;
+        window.addEventListener("startSimulation", startSimulation);
+        window.addEventListener("endSimulation", endSimulation);
+
+        const {Engine, Render, Runner, Bodies, Composite, Body} = Matter;
         const engine = Engine.create();
+        engineRef.current = engine;
 
         const render = Render.create({
             element: sceneRef.current,
@@ -28,16 +37,22 @@ const KinematicsMatter = () => {
                 background: 'rgb(105, 48, 174)',
             },
         });
+        const runner = Runner.create();
+        runnerRef.current = runner;
+
         const ball = Bodies.circle(150, 200, 10);
         const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
         const elevation = Bodies.rectangle(0, 475, 500, storeProjectileSim.elevation, {isStatic: true});
+        ballRef.current = ball;
+
 
         Composite.add(engine.world, [ball, floor, elevation]);
-        
+        Render.run(render);
+        /*
         const runner = Runner.create();
         Runner.run(runner,engine);
         Render.run(render);
-
+        */
         return () => {
             window.removeEventListener("kinCanvas", kinCanvasHS);
             Runner.stop(runner);
@@ -48,6 +63,24 @@ const KinematicsMatter = () => {
             render.textures = {};
         }
     }, [storeProjectileSim.elevation]);
+
+    const startSimulation = () => {
+        if(isRunning) return;
+
+        const{Runner, Body} = Matter;
+        Body.setVelocity(ballRef.current, {x: 10, y: 0});
+        Runner.run(runnerRef.current, engineRef.current);
+        setIsRunning(true);
+    };
+
+    const endSimulation = () => {
+        console.log("sim ended");
+
+        const {Runner, Body} = Matter;
+        Runner.stop(runnerRef.current);
+        Body.setPosition(ballRef.current, {x: 150, y: 200});
+        Body.setVelocity(ballRef.current, {x: 0, y: 0});
+    }
 
     const canvasHidden = useRef(false);
     const kinCanvasHS = () => {

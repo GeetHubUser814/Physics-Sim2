@@ -68,7 +68,7 @@ function DashKinematics() {
 
     useEffect(() => {
         window.addEventListener("dashOpenClose", dashOpenClose);
-        
+
         return () => {
             window.removeEventListener("dashOpenClose", dashOpenClose);
         }
@@ -114,11 +114,24 @@ function DashKinematics() {
         setSubmitReceipt(projectileSim);
     };
 
+    const [isRunning, setIsRunning] = useState(false);
+
     function startSimulation(){
-        setStoreProjectileSim(submitReceipt);
+        if(!isRunning){
+            setStoreProjectileSim(submitReceipt);
+            const startSimulation = new CustomEvent("startSimulation");
+            window.dispatchEvent(startSimulation); 
+            setIsRunning(true);
+        }else{
+            const endSimulation = new CustomEvent("endSimulation");
+            window.dispatchEvent(endSimulation);
+            setIsRunning(false);
+        }
     }
 
-
+    function switchSimulationBtn(){
+        setIsRunning(true);
+    }
 
     return(
         <div>
@@ -278,7 +291,7 @@ function DashKinematics() {
                 <p>angle of launch:{submitReceipt.launchAngle}</p>
                 <p>acceleration due to gravity:{submitReceipt.gravAcceleration}</p>
             </div>
-            <button className="startBtn" onClick={startSimulation}>Start Simulation</button>
+            <button className="startBtn" onClick={startSimulation}>{isRunning ? "Stop Simulation" : "Start Simualtion"}</button>
         </div>
     );
 }

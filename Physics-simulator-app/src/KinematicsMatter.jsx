@@ -13,7 +13,6 @@ const KinematicsMatter = () => {
     const storeProjectileSim = useProjectileStore((state) => state.projectileSim);
 
     useEffect(() => {
-
         window.addEventListener("kinCanvas", kinCanvasHS);
 
         window.addEventListener("fromForceBtn", otherHide);
@@ -44,15 +43,10 @@ const KinematicsMatter = () => {
         const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
         const elevation = Bodies.rectangle(0, 475, 500, storeProjectileSim.elevation, {isStatic: true});
         ballRef.current = ball;
-
+        Body.setVelocity(ball, {x: 10, y: 0});
 
         Composite.add(engine.world, [ball, floor, elevation]);
         Render.run(render);
-        /*
-        const runner = Runner.create();
-        Runner.run(runner,engine);
-        Render.run(render);
-        */
         return () => {
             window.removeEventListener("kinCanvas", kinCanvasHS);
             Runner.stop(runner);
@@ -65,17 +59,12 @@ const KinematicsMatter = () => {
     }, [storeProjectileSim.elevation]);
 
     const startSimulation = () => {
-        if(isRunning) return;
-
         const{Runner, Body} = Matter;
-        Body.setVelocity(ballRef.current, {x: 10, y: 0});
         Runner.run(runnerRef.current, engineRef.current);
         setIsRunning(true);
     };
 
     const endSimulation = () => {
-        console.log("sim ended");
-
         const {Runner, Body} = Matter;
         Runner.stop(runnerRef.current);
         Body.setPosition(ballRef.current, {x: 150, y: 200});
@@ -109,6 +98,7 @@ const KinematicsMatter = () => {
     return(
         <div className="physCanvas" style={canvasStyle}>
             <div ref={sceneRef}/>
+            <div>{storeProjectileSim.velocity}</div>
         </div>
     );
 }

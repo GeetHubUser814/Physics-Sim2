@@ -7,8 +7,11 @@ const KinematicsMatter = () => {
     const engineRef = useRef(null);
     const runnerRef = useRef(null);
     const ballRef = useRef(null);
+    const elevationRef = useRef(null);
 
     const [isRunning, setIsRunning] = useState(false);
+    const [velocityValue, setVelocityValue] = useState(10);
+    const [elevationValue, setElevationValue] = useState(400);
     
     const storeProjectileSim = useProjectileStore((state) => state.projectileSim);
 
@@ -21,7 +24,9 @@ const KinematicsMatter = () => {
 
         window.addEventListener("startSimulation", startSimulation);
         window.addEventListener("endSimulation", endSimulation);
+    }, []);
 
+    useEffect(() => {
         const {Engine, Render, Runner, Bodies, Composite, Body} = Matter;
         const engine = Engine.create();
         engineRef.current = engine;
@@ -41,11 +46,11 @@ const KinematicsMatter = () => {
 
         const ball = Bodies.circle(150, 200, 10);
         const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
-        const elevation = Bodies.rectangle(0, 475, 500, storeProjectileSim.elevation, {isStatic: true});
+        //const elevation = Bodies.rectangle(0, 475, 500, elevationValue, {isStatic: true});
         ballRef.current = ball;
-        Body.setVelocity(ball, {x: 10, y: 0});
+        //elevationRef.current = elevation;
 
-        Composite.add(engine.world, [ball, floor, elevation]);
+        Composite.add(engine.world, [ball, floor]);
         Render.run(render);
         return () => {
             window.removeEventListener("kinCanvas", kinCanvasHS);
@@ -56,11 +61,10 @@ const KinematicsMatter = () => {
             render.canvas.remove();
             render.textures = {};
         }
-    }, [storeProjectileSim.elevation]);
+    }, []);
 
-    const startSimulation = () => {
-        const{Runner, Body} = Matter;
-        Runner.run(runnerRef.current, engineRef.current);
+    function startSimulation(){
+        
         setIsRunning(true);
     };
 

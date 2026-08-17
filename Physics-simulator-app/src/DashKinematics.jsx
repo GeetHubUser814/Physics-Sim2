@@ -88,7 +88,7 @@ function DashKinematics() {
         launchAngle: 45,
         gravAcceleration: 9.8,
     });
-
+    /*
     const [submitReceipt, setSubmitReceipt] = useState({
         elevation: 400,
         velocity: 10,
@@ -96,7 +96,7 @@ function DashKinematics() {
         launchAngle: 45,
         gravAcceleration: 9.8
     });
-
+    */
     const handleInputChange = (e) => {
         const {name, value, type} = e.target;
 
@@ -107,31 +107,34 @@ function DashKinematics() {
             [name]: finalValue,
         }));
     };
-
+    
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        setSubmitReceipt(projectileSim);
+        setStoreProjectileSim(projectileSim);
+        /*
+        const submitValues = new CustomEvent("submitValues");
+        window.dispatchEvent(submitValues);
+        */
     };
-
+    
     const [isRunning, setIsRunning] = useState(false);
 
     function startSimulation(){
+        const startEndSim = new CustomEvent("startEndSim");
+        window.dispatchEvent(startEndSim);
         if(!isRunning){
-            setStoreProjectileSim(submitReceipt);
-            const startSimulation = new CustomEvent("startSimulation");
-            window.dispatchEvent(startSimulation); 
             setIsRunning(true);
         }else{
-            const endSimulation = new CustomEvent("endSimulation");
-            window.dispatchEvent(endSimulation);
             setIsRunning(false);
         }
     }
 
+    /*
     function switchSimulationBtn(){
         setIsRunning(true);
     }
+    */
 
     return(
         <div>
@@ -195,6 +198,7 @@ function DashKinematics() {
                 </div>
                 
                 <button className="submitBtn" type="submit">Submit</button>
+                
             </form>
             )}
             {(isOpen && isOpenOneDMotion) && (
@@ -264,33 +268,7 @@ function DashKinematics() {
                 </div>
             </div>
             )}
-            
-            <div className="submitReceipt" /*draggable="true" onDragEnd={handleDragEnd}
-            style={{
-                position: 'absolute',
-                left: '${position.x}px',
-                top: `${position.y}px`,
-                cursor: 'grab',
-                width: '10vw',
-                height: '30vh',
-                position: 'absolute',
-                fontSize: '2vh',
-                padding: '1vh',
-                fontFamily: 'monospace',
-                border: '1vh solid',
-                borderRadius: '1vh',
-                backgroundColor: 'rgb(111, 60, 199)',
-                borderColor: 'rgb(139, 95, 214)',
-                color: 'white',
-                cursor: 'grab',
-                userSelect: 'none'
-            }}*/>
-                <p>elevation: {submitReceipt.elevation}</p>
-                <p>velocity:{submitReceipt.velocity}</p>
-                <p>mass:{submitReceipt.mass}</p>
-                <p>angle of launch:{submitReceipt.launchAngle}</p>
-                <p>acceleration due to gravity:{submitReceipt.gravAcceleration}</p>
-            </div>
+
             <button className="startBtn" onClick={startSimulation}>{isRunning ? "Stop Simulation" : "Start Simualtion"}</button>
         </div>
     );
@@ -310,4 +288,14 @@ Sovle-
         Displacement, Distance, Time, Initial Velocity, Final Velocity, Acceleration
 
 
+
+            <div className="submitReceipt">
+                <p>elevation: {submitReceipt.elevation}</p>
+                <p>velocity:{submitReceipt.velocity}</p>
+                <p>mass:{submitReceipt.mass}</p>
+                <p>angle of launch:{submitReceipt.launchAngle}</p>
+                <p>acceleration due to gravity:{submitReceipt.gravAcceleration}</p>
+            </div>
+
+            <button className="submitBtn" type="submit">Submit</button>
 */

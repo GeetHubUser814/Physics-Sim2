@@ -9,9 +9,10 @@ const KinematicsMatter = () => {
     const ballRef = useRef(null);
     const elevationRef = useRef(null);
 
-    const [isRunning, setIsRunning] = useState(false);
-    const [velocityValue, setVelocityValue] = useState(10);
-    const [elevationValue, setElevationValue] = useState(400);
+    const isRunning = useRef(false);
+    const velocityValue = useRef(10);
+    const elevationValue = useRef(400);
+    const launchAngle = useRef(45);
     
     const storeProjectileSim = useProjectileStore((state) => state.projectileSim);
 
@@ -22,8 +23,18 @@ const KinematicsMatter = () => {
         window.addEventListener("fromWEPBtn", otherHide);
         window.addEventListener("fromLinearMBtn", otherHide);
 
-        window.addEventListener("startSimulation", startSimulation);
-        window.addEventListener("endSimulation", endSimulation);
+        window.addEventListener("startEndSim", startEndSim);
+
+        //window.addEventListener("submitValues", submitValues);
+
+        return () => {
+            window.removeEventListener("kinCanvas", kinCanvasHS);
+            window.removeEventListener("fromForceBtn", otherHide);
+            window.removeEventListener("fromWEPBtn", otherHide);
+            window.removeEventListener("fromLinearMBtn", otherHide);
+            window.removeEventListener("startEndSim", startEndSim);
+            //window.removeEventListener("submitValues", submitValues);
+        }
     }, []);
 
     useEffect(() => {
@@ -44,16 +55,23 @@ const KinematicsMatter = () => {
         const runner = Runner.create();
         runnerRef.current = runner;
 
-        const ball = Bodies.circle(150, 200, 10);
-        const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
-        //const elevation = Bodies.rectangle(0, 475, 500, elevationValue, {isStatic: true});
-        ballRef.current = ball;
-        //elevationRef.current = elevation;
+        const handleBounce = (event) => {
+            Body.setStatic(ballRef.current, true);
+        }
 
-        Composite.add(engine.world, [ball, floor]);
+        Matter.Events.on(engine, 'collisionStart', handleBounce)
+
+        const ball = Bodies.circle(240, 265 + 200 - elevationValue.current / 2, 10, {frictionAir: 0, restitution: 0});
+        const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
+        const elevation = Bodies.rectangle(0, 475, 500, elevationValue.current, {isStatic: true});
+        
+        ballRef.current = ball;
+        elevationRef.current = elevation;
+
+        Composite.add(engine.world, [ball, floor, elevation]);
         Render.run(render);
         return () => {
-            window.removeEventListener("kinCanvas", kinCanvasHS);
+            Matter.Events.off(engine, 'collisionStart', handleBounce);
             Runner.stop(runner);
             Render.stop(render);
             Composite.clear(engine.world, false);
@@ -63,17 +81,44 @@ const KinematicsMatter = () => {
         }
     }, []);
 
-    function startSimulation(){
-        
-        setIsRunning(true);
+    useEffect(() => {
+        elevationValue.current = storeProjectileSim.elevation;
+        velocityValue.current = storeProjectileSim.velocity;
+        launchAngle.current = storeProjectileSim.launchAngle * (Math.PI / 180);
+    }, [storeProjectileSim.elevation, storeProjectileSim.velocity, storeProjectileSim.launchAngle]);
+
+    function startEndSim(){
+        if(!runnerRef.current) return;
+
+        const {Runner, Composite, Bodies, Body} = Matter;
+
+        if(!isRunning.current){
+            const newBall = Bodies.circle(240, 265 + 199 - elevationValue.current / 2, 10, {frictionAir: 0, restitution: 0});
+            const newElevation = Bodies.rectangle(0, 475, 500, elevationValue.current, {isStatic: true});
+            Body.setVelocity(newBall, {
+                x: velocityValue.current * Math.cos(launchAngle.current),
+                y: velocityValue.current * Math.sin(launchAngle.current) * -1
+            });
+
+            Composite.remove(engineRef.current.world, [ballRef.current, elevationRef.current]);
+            Composite.add(engineRef.current.world, [newBall, newElevation]);
+            ballRef.current = newBall;
+            elevationRef.current = newElevation;
+
+            Runner.run(runnerRef.current, engineRef.current);
+
+        }else if(isRunning.current){
+            Matter.Runner.stop(runnerRef.current);
+            //Matter.Engine.clear(engineRef.current);
+        }
+        isRunning.current = !isRunning.current;
     };
 
-    const endSimulation = () => {
-        const {Runner, Body} = Matter;
-        Runner.stop(runnerRef.current);
-        Body.setPosition(ballRef.current, {x: 150, y: 200});
-        Body.setVelocity(ballRef.current, {x: 0, y: 0});
+    /*
+    function submitValues(){
+
     }
+    */
 
     const canvasHidden = useRef(false);
     const kinCanvasHS = () => {
@@ -102,7 +147,7 @@ const KinematicsMatter = () => {
     return(
         <div className="physCanvas" style={canvasStyle}>
             <div ref={sceneRef}/>
-            <div>{storeProjectileSim.velocity}</div>
+            <div>{storeProjectileSim.elevation},{storeProjectileSim.velocity},{storeProjectileSim.launchAngle}</div>
         </div>
     );
 }

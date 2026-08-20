@@ -20,7 +20,7 @@ export const useOneDStore = create((set) => ({
 
         logout: () => set({
             oneDSim: {
-                velocity: 10,
+                velocity: 1,
                 acceleration: 5,
                 accelDirection: false,
                 time: 10,

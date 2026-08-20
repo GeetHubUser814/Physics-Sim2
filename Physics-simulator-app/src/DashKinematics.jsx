@@ -143,8 +143,13 @@ function DashKinematics() {
     const [isRunning, setIsRunning] = useState(false);
 
     function startSimulation(){
-        const startEndSim = new CustomEvent("startEndSim");
-        window.dispatchEvent(startEndSim);
+        if(isOpenProjectile){
+            const startEndSimProj = new CustomEvent("startEndSimProj");
+            window.dispatchEvent(startEndSimProj);    
+        }else if(isOpenOneDMotion){
+            const startEndSimOneD = new CustomEvent("startEndSimOneD");
+            window.dispatchEvent(startEndSimOneD);
+        }
         if(!isRunning){
             setIsRunning(true);
         }else{

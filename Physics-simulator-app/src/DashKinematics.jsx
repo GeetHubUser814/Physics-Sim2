@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import { useProjectileStore } from './ProjectileSimStore';
+import { useOneDStore } from './OneDSimStore';
 
 function DashKinematics() {
 
@@ -84,7 +85,6 @@ function DashKinematics() {
     const [projectileSim, setProjectileSim] = useState({
         elevation: 400,
         velocity: 10,
-        mass: 1,
         launchAngle: 45,
         gravAcceleration: 9.8,
     });
@@ -92,12 +92,11 @@ function DashKinematics() {
     const [submitReceipt, setSubmitReceipt] = useState({
         elevation: 400,
         velocity: 10,
-        mass: 1,
         launchAngle: 45,
         gravAcceleration: 9.8
     });
     */
-    const handleInputChange = (e) => {
+    const handleInputChangeProj = (e) => {
         const {name, value, type} = e.target;
 
         const finalValue = type === 'number' ? Number(value) : value;
@@ -107,11 +106,34 @@ function DashKinematics() {
             [name]: finalValue,
         }));
     };
-    
+/* 1D SIM*/
+    const storeOneDSim = useOneDStore((state) => state.oneDSim);
+    const updateOneDSim = useOneDStore((state) => state.updateOneDSim);
+    const setStoreOneDSim = useOneDStore((state) => state.setStoreOneDSim);
+
+    const [oneDSim, setOneDSim] = useState({
+        velocity: 10,
+        acceleration: 5,
+        accelDirection: false,
+        time: 10,
+    });
+
+    const handleInputChangeOneD = (e) => {
+        const {name, value, type} = e.target;
+
+        const finalValue = type === 'number' ? Number(value) : value;
+
+        setOneDSim((prevOneDSim) => ({
+            ...prevOneDSim,
+            [name]: finalValue,
+        }));
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
         setStoreProjectileSim(projectileSim);
+        setStoreOneDSim(oneDSim);
         /*
         const submitValues = new CustomEvent("submitValues");
         window.dispatchEvent(submitValues);
@@ -153,7 +175,7 @@ function DashKinematics() {
                     type="number"
                     name="elevation"
                     value={projectileSim.elevation}
-                    onChange={handleInputChange}
+                    onChange={handleInputChangeProj}
                     />
                 </div>
 
@@ -163,17 +185,7 @@ function DashKinematics() {
                     type="number"
                     name="velocity"
                     value={projectileSim.velocity}
-                    onChange={handleInputChange}
-                    />
-                </div>
-
-                <div className="inputDiv">
-                    <label>mass: </label>
-                    <input
-                    type="number"
-                    name="mass"
-                    value={projectileSim.mass}
-                    onChange={handleInputChange}
+                    onChange={handleInputChangeProj}
                     />
                 </div>
 
@@ -183,7 +195,7 @@ function DashKinematics() {
                     type="number"
                     name="launchAngle"
                     value={projectileSim.launchAngle}
-                    onChange={handleInputChange}
+                    onChange={handleInputChangeProj}
                     />
                 </div>
 
@@ -193,7 +205,7 @@ function DashKinematics() {
                     type="number"
                     name="gravAcceleration"
                     value={projectileSim.gravAcceleration}
-                    onChange={handleInputChange}
+                    onChange={handleInputChangeProj}
                     />
                 </div>
                 
@@ -203,7 +215,50 @@ function DashKinematics() {
             )}
             {(isOpen && isOpenOneDMotion) && (
             <div className="kinematicsDash">
+            <form className="containerForm" onSubmit={handleSubmit}>
+                <div className="inputDiv">
+                    <label>velocity: </label>
+                    <input
+                    type="number"
+                    name="velocity"
+                    value={oneDSim.velocity}
+                    onChange={handleInputChangeOneD}
+                    />
+                </div>
 
+                <div className="inputDiv">
+                    <label>acceleration: </label>
+                    <input
+                    type="number"
+                    name="acceleration"
+                    value={oneDSim.acceleration}
+                    onChange={handleInputChangeOneD}
+                    />
+                </div>
+
+                <div className="inputDiv">
+                    <label>acceleration in the same direction as velocity: </label>
+                    <input
+                    type="checkbox"
+                    name="accelDirection"
+                    value={oneDSim.accelDirection}
+                    onChange={handleInputChangeOneD}
+                    />
+                </div>
+
+                <div className="inputDiv">
+                    <label>time: </label>
+                    <input
+                    type="number"
+                    name="time"
+                    value={oneDSim.time}
+                    onChange={handleInputChangeOneD}
+                    />
+                </div>
+                
+                <button className="submitBtn" type="submit">Submit</button>
+                
+            </form>
             </div>
             )}
             {(isOpen && isOpenSolve) && (
@@ -268,8 +323,10 @@ function DashKinematics() {
                 </div>
             </div>
             )}
+            {(isOpen && (isOpenProjectile || isOpenOneDMotion)) && (
+                <button className="startBtn" onClick={startSimulation}>{isRunning ? "Stop Simulation" : "Start Simualtion"}</button>
+            )}
 
-            <button className="startBtn" onClick={startSimulation}>{isRunning ? "Stop Simulation" : "Start Simualtion"}</button>
         </div>
     );
 }
@@ -278,7 +335,7 @@ export default DashKinematics
 
 /*
 Projectile Motion-
-    elevation, velocity, mass, angle of launch, acceleration due to gravity
+    elevation, velocity, angle of launch, acceleration due to gravity
 1D Motion-
     velocity, acceleration, acceleration in the same direction of velocity, time
 Sovle-

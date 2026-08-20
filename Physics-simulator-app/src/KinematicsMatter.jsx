@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import Matter from 'matter-js';
 import { useProjectileStore } from './ProjectileSimStore';
+import { useOneDStore } from './OneDSimStore';
 
 const KinematicsMatter = () => {
     const sceneRef = useRef(null);  
@@ -15,6 +16,7 @@ const KinematicsMatter = () => {
     const launchAngle = useRef(45);
     
     const storeProjectileSim = useProjectileStore((state) => state.projectileSim);
+    const storeOneDSim = useOneDStore((state) => state.oneDSim);
 
     useEffect(() => {
         window.addEventListener("kinCanvas", kinCanvasHS);
@@ -147,7 +149,7 @@ const KinematicsMatter = () => {
     return(
         <div className="physCanvas" style={canvasStyle}>
             <div ref={sceneRef}/>
-            <div>{storeProjectileSim.elevation},{storeProjectileSim.velocity},{storeProjectileSim.launchAngle}</div>
+            <div>{storeOneDSim.velocity},{storeOneDSim.acceleration},{storeOneDSim.accelDirection}</div>
         </div>
     );
 }

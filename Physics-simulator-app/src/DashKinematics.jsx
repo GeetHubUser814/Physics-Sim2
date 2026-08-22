@@ -83,7 +83,7 @@ function DashKinematics() {
     const setStoreProjectileSim = useProjectileStore((state) => state.setStoreProjectileSim);
 
     const [projectileSim, setProjectileSim] = useState({
-        elevation: 400,
+        elevation: 200,
         velocity: 10,
         launchAngle: 45,
         gravAcceleration: 9.8,
@@ -128,13 +128,55 @@ function DashKinematics() {
             [name]: finalValue,
         }));
     };
+/* HANDLE SUBMIT */
+
+    const roundingConstant = 1000000;
+
+    const [projRange, setProjRange] = useState(50.536);
+    const [projTime, setProjTime] = useState(7.147);
+    const [projHeight, setProjHeight] = useState(2.548);
+    const [projVelocityMag, setProjVelocityMag] = useState(63.04);
+    const [projVelocityAngle, setProjVelocityAngle] = useState(-83.56);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         setStoreProjectileSim(projectileSim);
         setStoreOneDSim(oneDSim);
+
+        setProjRange(
+            Math.round(((((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant) - 
+            Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) - 4 * (-9.81 / 2) * (projectileSim.elevation))) / -9.81) * 
+            (projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant)) * 1000) / 1000
+        );
+
+        setProjTime(
+            Math.round((((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant) - 
+            Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) - 4 * (-9.81 / 2) * (projectileSim.elevation))) / 
+            -9.81) * 1000) / 1000
+        );
+
+        setProjHeight(
+            Math.round((-Math.pow(-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant, 2)) / 
+            (2 * -9.81) * 1000) / 1000
+        );
+
+        setProjVelocityMag(
+            Math.round((Math.sqrt(Math.pow(projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant, 2) + 
+            (2 * -9.81 * -projectileSim.elevation))) * 1000) / 1000
+        );
+
+        setProjVelocityAngle(
+            Math.round((Math.atan((-Math.sqrt(2 * -9.81 * -projectileSim.elevation)) / 
+            (projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant)) * (180 / Math.PI)) * 1000) / 1000  
+        )
+
         /*
+            ((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * 1000) / 1000) - 
+            Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * 1000) / 1000), 2) - 4 * (-9.81 / 2)(projectileSim.elevation)))/(2 * (-9.81 / 2))
+
+            Math.round(((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * 1000) / 1000) - Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * 1000) / 1000), 2) - 4 * (-10 / 2) * (projectileSim.elevation))) * 1000) / 1000
+            
         const submitValues = new CustomEvent("submitValues");
         window.dispatchEvent(submitValues);
         */
@@ -332,6 +374,15 @@ function DashKinematics() {
                 <button className="startBtn" onClick={startSimulation}>{isRunning ? "Stop Simulation" : "Start Simualtion"}</button>
             )}
 
+            {(isOpen && isOpenProjectile) && (
+            <div className="simResult">
+                <p>range: {projRange}</p>
+                <p>time in air: {projTime}</p>
+                <p>max height from elevation: {projHeight}</p>
+                <p>final velocity(magnitude): {projVelocityMag}</p>
+                <p>final velocity(angle with horizontal): {projVelocityAngle}</p>
+            </div>
+            )}
         </div>
     );
 }

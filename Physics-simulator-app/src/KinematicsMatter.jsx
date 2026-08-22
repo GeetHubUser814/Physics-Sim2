@@ -14,7 +14,7 @@ const KinematicsMatter = () => {
     const isProj = useRef(true);
 
     const velocityValue = useRef(10);
-    const elevationValue = useRef(400);
+    const elevationValue = useRef(200);
     const launchAngle = useRef(45);
 
     const odVelocityValue = useRef(10);
@@ -86,9 +86,9 @@ const KinematicsMatter = () => {
         Matter.Events.on(engine, 'collisionStart', handleBounce);
         Matter.Events.on(engine, 'beforeUpdate', oneDAccel);
 
-        const ball = Bodies.circle(240, 265 + 200 - elevationValue.current / 2, 10, {frictionAir: 0, restitution: 0});
+        const ball = Bodies.circle(255, 265 + 191 - elevationValue.current, 10, {frictionAir: 0, restitution: 0});
         const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
-        const elevation = Bodies.rectangle(0, 475, 500, elevationValue.current, {isStatic: true});
+        const elevation = Bodies.rectangle(0, 465 - elevationValue.current / 2, 500, elevationValue.current, {isStatic: true});
         
         ballRef.current = ball;
         elevationRef.current = elevation;
@@ -127,8 +127,8 @@ const KinematicsMatter = () => {
             const {Runner, Composite, Bodies, Body} = Matter;
 
             if(!isRunning.current){
-                const newBall = Bodies.circle(240, 265 + 199 - elevationValue.current / 2, 10, {frictionAir: 0, restitution: 0});
-                const newElevation = Bodies.rectangle(0, 475, 500, elevationValue.current, {isStatic: true});
+                const newBall = Bodies.circle(255, 265 + 191 - elevationValue.current, 10, {frictionAir: 0, restitution: 0});
+                const newElevation = Bodies.rectangle(0, 465 - elevationValue.current / 2, 500, elevationValue.current, {isStatic: true});
                 Body.setVelocity(newBall, {
                     x: velocityValue.current * Math.cos(launchAngle.current),
                     y: velocityValue.current * Math.sin(launchAngle.current) * -1

@@ -77,7 +77,7 @@ const KinematicsMatter = () => {
         const oneDAccel = (event) => {
             if(!isProj.current){
                 Body.applyForce(ballRef.current, ballRef.current.position, {
-                    x: -odAccelValue.current/100000,
+                    x: odAccelDirection.current ? odAccelValue.current/100000 : -odAccelValue.current/100000,
                     y: 0,
                 });
             }
@@ -209,7 +209,7 @@ const KinematicsMatter = () => {
     return(
         <div className="physCanvas" style={canvasStyle}>
             <div ref={sceneRef}/>
-            <div>{storeOneDSim.velocity},{storeOneDSim.acceleration},{storeOneDSim.accelDirection}</div>
+            <div>{storeOneDSim.accelDirection + ""}</div>
         </div>
     );
 }

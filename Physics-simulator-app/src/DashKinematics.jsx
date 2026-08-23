@@ -118,15 +118,21 @@ function DashKinematics() {
         time: 10,
     });
 
+    const [aDirect, setADirect] = useState(true);
     const handleInputChangeOneD = (e) => {
         const {name, value, type} = e.target;
 
-        const finalValue = type === 'number' ? Number(value) : value;
+        if(type === 'checkbox'){
+            setADirect((prev) => !prev);
+        }
+
+        const finalValue = type === 'number' ? Number(value) : aDirect;
 
         setOneDSim((prevOneDSim) => ({
             ...prevOneDSim,
             [name]: finalValue,
         }));
+        console.log(oneDSim);
     };
 /* HANDLE SUBMIT */
 

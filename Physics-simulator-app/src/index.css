@@ -131,7 +131,7 @@ body{
 .startBtn{
   position: absolute;
   left: 80vw;
-  top: 10vh;
+  top: -2vh;
   font-size: 3vh;
   padding: 1vh;
   font-family: monospace;

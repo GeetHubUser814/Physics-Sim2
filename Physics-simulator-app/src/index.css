@@ -255,8 +255,8 @@ body{
 .simResult{
   width: 12vw;
   max-width: 14vw;
-  height: 35vh;
-  max-height: 37vh;
+  height: max-content;
+  max-height: 38vh;
   position: absolute;
   top: -50vh;
   left: 77vw;

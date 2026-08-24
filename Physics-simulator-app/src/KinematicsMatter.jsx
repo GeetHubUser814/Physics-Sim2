@@ -20,7 +20,7 @@ const KinematicsMatter = () => {
     const odVelocityValue = useRef(10);
     const odAccelValue = useRef(5);
     const odAccelDirection = useRef(false);
-    const odTimeValue = useRef(10);
+    const odTimeValue = useRef(5);
     const odPrevTime = useRef(0);
     
     const storeProjectileSim = useProjectileStore((state) => state.projectileSim);
@@ -79,7 +79,7 @@ const KinematicsMatter = () => {
         const oneDAccel = (event) => {
             if(!isProj.current){
                 Body.applyForce(ballRef.current, ballRef.current.position, {
-                    x: odAccelDirection.current ? odAccelValue.current / Math.pow(10, 6) : -odAccelValue.current / Math.pow(10, 6),
+                    x: odAccelDirection.current ? odAccelValue.current / (Math.pow(10, 6)) : -odAccelValue.current / (Math.pow(10, 6)),
                     y: 0,
                 });
             }

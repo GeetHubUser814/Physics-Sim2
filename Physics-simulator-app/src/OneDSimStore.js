@@ -5,7 +5,7 @@ export const useOneDStore = create((set) => ({
         velocity: 10,
         acceleration: 5,
         accelDirection: false,
-        time: 10,
+        time: 5,
     },
 
     setStoreOneDSim: (newOneDSim) => set(() => ({oneDSim: newOneDSim})),
@@ -20,10 +20,10 @@ export const useOneDStore = create((set) => ({
 
         logout: () => set({
             oneDSim: {
-                velocity: 1,
+                velocity: 10,
                 acceleration: 5,
                 accelDirection: false,
-                time: 10,
+                time: 5,
             }
         })
 

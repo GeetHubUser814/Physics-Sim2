@@ -115,7 +115,7 @@ function DashKinematics() {
         velocity: 10,
         acceleration: 5,
         accelDirection: false,
-        time: 10,
+        time: 5,
     });
 
     const [aDirect, setADirect] = useState(true);
@@ -143,48 +143,83 @@ function DashKinematics() {
     const [projVelocityMag, setProjVelocityMag] = useState(63.435);
     const [projVelocityAngle, setProjVelocityAngle] = useState(-83.6);
 
+    const [odDisplace, setOdDisplace] = useState(-12.5);
+    const [odDistance, setOdDistance] = useState(62.5);
+    const [odFinalVelocity, setOdFinalVelocity] = useState(-15);
+    const [odTime, setOdTime] = useState(2);
+    const [odVelDistance, setOdVelDistance] = useState(10);
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
         setStoreProjectileSim(projectileSim);
         setStoreOneDSim(oneDSim);
-
+        //projectile
         setProjRange(
-            Math.round(((((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant) - 
+            Math.round((
+                (((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant) - 
             Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) - 4 * (-9.81 / 2) * (projectileSim.elevation))) / -9.81) * 
-            (projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant)) * 1000) / 1000
+            (projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant)
+        ) * 1000) / 1000
         );
 
         setProjTime(
-            Math.round((((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant) - 
-            Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) - 4 * (-9.81 / 2) * (projectileSim.elevation))) / 
-            -9.81) * 1000) / 1000
+            Math.round((
+                ((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant) - 
+                Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) - 4 * (-9.81 / 2) * (projectileSim.elevation))) / -9.81
+            ) * 1000) / 1000
         );
 
         setProjHeight(
-            Math.round((-Math.pow(-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant, 2)) / 
-            (2 * -9.81) * 1000) / 1000
+            Math.round((
+                -Math.pow(-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant, 2)
+            ) / (2 * -9.81) * 1000) / 1000
         );
 
         setProjVelocityMag(
-            Math.round((Math.sqrt(Math.pow(projectileSim.velocity, 2) + 
-            (2 * -9.81 * -projectileSim.elevation))) * 1000) / 1000
+            Math.round((
+                Math.sqrt(Math.pow(projectileSim.velocity, 2) + 
+                (2 * -9.81 * -projectileSim.elevation))
+            ) * 1000) / 1000
         );
 
         setProjVelocityAngle(
-            Math.round((Math.atan((-Math.sqrt(Math.pow((projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) + 2 * -9.81 * -projectileSim.elevation)) / 
-            (projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant)) * (180 / Math.PI)) * 1000) / 1000  
+            Math.round((
+                Math.atan((-Math.sqrt(Math.pow((projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) + 2 * -9.81 * -projectileSim.elevation)) / 
+                (projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant)) * (180 / Math.PI)
+            ) * 1000) / 1000  
+        )
+        //1d motion
+        setOdDisplace(
+            Math.round((oneDSim.velocity * oneDSim.time + (aDirect ? -1 : 1) * 0.5 * oneDSim.acceleration * Math.pow(oneDSim.time, 2)) * 1000) / 1000
+        );
+        
+        setOdDistance(
+            Math.round((
+                (aDirect ? (
+                    Math.abs((oneDSim.velocity * (oneDSim.velocity / oneDSim.acceleration) - 0.5 * oneDSim.acceleration * Math.pow((oneDSim.velocity / oneDSim.acceleration), 2))) + 
+                    Math.abs((oneDSim.velocity * (oneDSim.time - (oneDSim.velocity / oneDSim.acceleration)) + 0.5 * oneDSim.acceleration * Math.pow((oneDSim.time - (oneDSim.velocity / oneDSim.acceleration)), 2)))
+                ) : (oneDSim.velocity * oneDSim.time + 0.5 * oneDSim.acceleration * Math.pow(oneDSim.time, 2)))
+            ) * 1000) / 1000
+        );
+
+        setOdFinalVelocity(
+            Math.round((
+                oneDSim.velocity + (aDirect ? -1 : 1) * oneDSim.acceleration * oneDSim.time
+            ) * 1000) / 1000
         )
 
-        /*
-            ((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * 1000) / 1000) - 
-            Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * 1000) / 1000), 2) - 4 * (-9.81 / 2)(projectileSim.elevation)))/(2 * (-9.81 / 2))
+        setOdTime(
+            Math.round((
+                oneDSim.velocity / oneDSim.acceleration
+            ) * 1000) / 1000
+        )
 
-            Math.round(((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * 1000) / 1000) - Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * 1000) / 1000), 2) - 4 * (-10 / 2) * (projectileSim.elevation))) * 1000) / 1000
-            
-        const submitValues = new CustomEvent("submitValues");
-        window.dispatchEvent(submitValues);
-        */
+        setOdVelDistance(
+            Math.round((
+                Math.abs((oneDSim.velocity * (oneDSim.velocity / oneDSim.acceleration) - 0.5 * oneDSim.acceleration * Math.pow((oneDSim.velocity / oneDSim.acceleration), 2)))
+            ) * 1000) / 1000
+        )
     };
     
     const [isRunning, setIsRunning] = useState(false);
@@ -386,6 +421,16 @@ function DashKinematics() {
                 <p>max height from elevation: {projHeight}</p>
                 <p>final velocity(magnitude): {projVelocityMag}</p>
                 <p>final velocity(angle with horizontal): {projVelocityAngle}</p>
+            </div>
+            )}
+
+            {(isOpen && isOpenOneDMotion) && (
+            <div className="simResult">
+                <p>displacement: {odDisplace}</p>
+                <p>distance: {odDistance}</p>
+                <p>final velocity: {odFinalVelocity}</p>
+                <p>time when velocity is zero: {odTime}</p>
+                <p>distance when velocity is zero: {odVelDistance}</p>
             </div>
             )}
         </div>

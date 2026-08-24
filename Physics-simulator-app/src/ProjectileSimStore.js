@@ -5,7 +5,7 @@ export const useProjectileStore = create((set) => ({
         elevation: 200,
         velocity: 10,
         launchAngle: 45,
-        gravAcceleration: 9.8,
+        gravAcceleration: 9.81,
     },
 
     setStoreProjectileSim: (newProjectileSim) => set(() => ({projectileSim: newProjectileSim})),

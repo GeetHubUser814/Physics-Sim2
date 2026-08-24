@@ -86,7 +86,7 @@ function DashKinematics() {
         elevation: 200,
         velocity: 10,
         launchAngle: 45,
-        gravAcceleration: 9.8,
+        gravAcceleration: 9.81,
     });
     /*
     const [submitReceipt, setSubmitReceipt] = useState({
@@ -132,17 +132,16 @@ function DashKinematics() {
             ...prevOneDSim,
             [name]: finalValue,
         }));
-        console.log(oneDSim);
     };
 /* HANDLE SUBMIT */
 
     const roundingConstant = 1000000;
-
+ 
     const [projRange, setProjRange] = useState(50.536);
     const [projTime, setProjTime] = useState(7.147);
     const [projHeight, setProjHeight] = useState(2.548);
-    const [projVelocityMag, setProjVelocityMag] = useState(63.04);
-    const [projVelocityAngle, setProjVelocityAngle] = useState(-83.56);
+    const [projVelocityMag, setProjVelocityMag] = useState(63.435);
+    const [projVelocityAngle, setProjVelocityAngle] = useState(-83.6);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -168,12 +167,12 @@ function DashKinematics() {
         );
 
         setProjVelocityMag(
-            Math.round((Math.sqrt(Math.pow(projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant, 2) + 
+            Math.round((Math.sqrt(Math.pow(projectileSim.velocity, 2) + 
             (2 * -9.81 * -projectileSim.elevation))) * 1000) / 1000
         );
 
         setProjVelocityAngle(
-            Math.round((Math.atan((-Math.sqrt(2 * -9.81 * -projectileSim.elevation)) / 
+            Math.round((Math.atan((-Math.sqrt(Math.pow((projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) + 2 * -9.81 * -projectileSim.elevation)) / 
             (projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant)) * (180 / Math.PI)) * 1000) / 1000  
         )
 

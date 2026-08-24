@@ -21,12 +21,14 @@ const KinematicsMatter = () => {
     const odAccelValue = useRef(5);
     const odAccelDirection = useRef(false);
     const odTimeValue = useRef(10);
+    const odPrevTime = useRef(0);
     
     const storeProjectileSim = useProjectileStore((state) => state.projectileSim);
     const storeOneDSim = useOneDStore((state) => state.oneDSim);
 
     const projSim = () => startEndSim("proj");
     const oneDSim = () => startEndSim("oneD");
+
     useEffect(() => {
         window.addEventListener("kinCanvas", kinCanvasHS);
 
@@ -77,7 +79,7 @@ const KinematicsMatter = () => {
         const oneDAccel = (event) => {
             if(!isProj.current){
                 Body.applyForce(ballRef.current, ballRef.current.position, {
-                    x: odAccelDirection.current ? odAccelValue.current/100000 : -odAccelValue.current/100000,
+                    x: odAccelDirection.current ? odAccelValue.current / Math.pow(10, 6) : -odAccelValue.current / Math.pow(10, 6),
                     y: 0,
                 });
             }
@@ -85,8 +87,21 @@ const KinematicsMatter = () => {
 
         Matter.Events.on(engine, 'collisionStart', handleBounce);
         Matter.Events.on(engine, 'beforeUpdate', oneDAccel);
+        Matter.Events.on(engine, 'afterUpdate', () => {
+            if(engine.timing.timestamp >= odTimeValue.current * 1000){
+                Body.setStatic(ballRef.current, true);
+                console.log("timer");
+            }
+            if(ballRef.current.isStatic){
+                engine.timing.timestamp = 0;
+                Runner.stop(runner);
 
-        const ball = Bodies.circle(255, 265 + 191 - elevationValue.current, 10, {frictionAir: 0, restitution: 0});
+                console.log("stop timer");
+                console.log(engine.timing.timestamp);
+            }
+        });
+
+        const ball = Bodies.circle(250, 269 + 191 - elevationValue.current, 5, {frictionAir: 0, restitution: 0});
         const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
         const elevation = Bodies.rectangle(0, 465 - elevationValue.current / 2, 500, elevationValue.current, {isStatic: true});
         
@@ -95,6 +110,7 @@ const KinematicsMatter = () => {
 
         Composite.add(engine.world, [ball, floor, elevation]);
         Render.run(render);
+
         return () => {
             Matter.Events.off(engine, 'collisionStart', handleBounce);
             Runner.stop(runner);
@@ -127,7 +143,7 @@ const KinematicsMatter = () => {
             const {Runner, Composite, Bodies, Body} = Matter;
 
             if(!isRunning.current){
-                const newBall = Bodies.circle(255, 265 + 191 - elevationValue.current, 10, {frictionAir: 0, restitution: 0});
+                const newBall = Bodies.circle(255, 269 + 191 - elevationValue.current, 5, {frictionAir: 0, restitution: 0});
                 const newElevation = Bodies.rectangle(0, 465 - elevationValue.current / 2, 500, elevationValue.current, {isStatic: true});
                 Body.setVelocity(newBall, {
                     x: velocityValue.current * Math.cos(launchAngle.current),
@@ -150,14 +166,13 @@ const KinematicsMatter = () => {
             isProj.current = false;
             if(!runnerRef.current) return;
 
-            const {Runner, Composite, Bodies, Body} = Matter;
-
+            const {Runner, Composite, Bodies, Body, Render, Engine} = Matter;
             if(!isRunning.current){
-                const newBall = Bodies.circle(20, 455, 10, {friction: 0, frictionAir: 0, restitution: 0});
+                const newBall = Bodies.circle(570, 460, 5, {friction: 0, frictionAir: 0, restitution: 0});
                 const newElevation = Bodies.rectangle(0, 0, 0, 0, {isStatic: true});
 
                 Body.setVelocity(newBall, {
-                    x: odVelocityValue.current,
+                    x: odVelocityValue.current / 10,
                     y: 0,
                 });
 
@@ -209,7 +224,7 @@ const KinematicsMatter = () => {
     return(
         <div className="physCanvas" style={canvasStyle}>
             <div ref={sceneRef}/>
-            <div>{storeOneDSim.accelDirection + ""}</div>
+            <div>{storeOneDSim.accelDirection + "," + isProj.current}</div>
         </div>
     );
 }

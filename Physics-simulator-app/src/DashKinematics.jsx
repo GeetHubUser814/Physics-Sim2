@@ -301,7 +301,6 @@ function DashKinematics() {
             </form>
             )}
             {(isOpen && isOpenOneDMotion) && (
-            <div className="kinematicsDash">
             <form className="containerForm" onSubmit={handleSubmit}>
                 <div className="inputDiv">
                     <label>velocity: </label>
@@ -346,69 +345,6 @@ function DashKinematics() {
                 <button className="submitBtn" type="submit">Submit</button>
                 
             </form>
-            </div>
-            )}
-            {(isOpen && isOpenSolve) && (
-            <div className="kinematicsDash">
-
-
-            </div>
-            )}
-
-            {(isOpen && isOpenSolveProjectile) && (
-            <div className="kinematicsDash">
-               <p className="solveFor">Solve For: </p>
-
-                <div className="solveForBack">
-                    <button className="dashBtn">Range(m)</button>
-                </div>
-                
-                <div className="solveForBack">
-                    <button className="dashBtn">Max Height(m)</button>
-                </div>
-
-                <div className="solveForBack">
-                    <button className="dashBtn">Time in the Air(s)</button>
-                </div>
-                
-                <div className="solveForBack">
-                    <button className="dashBtn">Initial Velocity(m/s)</button>
-                </div>
-
-                <div className="solveForBack">
-                    <button className="dashBtn">Final Velocity(m/s)</button>
-                </div>
-                
-                <div className="solveForBack">
-                    <button className="dashBtn">Angle of Launch(deg)</button>
-                </div>
-            </div>
-            )}
-
-            {(isOpen && isOpenSolveOneD) && (
-            <div className="kinematicsDash">
-               <p className="solveFor">Solve For: </p>
-
-                <div className="solveForBack">
-                    <button className="dashBtn">Displacement(m)</button>
-                </div>
-                
-                <div className="solveForBack">
-                    <button className="dashBtn">Distance(m)</button>
-                </div>
-
-                <div className="solveForBack">
-                    <button className="dashBtn">Time(s)</button>
-                </div>
-                
-                <div className="solveForBack">
-                    <button className="dashBtn">Initial Velocity(m/s)</button>
-                </div>
-
-                <div className="solveForBack">
-                    <button className="dashBtn">Final Velocity(m/s)</button>
-                </div>
-            </div>
             )}
             {(isOpen && (isOpenProjectile || isOpenOneDMotion)) && (
                 <button className="startBtn" onClick={startSimulation}>{isRunning ? "Stop Simulation" : "Start Simualtion"}</button>
@@ -432,6 +368,16 @@ function DashKinematics() {
                 <p>time when velocity is zero: {odTime}</p>
                 <p>distance when velocity is zero: {odVelDistance}</p>
             </div>
+            )}
+            {(isOpen && isOpenSolve) && (
+                <div className="containerForm containerSolve">
+                    <div className="solveDiv">
+                        <button>projectile motion</button>
+                    </div>
+                    <div className="solveDiv">
+                        <button>1d motion</button>
+                    </div>
+                </div>
             )}
         </div>
     );

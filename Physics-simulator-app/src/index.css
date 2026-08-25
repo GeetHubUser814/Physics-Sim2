@@ -43,7 +43,7 @@ body{
   font-family: monospace;
   font-weight: bold;
   letter-spacing: 0.5vh;
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 .unitBtn{
   background-color: rgb(83, 24, 135);
@@ -55,7 +55,7 @@ body{
   font-size: 2.2vh;
   letter-spacing: 0.3vh;
   font-family: monospace;
-  transition: all 0.15s;
+  transition: all 0.1s;
   text-align: left;
 }
 .unitBtn:hover{
@@ -140,7 +140,7 @@ body{
   background-color: rgb(111, 60, 199);
   border-color: rgb(139, 95, 214);
   color: white;
-  transition: all, 1s ease-in-out;
+  transition: all, 0.8s ease-in-out;
 }
 .startBtn:hover{
   cursor: pointer;
@@ -159,7 +159,7 @@ body{
   background-color: rgb(111, 60, 199);
   border-color: rgb(139, 95, 214);
   color: white;
-  transition: all, 0.15s ease-in-out;
+  transition: all, 0.1s ease-in-out;
 }
 .dashBtn:hover{
   cursor: pointer;
@@ -216,6 +216,7 @@ body{
   display: flex;
   flex-wrap: wrap;
   align-content: center;
+  justify-content: center;
   gap: 3vh;
 }
 .inputDiv{
@@ -244,7 +245,7 @@ body{
   position: absolute;
   top: 25vh;
   left: 135vh;
-  transition: all, 0.15s ease-in-out;
+  transition: all, 0.1s ease-in-out;
 }
 .submitBtn:hover{
   cursor: pointer;
@@ -271,22 +272,25 @@ body{
   resize: both;
   overflow: auto;
 }
-/*
-  width: 10vw;
-  max-width: 10vw;
-  height: 30vh;
-  max-height: 30vh;
-  position: absolute;
-  top: -50vh;
-  left: 77vw;
-  font-size: 2vh;
-  padding: 1vh;
+.solveDiv button{
   font-family: monospace;
+  font-size: 2.5vh;
   border: 1vh solid;
   border-radius: 1vh;
   background-color: rgb(111, 60, 199);
   border-color: rgb(139, 95, 214);
+  padding: 1vh;
   color: white;
-  resize: both;
-  overflow: auto;
-*/
+  position: relative;
+  transition: all, 0.1s ease-in-out;
+}
+.solveDiv button:hover{
+  cursor: pointer;
+  transform: scale(105%);
+  background-color: rgb(123, 78, 201);
+  border-color: rgb(162, 129, 218);
+}
+.containerSolve{
+  display: flex;
+  justify-content: space-evenly;
+}

@@ -11,6 +11,8 @@ function DashKinematics() {
     const [isOpenSolveProjectile, setIsOpenSolveProjectile] = useState(false);
     const[isOpenSolveOneD, setIsOpenSolveOneD] = useState(false);
 
+    const openCanvas = new CustomEvent("openCanvas");
+    const closeCanvas = new CustomEvent("closeCanvas");
 
     function dashOpenClose(){
         setIsOpen((prev) => !prev);
@@ -24,6 +26,7 @@ function DashKinematics() {
             setIsOpenSolveProjectile(false);
             setIsOpenSolveOneD(false);
         }
+        window.dispatchEvent(openCanvas);
     }
 
     function oneDMotionBtn (){
@@ -33,8 +36,8 @@ function DashKinematics() {
             setIsOpenProjectile(false);
             setIsOpenSolveProjectile(false);
             setIsOpenSolveOneD(false);
-
         }
+        window.dispatchEvent(openCanvas);
     }
 
     function solveBtn(){
@@ -45,9 +48,10 @@ function DashKinematics() {
             setIsOpenSolveProjectile(false);
             setIsOpenSolveOneD(false);
         }
+        window.dispatchEvent(closeCanvas);
     }
 
-    function solveProjectileBtn(){
+    function projSolveBtn(){
         setIsOpenSolveProjectile((prev) => !prev);
         if(isOpenProjectile || isOpenOneDMotion || isOpenSolve || isOpenSolveOneD){
             setIsOpenProjectile(false);
@@ -57,14 +61,19 @@ function DashKinematics() {
         }
     }
 
-    function solveOneDBtn(){
+    function oneDSolveBtn(){
         setIsOpenSolveOneD((prev) => !prev);
-        if(isOpenProjectile || isOpenOneDMotion || isOpenSolve || isOpenSolveProjectile){
+        if(isOpenProjectile || isOpenOneDMotion || isOpenSolve || isOpenSolveOneD){
             setIsOpenProjectile(false);
             setIsOpenSolve(false);
             setIsOpenOneDMotion(false);
-            setIsOpenSolveProjectile(false);
+            setIsOpenSolveOneD(false);
         }
+    }
+
+    const [subProj, setSubProj] = useState("");
+    function subProjSolve(e){
+        setSubProj(e)
     }
 
     useEffect(() => {
@@ -372,13 +381,78 @@ function DashKinematics() {
             {(isOpen && isOpenSolve) && (
                 <div className="containerForm containerSolve">
                     <div className="solveDiv">
-                        <button>projectile motion</button>
+                        <button onClick={projSolveBtn}>projectile motion</button>
                     </div>
                     <div className="solveDiv">
-                        <button>1d motion</button>
+                        <button onClick={oneDSolveBtn}>1d motion</button>
                     </div>
                 </div>
             )}
+            {(isOpen && isOpenSolveProjectile) && (
+               <div className="containerForm">
+                    <div className="solveDiv">
+                        <button onClick={() => subProjSolve("range")}>range</button>
+                    </div>
+                    <div className="solveDiv">
+                        <button onClick={() => subProjSolve("max height")}>max height</button>
+                    </div>
+                    <div className="solveDiv">
+                        <button onClick={() => subProjSolve("time")}>time in the air</button>
+                    </div>
+                    <div className="solveDiv">
+                        <button onClick={() => subProjSolve("velI")}>initial velocity</button>
+                    </div>
+                    <div className="solveDiv">
+                        <button onClick={() => subProjSolve("velF")}>final velocity</button>
+                    </div>
+                    <div className="solveDiv">
+                        <button onClick={() => subProjSolve("angleI")}>angle of launch</button>
+                    </div>
+                    <div className="solveDiv">
+                        <button onClick={() => subProjSolve("angleF")}>angle of impact</button>
+                    </div>
+                </div>
+            )}
+            {(isOpen && isOpenSolveProjectile && subProj == "range") && (
+                <div className="solvePopup">
+                    <form className="solveContainerForm">
+                        <div className="inputDiv">
+                            <label>initial velocity: </label>
+                            <input
+                            type="velI"
+                            name="range"
+                            />
+                        </div>
+                        <div className="inputDiv">
+                            <label>launch angle: </label>
+                            <input
+                            type="angleI"
+                            name="range"
+                            />
+                        </div>
+                        <div className="inputDiv">
+                            <label>elevation: </label>
+                            <input
+                            type="angleI"
+                            name="range"
+                            />
+                        </div>
+                        <div className="inputDiv">
+                            <label>acceleration due to gravity: </label>
+                            <input
+                            type="angleI"
+                            name="range"
+                            />
+                        </div>
+                    </form>
+                    <div className="solveAnswers">
+                        <p>answer: </p>
+                        <p>steps: </p>
+                        <p>proportionality: </p>
+                    </div>
+                </div>
+            )}
+            
         </div>
     );
 }

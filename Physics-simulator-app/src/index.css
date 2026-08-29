@@ -294,3 +294,39 @@ body{
   display: flex;
   justify-content: space-evenly;
 }
+.solvePopup{
+  width: 30vw;
+  height: max-content;
+  position: absolute;
+  top: -55vh;
+  left: 5vw;
+  font-size: 1.9vh;
+  padding: 1vh;
+  font-family: monospace;
+  border: 1vh solid;
+  border-radius: 1vh;
+  background-color: rgb(111, 60, 199);
+  border-color: rgb(139, 95, 214);
+  color: white;
+}
+.solveContainerForm{
+  width: 30vw;
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+}
+.solveAnswers{
+  width: 30vw;
+  height: 45vh;
+  position: absolute;
+  left: 33vw;
+  top: -0.9vh;
+  font-size: 1.9vh;
+  padding: 1vh;
+  font-family: monospace;
+  border: 1vh solid;
+  border-radius: 1vh;
+  background-color: rgb(111, 60, 199);
+  border-color: rgb(139, 95, 214);
+  color: white;
+}

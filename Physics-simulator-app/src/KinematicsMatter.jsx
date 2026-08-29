@@ -29,6 +29,8 @@ const KinematicsMatter = () => {
     const projSim = () => startEndSim("proj");
     const oneDSim = () => startEndSim("oneD");
 
+    const [canvasOpen, setCanvasOpen] = useState(true);
+
     useEffect(() => {
         window.addEventListener("kinCanvas", kinCanvasHS);
 
@@ -39,6 +41,9 @@ const KinematicsMatter = () => {
         window.addEventListener("startEndSimProj", projSim);
         window.addEventListener("startEndSimOneD", oneDSim);
 
+        window.addEventListener("openCanvas", kinCanvasHS);
+        window.addEventListener("closeCanvas", otherHide);
+
         //window.addEventListener("submitValues", submitValues);
 
         return () => {
@@ -48,6 +53,8 @@ const KinematicsMatter = () => {
             window.removeEventListener("fromLinearMBtn", otherHide);
             window.removeEventListener("startEndSimProj", projSim);
             window.removeEventListener("startEndSimOneD", oneDSim);
+            window.removeEventListener("openCanvas", kinCanvasHS);
+            window.removeEventListener("closeCanvas", otherHide);
             //window.removeEventListener("submitValues", submitValues);
         }
     }, []);
@@ -221,9 +228,12 @@ const KinematicsMatter = () => {
         top: "8vh",
     }
     
+
+
     return(
         <div className="physCanvas" style={canvasStyle}>
             <div ref={sceneRef}/>
+
             <div>{storeOneDSim.accelDirection + "," + isProj.current}</div>
         </div>
     );

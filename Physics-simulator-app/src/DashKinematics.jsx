@@ -14,6 +14,8 @@ function DashKinematics() {
     const openCanvas = new CustomEvent("openCanvas");
     const closeCanvas = new CustomEvent("closeCanvas");
 
+    const [subProj, setSubProj] = useState("");
+
     function dashOpenClose(){
         setIsOpen((prev) => !prev);
     }
@@ -71,10 +73,6 @@ function DashKinematics() {
         }
     }
 
-    const [subProj, setSubProj] = useState("");
-    function subProjSolve(e){
-        setSubProj(e)
-    }
 
     useEffect(() => {
         window.addEventListener("dashOpenClose", dashOpenClose);
@@ -142,6 +140,33 @@ function DashKinematics() {
             [name]: finalValue,
         }));
     };
+
+    const [solveProj, setSolveProj] = useState({
+        velI: 0,
+        angleI: 0,
+        elevation: 0,
+        accel: 0,
+    });
+
+    const [solveProjAnswer, setSolveProjAnswer] = useState({
+        range: 0,
+        max_height: 0,
+        time: 0,
+        velI: 0,
+        velF: 0,
+        angleI: 0,
+        angleF: 0
+    });
+    const handleInputChangeSolve = (e) => {
+        const {name, value, type} = e.target;
+
+        const finalValue = type === 'number' ? Number(value) : value;
+
+        setSolveProj((prevSolveProj) => ({
+            ...prevSolveProj,
+            [name]: finalValue,
+        }));
+    };
 /* HANDLE SUBMIT */
 
     const roundingConstant = 1000000;
@@ -167,9 +192,9 @@ function DashKinematics() {
         setProjRange(
             Math.round((
                 (((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant) - 
-            Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) - 4 * (-9.81 / 2) * (projectileSim.elevation))) / -9.81) * 
-            (projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant)
-        ) * 1000) / 1000
+                Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) - 4 * (-9.81 / 2) * (projectileSim.elevation))) / -9.81) * 
+                (projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant)
+            ) * 1000) / 1000
         );
 
         setProjTime(
@@ -231,6 +256,31 @@ function DashKinematics() {
         )
     };
     
+    const handleSubmitSolve = (e) => {
+        e.preventDefault();
+
+        if(subProj === "range"){
+            setSolveProjAnswer((prevSolveProjAnswer) => ({
+                ...prevSolveProjAnswer,
+                range: 
+                Math.round((
+                    (((-solveProj.velI * Math.round((Math.sin(solveProj.angleI * Math.PI / 180)) * roundingConstant) / roundingConstant) - 
+                    Math.sqrt(Math.pow(solveProj.velI * (Math.round((Math.sin(solveProj.angleI * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) - 4 * (-solveProj.accel / 2) * (solveProj.elevation))) / -solveProj.accel) * 
+                    (solveProj.velI * Math.round((Math.cos(solveProj.angleI * Math.PI / 180)) * roundingConstant) / roundingConstant)
+                ) * 1000) / 1000
+            }));
+        }
+        if(subProj == "max height"){
+            setSolveProjAnswer((prevSolveProjAnswer) => ({
+                ...prevSolveProjAnswer,
+                max_height: 
+                Math.round((
+                    -Math.pow(-solveProj.velI * Math.round((Math.sin(solveProj.angleI * Math.PI / 180)) * roundingConstant) / roundingConstant, 2)
+                ) / (2 * -9.81) * 1000) / 1000
+            }));
+        }
+    }
+
     const [isRunning, setIsRunning] = useState(false);
 
     function startSimulation(){
@@ -253,6 +303,24 @@ function DashKinematics() {
         setIsRunning(true);
     }
     */
+
+    function repeatSolveInput(inputArray, condition){
+        return(
+            <div className={subProj === condition ? "b" : "a"}>
+                {inputArray.map((_, rowIndex) => (
+                            <div key={rowIndex} className="inputDiv">
+                                <label>{inputArray[rowIndex][0]}: </label>
+                                <input
+                                type="number"
+                                name={inputArray[rowIndex][1]}
+                                onChange={handleInputChangeSolve}
+                                value={inputArray[rowIndex][2]}
+                                />
+                            </div>
+                ))}
+            </div>
+        );
+    }
 
     return(
         <div>
@@ -391,62 +459,95 @@ function DashKinematics() {
             {(isOpen && isOpenSolveProjectile) && (
                <div className="containerForm">
                     <div className="solveDiv">
-                        <button onClick={() => subProjSolve("range")}>range</button>
+                        <button onClick={() => setSubProj("range")}>range</button>
                     </div>
                     <div className="solveDiv">
-                        <button onClick={() => subProjSolve("max height")}>max height</button>
+                        <button onClick={() => setSubProj("max height")}>max height</button>
                     </div>
                     <div className="solveDiv">
-                        <button onClick={() => subProjSolve("time")}>time in the air</button>
+                        <button onClick={() => setSubProj("time")}>time in the air</button>
                     </div>
                     <div className="solveDiv">
-                        <button onClick={() => subProjSolve("velI")}>initial velocity</button>
+                        <button onClick={() => setSubProj("velI")}>initial velocity</button>
                     </div>
                     <div className="solveDiv">
-                        <button onClick={() => subProjSolve("velF")}>final velocity</button>
+                        <button onClick={() => setSubProj("velF")}>final velocity</button>
                     </div>
                     <div className="solveDiv">
-                        <button onClick={() => subProjSolve("angleI")}>angle of launch</button>
+                        <button onClick={() => setSubProj("angleI")}>angle of launch</button>
                     </div>
                     <div className="solveDiv">
-                        <button onClick={() => subProjSolve("angleF")}>angle of impact</button>
+                        <button onClick={() => setSubProj("angleF")}>angle of impact</button>
                     </div>
                 </div>
             )}
-            {(isOpen && isOpenSolveProjectile && subProj == "range") && (
+
+            
+            {(isOpen && isOpenSolveProjectile) && (
+                /*SOLVE DIV FOR PROJECTILE MOTION
+                *******************
+                ***************
+                **********
+                ******
+                ***
+                *
+                */
                 <div className="solvePopup">
-                    <form className="solveContainerForm">
-                        <div className="inputDiv">
-                            <label>initial velocity: </label>
-                            <input
-                            type="velI"
-                            name="range"
-                            />
-                        </div>
-                        <div className="inputDiv">
-                            <label>launch angle: </label>
-                            <input
-                            type="angleI"
-                            name="range"
-                            />
-                        </div>
-                        <div className="inputDiv">
-                            <label>elevation: </label>
-                            <input
-                            type="angleI"
-                            name="range"
-                            />
-                        </div>
-                        <div className="inputDiv">
-                            <label>acceleration due to gravity: </label>
-                            <input
-                            type="angleI"
-                            name="range"
-                            />
-                        </div>
+                    <form className="solveContainerForm" onSubmit={handleSubmitSolve}>
+
+                        {repeatSolveInput([
+                            ["initial velocity", "velI", solveProj.velI],
+                            ["launch angle", "angleI", solveProj.angleI],
+                            ["elevation", "elevation", solveProj.elevation],
+                            ["acceleration due to gravity", "accel", solveProj.accel]
+                        ], "range")}
+                       
+                        {repeatSolveInput([
+                            ["initial velocity", "velI", solveProj.velI],
+                            ["launch angle", "angleI", solveProj.angleI],
+                            ["elevation", "elevation", solveProj.elevation],
+                            ["acceleration due to gravity", "accel", solveProj.accel]
+                        ], "max height")}
+
+                        {repeatSolveInput([
+                            ["initial velocity", "velI", solveProj.velI],
+                            ["launch angle", "angleI", solveProj.angleI],
+                            ["elevation", "elevation", solveProj.elevation],
+                            ["acceleration due to gravity", "accel", solveProj.accel]
+                        ], "time")}
+
+                        {repeatSolveInput([
+                            ["initial velocity", "velI", solveProj.velI],
+                            ["launch angle", "angleI", solveProj.angleI],
+                            ["elevation", "elevation", solveProj.elevation],
+                            ["acceleration due to gravity", "accel", solveProj.accel]
+                        ], "velI")}
+
+                        {repeatSolveInput([
+                            ["initial velocity", "velI", solveProj.velI],
+                            ["launch angle", "angleI", solveProj.angleI],
+                            ["elevation", "elevation", solveProj.elevation],
+                            ["acceleration due to gravity", "accel", solveProj.accel]
+                        ], "velF")}
+
+                        {repeatSolveInput([
+                            ["initial velocity", "velI", solveProj.velI],
+                            ["launch angle", "angleI", solveProj.angleI],
+                            ["elevation", "elevation", solveProj.elevation],
+                            ["acceleration due to gravity", "accel", solveProj.accel]
+                        ], "angleI")}
+
+                        {repeatSolveInput([
+                            ["initial velocity", "velI", solveProj.velI],
+                            ["launch angle", "angleI", solveProj.angleI],
+                            ["elevation", "elevation", solveProj.elevation],
+                            ["acceleration due to gravity", "accel", solveProj.accel]
+                        ], "angleF")}
+                        <button className="dashBtn" type="submit">Submit</button>
                     </form>
                     <div className="solveAnswers">
-                        <p>answer: </p>
+                        <p>answer: {solveProjAnswer.range}</p>
+                        <p>skills used: {subProj}</p>
                         <p>steps: </p>
                         <p>proportionality: </p>
                     </div>

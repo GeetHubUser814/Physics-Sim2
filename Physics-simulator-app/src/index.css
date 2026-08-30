@@ -103,7 +103,7 @@ body{
   font-family: monospace;
   font-size: 0vh;
   border: 2vh solid;
-  border-radius: 3vh;
+  border-radius: 1vh;
   border-color: rgb(139, 95, 214);
   transition: all 0.15s ease-in-out;
 }
@@ -124,7 +124,7 @@ body{
   font-family: monospace;
   font-size: 5vh;
   border: 2vh solid;
-  border-radius: 3vh;
+  border-radius: 1vh;
   border-color: rgb(139, 95, 214);
   transition: all 0.15s ease-in-out;
 }
@@ -150,7 +150,7 @@ body{
 }
 .dashBtn{
   position: relative;
-  margin-left: 1vh;
+  margin: 1vh;
   font-size: 2.5vh;
   padding: 1vh;
   font-family: monospace;
@@ -236,6 +236,7 @@ body{
 }
 .submitBtn{
   font-family: monospace;
+  font-size: 2vh;
   border: 1vh solid;
   border-radius: 1vh;
   background-color: rgb(111, 60, 199);
@@ -244,7 +245,7 @@ body{
   color: white;
   position: absolute;
   top: 25vh;
-  left: 135vh;
+  left: 77vw;
   transition: all, 0.1s ease-in-out;
 }
 .submitBtn:hover{
@@ -329,4 +330,12 @@ body{
   background-color: rgb(111, 60, 199);
   border-color: rgb(139, 95, 214);
   color: white;
+}
+.a{
+  display: none;
+}
+.b{
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
 }

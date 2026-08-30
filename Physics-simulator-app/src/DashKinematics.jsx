@@ -304,6 +304,14 @@ function DashKinematics() {
     }
     */
 
+    /*
+    CAVEMAN DISCOVERS MAP
+    **********
+      ******
+       ***
+        *
+        * 
+    */
     function repeatSolveInput(inputArray, condition){
         return(
             <div className={subProj === condition ? "b" : "a"}>

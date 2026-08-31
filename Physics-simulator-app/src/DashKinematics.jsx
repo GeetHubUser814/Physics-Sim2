@@ -303,7 +303,6 @@ function DashKinematics() {
         setIsRunning(true);
     }
     */
-
     /*
     CAVEMAN DISCOVERS MAP
     **********
@@ -330,6 +329,47 @@ function DashKinematics() {
         );
     }
 
+    function repeatInputDiv(inputArray){
+        return(
+            <form className="containerForm" onSubmit={handleSubmit}>
+                {inputArray.map((_, rowIndex) => (
+                    <div className="inputDiv">
+                        <label>{inputArray[rowIndex][0]}: </label>
+                        <input
+                        type={inputArray[rowIndex][1]}
+                        name={inputArray[rowIndex][2]}
+                        value={inputArray[rowIndex][3]}
+                        onChange={inputArray[rowIndex][4]}
+                        />
+                    </div>
+                ))}
+                <button className="submitBtn" type="submit">Submit</button>
+            </form>
+        );
+    }
+
+    function repeatDisplay(inputArray, containerDiv){
+        return(
+            <div className={containerDiv}>
+                {inputArray.map((_, rowIndex) => (
+                    <p>{inputArray[rowIndex][0]}: {inputArray[rowIndex][1]}</p>
+                ))}
+            </div>
+        );
+    }
+
+    function repeatSolveBtn(inputArray){
+        return(
+            <div className="containerForm">
+                {inputArray.map((_, rowIndex) => (
+                    <div className="solveDiv">
+                        <button onClick={() => setSubProj(inputArray[rowIndex][0])}>{inputArray[rowIndex][1]}</button>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
     return(
         <div>
             {isOpen && (
@@ -340,119 +380,43 @@ function DashKinematics() {
                 </div>
             )}
             {(isOpen && isOpenProjectile) && (
-            <form className="containerForm" onSubmit={handleSubmit}>
-                <div className="inputDiv">
-                    <label>elevation: </label>
-                    <input
-                    type="number"
-                    name="elevation"
-                    value={projectileSim.elevation}
-                    onChange={handleInputChangeProj}
-                    />
-                </div>
-
-                <div className="inputDiv">
-                    <label>velocity: </label>
-                    <input
-                    type="number"
-                    name="velocity"
-                    value={projectileSim.velocity}
-                    onChange={handleInputChangeProj}
-                    />
-                </div>
-
-                <div className="inputDiv">
-                    <label>angle of launch: </label>
-                    <input
-                    type="number"
-                    name="launchAngle"
-                    value={projectileSim.launchAngle}
-                    onChange={handleInputChangeProj}
-                    />
-                </div>
-
-                <div className="inputDiv">
-                    <label>acceleration due to gravity: </label>
-                    <input
-                    type="number"
-                    name="gravAcceleration"
-                    value={projectileSim.gravAcceleration}
-                    onChange={handleInputChangeProj}
-                    />
-                </div>
-                
-                <button className="submitBtn" type="submit">Submit</button>
-                
-            </form>
+                repeatInputDiv([
+                    ["elevation", "number", "elevation", projectileSim.elevation, handleInputChangeProj],
+                    ["velocity", "number", "velocity", projectileSim.velocity, handleInputChangeProj],
+                    ["angle of launch", "number", "launchAngle", projectileSim.launchAngle, handleInputChangeProj],
+                    ["acceleration due to gravity", "gravAcceleration", "elevation", projectileSim.gravAcceleration, handleInputChangeProj]
+                ])
             )}
             {(isOpen && isOpenOneDMotion) && (
-            <form className="containerForm" onSubmit={handleSubmit}>
-                <div className="inputDiv">
-                    <label>velocity: </label>
-                    <input
-                    type="number"
-                    name="velocity"
-                    value={oneDSim.velocity}
-                    onChange={handleInputChangeOneD}
-                    />
-                </div>
-
-                <div className="inputDiv">
-                    <label>acceleration: </label>
-                    <input
-                    type="number"
-                    name="acceleration"
-                    value={oneDSim.acceleration}
-                    onChange={handleInputChangeOneD}
-                    />
-                </div>
-
-                <div className="inputDiv">
-                    <label>acceleration in the same direction as velocity: </label>
-                    <input
-                    type="checkbox"
-                    name="accelDirection"
-                    value={oneDSim.accelDirection}
-                    onChange={handleInputChangeOneD}
-                    />
-                </div>
-
-                <div className="inputDiv">
-                    <label>time: </label>
-                    <input
-                    type="number"
-                    name="time"
-                    value={oneDSim.time}
-                    onChange={handleInputChangeOneD}
-                    />
-                </div>
-                
-                <button className="submitBtn" type="submit">Submit</button>
-                
-            </form>
+                repeatInputDiv([
+                    ["velocity", "number", "velocity", oneDSim.velocity, handleInputChangeOneD],
+                    ["acceleration", "number", "acceleration", oneDSim.acceleration, handleInputChangeOneD],
+                    ["acceleration in the same direction as velocity", "checkbox", "accelDirection", oneDSim.accelDirection, handleInputChangeOneD],
+                    ["time", "number", "time", oneDSim.time, handleInputChangeOneD]
+                ])
             )}
             {(isOpen && (isOpenProjectile || isOpenOneDMotion)) && (
                 <button className="startBtn" onClick={startSimulation}>{isRunning ? "Stop Simulation" : "Start Simualtion"}</button>
             )}
 
             {(isOpen && isOpenProjectile) && (
-            <div className="simResult">
-                <p>range: {projRange}</p>
-                <p>time in air: {projTime}</p>
-                <p>max height from elevation: {projHeight}</p>
-                <p>final velocity(magnitude): {projVelocityMag}</p>
-                <p>final velocity(angle with horizontal): {projVelocityAngle}</p>
-            </div>
+                repeatDisplay([
+                    ["range", projRange],
+                    ["time in air", projTime],
+                    ["max height from elevation", projHeight],
+                    ["final velocity(magnitude)", projVelocityMag],
+                    ["final velocity(angle with horizontal)", projVelocityAngle]
+                ], "simResult")
             )}
 
             {(isOpen && isOpenOneDMotion) && (
-            <div className="simResult">
-                <p>displacement: {odDisplace}</p>
-                <p>distance: {odDistance}</p>
-                <p>final velocity: {odFinalVelocity}</p>
-                <p>time when velocity is zero: {odTime}</p>
-                <p>distance when velocity is zero: {odVelDistance}</p>
-            </div>
+                repeatDisplay([
+                    ["displacement", odDisplace],
+                    ["distance", odDistance],
+                    ["final velocity", odFinalVelocity],
+                    ["time when velocity is zero", odTime],
+                    ["distance when velocity is zero", odVelDistance]
+                ], "simResult")
             )}
             {(isOpen && isOpenSolve) && (
                 <div className="containerForm containerSolve">
@@ -465,29 +429,15 @@ function DashKinematics() {
                 </div>
             )}
             {(isOpen && isOpenSolveProjectile) && (
-               <div className="containerForm">
-                    <div className="solveDiv">
-                        <button onClick={() => setSubProj("range")}>range</button>
-                    </div>
-                    <div className="solveDiv">
-                        <button onClick={() => setSubProj("max height")}>max height</button>
-                    </div>
-                    <div className="solveDiv">
-                        <button onClick={() => setSubProj("time")}>time in the air</button>
-                    </div>
-                    <div className="solveDiv">
-                        <button onClick={() => setSubProj("velI")}>initial velocity</button>
-                    </div>
-                    <div className="solveDiv">
-                        <button onClick={() => setSubProj("velF")}>final velocity</button>
-                    </div>
-                    <div className="solveDiv">
-                        <button onClick={() => setSubProj("angleI")}>angle of launch</button>
-                    </div>
-                    <div className="solveDiv">
-                        <button onClick={() => setSubProj("angleF")}>angle of impact</button>
-                    </div>
-                </div>
+                repeatSolveBtn([
+                    ["range", "range"],
+                    ["max height", "max height"],
+                    ["time", "time in the air"],
+                    ["velI", "initial velocity"],
+                    ["velF", "final velocity"],
+                    ["angleI", "angle of launch"],
+                    ["angleF", "angle of impact"]
+                ])
             )}
 
             
@@ -553,12 +503,12 @@ function DashKinematics() {
                         ], "angleF")}
                         <button className="dashBtn" type="submit">Submit</button>
                     </form>
-                    <div className="solveAnswers">
-                        <p>answer: {solveProjAnswer.range}</p>
-                        <p>skills used: {subProj}</p>
-                        <p>steps: </p>
-                        <p>proportionality: </p>
-                    </div>
+                    {repeatDisplay([
+                        ["answer", solveProjAnswer.range],
+                        ["skills used", subProj],
+                        ["steps", subProj],
+                        ["proportionality", subProj]
+                    ], "solveAnswers")}
                 </div>
             )}
             

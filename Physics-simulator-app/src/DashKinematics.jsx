@@ -442,14 +442,6 @@ function DashKinematics() {
 
             
             {(isOpen && isOpenSolveProjectile) && (
-                /*SOLVE DIV FOR PROJECTILE MOTION
-                *******************
-                ***************
-                **********
-                ******
-                ***
-                *
-                */
                 <div className="solvePopup">
                     <form className="solveContainerForm" onSubmit={handleSubmitSolve}>
 
@@ -510,8 +502,7 @@ function DashKinematics() {
                         ["proportionality", subProj]
                     ], "solveAnswers")}
                 </div>
-            )}
-            
+            )}            
         </div>
     );
 }

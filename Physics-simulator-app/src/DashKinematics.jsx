@@ -146,6 +146,7 @@ function DashKinematics() {
         angleI: 0,
         elevation: 0,
         accel: 0,
+        velYI: 0
     });
 
     const [solveProjAnswer, setSolveProjAnswer] = useState({
@@ -270,13 +271,43 @@ function DashKinematics() {
                 ) * 1000) / 1000
             }));
         }
-        if(subProj == "max height"){
+        if(subProj === "max height"){
             setSolveProjAnswer((prevSolveProjAnswer) => ({
                 ...prevSolveProjAnswer,
                 max_height: 
+                Math.round(((
+                    -Math.pow(-solveProj.velYI, 2)
+                ) / (2 * -9.81) + solveProj.elevation) * 1000) / 1000
+            }));
+        }
+        if(subProj === "time"){
+            setSolveProjAnswer((prevSolveProjAnswer) => ({
+                ...prevSolveProjAnswer,
+                time:
                 Math.round((
-                    -Math.pow(-solveProj.velI * Math.round((Math.sin(solveProj.angleI * Math.PI / 180)) * roundingConstant) / roundingConstant, 2)
-                ) / (2 * -9.81) * 1000) / 1000
+                    ((-solveProj.velYI) - 
+                    Math.sqrt(Math.pow(solveProj.velYI, 2) - 4 * (-solveProj.accel / 2) * (solveProj.elevation))) / -solveProj.accel
+                ) * 1000) / 1000
+            }));
+        }
+        if(subProj === "velF"){
+            setSolveProjAnswer((prevSolveProjAnswer) => ({
+                ...prevSolveProjAnswer,
+                velF:
+                Math.round((
+                    Math.sqrt(Math.pow(solveProj.velI, 2) + 
+                    (2 * -solveProj.accel * -solveProj.elevation))
+                ) * 1000) / 1000
+            }));
+        }
+        if(subProj === "angleF"){
+            setSolveProjAnswer((prevSolveProjAnswer) => ({
+                ...prevSolveProjAnswer,
+                angleF:
+                Math.round((
+                    Math.atan((-Math.sqrt(Math.pow((solveProj.velI * Math.round((Math.sin(solveProj.angleI * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) + 2 * -solveProj.accel * -solveProj.elevation)) / 
+                    (solveProj.velI * Math.round((Math.cos(solveProj.angleI * Math.PI / 180)) * roundingConstant) / roundingConstant)) * (180 / Math.PI)
+                ) * 1000) / 1000  
             }));
         }
     }
@@ -453,15 +484,13 @@ function DashKinematics() {
                         ], "range")}
                        
                         {repeatSolveInput([
-                            ["initial velocity", "velI", solveProj.velI],
-                            ["launch angle", "angleI", solveProj.angleI],
+                            ["initial vertical velocity", "velYI", solveProj.velYI],
                             ["elevation", "elevation", solveProj.elevation],
                             ["acceleration due to gravity", "accel", solveProj.accel]
                         ], "max height")}
 
                         {repeatSolveInput([
-                            ["initial velocity", "velI", solveProj.velI],
-                            ["launch angle", "angleI", solveProj.angleI],
+                            ["initial vertical velocity", "velYI", solveProj.velYI],
                             ["elevation", "elevation", solveProj.elevation],
                             ["acceleration due to gravity", "accel", solveProj.accel]
                         ], "time")}
@@ -475,7 +504,6 @@ function DashKinematics() {
 
                         {repeatSolveInput([
                             ["initial velocity", "velI", solveProj.velI],
-                            ["launch angle", "angleI", solveProj.angleI],
                             ["elevation", "elevation", solveProj.elevation],
                             ["acceleration due to gravity", "accel", solveProj.accel]
                         ], "velF")}
@@ -496,7 +524,13 @@ function DashKinematics() {
                         <button className="dashBtn" type="submit">Submit</button>
                     </form>
                     {repeatDisplay([
-                        ["answer", solveProjAnswer.range],
+                        ["answer", (subProj === "range" ? solveProjAnswer.range : 
+                            (subProj === "max height" ? solveProjAnswer.max_height : 
+                                (subProj === "time" ? solveProjAnswer.time : 
+                                    (subProj === "velI" ? solveProjAnswer.velI : 
+                                        (subProj === "velF" ? solveProjAnswer.velF : 
+                                            (subProj === "angleI" ? solveProjAnswer.angleI : 
+                                                (subProj === "angleF" ? solveProjAnswer.angleF : 0)))))))],
                         ["skills used", subProj],
                         ["steps", subProj],
                         ["proportionality", subProj]

@@ -401,6 +401,12 @@ function DashKinematics() {
         );
     }
 
+    function solveOptionBtn(inputArray, condition){
+        return(
+            <div></div>
+        );
+    }
+
     return(
         <div>
             {isOpen && (
@@ -495,12 +501,16 @@ function DashKinematics() {
                             ["acceleration due to gravity", "accel", solveProj.accel]
                         ], "time")}
 
-                        {repeatSolveInput([
+                        {/*
+                        repeatSolveInput([
                             ["initial velocity", "velI", solveProj.velI],
                             ["launch angle", "angleI", solveProj.angleI],
                             ["elevation", "elevation", solveProj.elevation],
                             ["acceleration due to gravity", "accel", solveProj.accel]
-                        ], "velI")}
+                        ], "velI")
+                        */}
+                        {solveOptionBtn()}
+
 
                         {repeatSolveInput([
                             ["initial velocity", "velI", solveProj.velI],

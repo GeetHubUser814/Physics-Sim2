@@ -146,7 +146,8 @@ function DashKinematics() {
         angleI: 0,
         elevation: 0,
         accel: 0,
-        velYI: 0
+        velYI: 0,
+        time: 0
     });
 
     const [solveProjAnswer, setSolveProjAnswer] = useState({
@@ -310,6 +311,16 @@ function DashKinematics() {
                 ) * 1000) / 1000  
             }));
         }
+        if(subProj === "velIOptionOne"){
+            setSolveProjAnswer((prevSolveProjAnswer) => ({
+                ...prevSolveProjAnswer,
+                velI: 
+                Math.round((
+                    (-solveProj.elevation + 0.5 * solveProj.accel * Math.pow(solveProj.time, 2)) / (Math.sin(solveProj.angleI * Math.PI / 180) * solveProj.time)
+                ) * 1000) / 1000
+                
+            }));
+        }
     }
 
     const [isRunning, setIsRunning] = useState(false);
@@ -403,7 +414,15 @@ function DashKinematics() {
 
     function solveOptionBtn(inputArray, condition){
         return(
-            <div></div>
+            <div className={subProj === condition ? "b" : "a"}>
+                {inputArray.map((_, rowIndex) => (
+                    <div key={rowIndex} className="solveOptionsBtnContainer">
+                        <button className="inputDiv solveOptionBtn" onClick={() => setSubProj(inputArray[rowIndex][0])}>
+                            {inputArray[rowIndex][1]}
+                        </button>
+                    </div>
+                ))}
+            </div>
         );
     }
 
@@ -501,19 +520,22 @@ function DashKinematics() {
                             ["acceleration due to gravity", "accel", solveProj.accel]
                         ], "time")}
 
-                        {/*
+                        {
                         repeatSolveInput([
-                            ["initial velocity", "velI", solveProj.velI],
+                            ["time in air", "time", solveProj.time],
                             ["launch angle", "angleI", solveProj.angleI],
                             ["elevation", "elevation", solveProj.elevation],
                             ["acceleration due to gravity", "accel", solveProj.accel]
-                        ], "velI")
-                        */}
-                        {solveOptionBtn()}
+                        ], "velIOptionOne")
+                        } 
+                        {solveOptionBtn([
+                            ["velIOptionOne", "solve inputs: t, θᵢ, h, g"],
+                            ["velIOptionOne", "a"]
+                        ], "velI")}
 
 
                         {repeatSolveInput([
-                            ["initial velocity", "velI", solveProj.velI],
+                            ["solve inputs: initial velocity", "velI", solveProj.velI],
                             ["elevation", "elevation", solveProj.elevation],
                             ["acceleration due to gravity", "accel", solveProj.accel]
                         ], "velF")}
@@ -537,7 +559,7 @@ function DashKinematics() {
                         ["answer", (subProj === "range" ? solveProjAnswer.range : 
                             (subProj === "max height" ? solveProjAnswer.max_height : 
                                 (subProj === "time" ? solveProjAnswer.time : 
-                                    (subProj === "velI" ? solveProjAnswer.velI : 
+                                    (subProj === "velIOptionOne"  ? solveProjAnswer.velI : 
                                         (subProj === "velF" ? solveProjAnswer.velF : 
                                             (subProj === "angleI" ? solveProjAnswer.angleI : 
                                                 (subProj === "angleF" ? solveProjAnswer.angleF : 0)))))))],

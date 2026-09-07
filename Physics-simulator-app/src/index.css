@@ -338,9 +338,24 @@ body{
   display: flex;
   flex-direction: column;
   gap: 1vh;
+  margin: 1vh;
 }
 .divdiv{
   width: 100vw;
   height: 100vh;
   background-color: red;
+}
+.solveOptionsBtnContainer{
+  display: flex;
+  justify-content: center;
+}
+.solveOptionBtn{
+  width: 100%;
+  transition: all, 0.1s ease-in-out;
+}
+.solveOptionBtn:hover{
+  cursor: pointer;
+  transform: scale(105%);
+  background-color: rgb(123, 78, 201);
+  border-color: rgb(162, 129, 218);
 }

@@ -221,7 +221,7 @@ body{
 }
 .inputDiv{
   border: 0.1vh solid;
-  font-size: 2.5vh;
+  font-size: 2vh;
   height: max-content;
   padding: 1vh;
   font-family: monospace;

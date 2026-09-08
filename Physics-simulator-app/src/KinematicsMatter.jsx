@@ -233,8 +233,6 @@ const KinematicsMatter = () => {
     return(
         <div className="physCanvas" style={canvasStyle}>
             <div ref={sceneRef}/>
-
-            <div>{storeOneDSim.accelDirection + "," + isProj.current}</div>
         </div>
     );
 }

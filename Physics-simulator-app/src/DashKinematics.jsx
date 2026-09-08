@@ -386,7 +386,7 @@ function DashKinematics() {
     const [rangeSkills, maxHeightSkills, timeSkills, velISkillsOne, velISkillsTwo, velISkillsThree, velFSkills, angleISkillsOne, angleISkillsTwo, angleFSkills] = [
         "vector decomposition, separation of horizontal and vertical motion, application of kinematic equations, solving quadratic equations, horizontal range formula", 
         "indentifying peak height, application of kinematic equations", 
-        0, 
+        "application of kinematic equations, solving quadratic equations", 
         0, 
         0, 
         0, 

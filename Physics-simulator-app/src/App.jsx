@@ -6,6 +6,7 @@ import ForceMatter from './ForceMatter.jsx';
 import WEPMatter from './WEPMatter.jsx';
 import LinearMMatter from './LinearMMatter.jsx';
 import DashBoard from './DashBoard.jsx';
+import "mafs/core.css";
 
 function App() {
   return(

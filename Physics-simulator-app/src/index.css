@@ -14,7 +14,7 @@ body{
   justify-content: center;
   justify-self: center;
   position: absolute;
-  top: 8vh;
+  top: 4vh;
 }
 body{
   background-color: rgb(66, 35, 119);
@@ -273,35 +273,34 @@ body{
   resize: both;
   overflow: auto;
 }
-.solveDiv button{
-  font-family: monospace;
-  font-size: 2.5vh;
-  border: 1vh solid;
-  border-radius: 1vh;
-  background-color: rgb(111, 60, 199);
-  border-color: rgb(139, 95, 214);
-  padding: 1vh;
-  color: white;
+.graphBtns{
   position: relative;
-  transition: all, 0.1s ease-in-out;
-}
-.solveDiv button:hover{
-  cursor: pointer;
-  transform: scale(105%);
-  background-color: rgb(123, 78, 201);
-  border-color: rgb(162, 129, 218);
-}
-.containerSolve{
+  top: 5vh;
+  width: 145vh;
+  left: 5vh;
   display: flex;
   justify-content: space-evenly;
 }
-.solvePopup{
-  width: 30vw;
+.graphContainer{
+  position: absolute;
+  top: -62vh;
+  left: 10vw;
+  font-size: 1.5vh;
+}
+.graphModContainer{
+  position: absolute;
+  top: 72vh;
+  width: 145vh;
+  left: -10vw;
+  height: 20vh;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.graphMod{
+  border: 0.1vh solid;
+  font-size: 2vh;
   height: max-content;
-  position: absolute;
-  top: -55vh;
-  left: 5vw;
-  font-size: 1.9vh;
   padding: 1vh;
   font-family: monospace;
   border: 1vh solid;
@@ -309,53 +308,5 @@ body{
   background-color: rgb(111, 60, 199);
   border-color: rgb(139, 95, 214);
   color: white;
-}
-.solveContainerForm{
-  width: 30vw;
-  display: flex;
-  flex-direction: column;
-  gap: 2vh;
-}
-.solveAnswers{
-  width: 30vw;
-  height: 45vh;
-  position: absolute;
-  left: 33vw;
-  top: -0.9vh;
-  font-size: 1.9vh;
-  padding: 1vh;
-  font-family: monospace;
-  border: 1vh solid;
-  border-radius: 1vh;
-  background-color: rgb(111, 60, 199);
-  border-color: rgb(139, 95, 214);
-  color: white;
-}
-.a{
-  display: none;
-}
-.b{
-  display: flex;
-  flex-direction: column;
-  gap: 1vh;
-  margin: 1vh;
-}
-.divdiv{
-  width: 100vw;
-  height: 100vh;
-  background-color: red;
-}
-.solveOptionsBtnContainer{
-  display: flex;
-  justify-content: center;
-}
-.solveOptionBtn{
-  width: 100%;
-  transition: all, 0.1s ease-in-out;
-}
-.solveOptionBtn:hover{
-  cursor: pointer;
-  transform: scale(105%);
-  background-color: rgb(123, 78, 201);
-  border-color: rgb(162, 129, 218);
+
 }

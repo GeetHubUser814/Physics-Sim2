@@ -20,6 +20,7 @@ function ProjectileMotionGraph() {
         }
     })
     const maxRange = domainCutoff();
+    const peakHeight = (vI - g * maxRange) ** 2 / (2 * g);
 
     const handleInputChange = (e) =>{ 
         const {name, value, type} = e.target;
@@ -80,10 +81,8 @@ function ProjectileMotionGraph() {
                 />
             </form>
        </div>
-        <Mafs viewBox={{x: [-4, 4], y: [-1, 6]}} height={500} width={1200} zoom={{min: 0.1, max: 2}}>
-            <Coordinates.Cartesian 
-
-            />
+        <Mafs viewBox={{x: [0, Math.max(4, maxRange)], y: [-2, Math.max(2, peakHeight + 2)]}} height={500} width={1200}>
+            <Coordinates.Cartesian />
             <Plot.OfX 
                 y={mafFunc}
                 domain={[0, domainCutoff()]}
@@ -95,6 +94,14 @@ function ProjectileMotionGraph() {
             >
                 ({coord.x.toFixed(2)}, {coord.y.toFixed(2)})
             </Text>
+            <Text
+                x={(peakHeight + 2) * 1.11 + 5}
+                y={0.8}
+            >time</Text>
+            <Text
+                x={-Math.max(2.5, 2.5 + peakHeight * 0.1)}
+                y={Math.max((peakHeight + 2) - 1, 2.1)}
+            >height</Text>
             {coord.element}
         </Mafs>
     </div>

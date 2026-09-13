@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import { useProjectileStore } from './ProjectileSimStore';
 import { useOneDStore } from './OneDSimStore';
 import ProjectileMotionGraph from './ProjectileMotionGraph';
+import OneDMotionGraph from './OneDMotionGraph';
 //import {Mafs, CartesianCoordinates, Plot, Line} from 'mafs';
 
 function DashKinematics() {
@@ -56,23 +57,13 @@ function DashKinematics() {
     }
 
     function projGraphBtn(){
-        setIsOpenGraphProjectile((prev) => !prev);
-        if(isOpenProjectile || isOpenOneDMotion || isOpenGraph || isOpenGraphOneD){
-            setIsOpenProjectile(false);
-            setIsOpenGraph(false);
-            setIsOpenOneDMotion(false);
-            setIsOpenGraphOneD(false);
-        }
+        setIsOpenGraphProjectile(true);
+        setIsOpenGraph(false);
     }
 
     function oneDGraphBtn(){
-        setIsOpenGraphOneD((prev) => !prev);
-        if(isOpenProjectile || isOpenOneDMotion || isOpenGraph || isOpenGraphOneD){
-            setIsOpenProjectile(false);
-            setIsOpenGraph(false);
-            setIsOpenOneDMotion(false);
-            setIsOpenGraphOneD(false);
-        }
+        setIsOpenGraphOneD(true);
+        setIsOpenGraph(false);
     }
 
 
@@ -402,6 +393,11 @@ function DashKinematics() {
             {(isOpen && isOpenGraphProjectile) && (
                 <div className="graphContainer">
                     <ProjectileMotionGraph/>
+                </div>
+            )}
+            {(isOpen && isOpenGraphOneD) && (
+                <div className="graphContainer">
+                    <OneDMotionGraph/>
                 </div>
             )}
         </div>

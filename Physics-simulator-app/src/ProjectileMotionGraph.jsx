@@ -11,32 +11,53 @@ function ProjectileMotionGraph() {
     const g = projGraph.gravConst;
     const vI = projGraph.velI;
     const h = projGraph.elevation;
-    const vIY = (vI * (Math.sin((projGraph.angleI) * (Math.PI / 180))));
-    const vIX = (vI * (Math.cos((projGraph.angleI) * (Math.PI / 180))));
-    const mafFunc = (x) => (0.5 * -g * x ** 2) + vI * (Math.sin((projGraph.angleI) * (Math.PI / 180))) * x + h;
+    const angle = projGraph.angleI;
+    const vIY = (vI * (Math.sin((angle) * (Math.PI / 180))));
+    const vIX = (vI * (Math.cos((angle) * (Math.PI / 180))));
+    const mafFunc = (x) => (0.5 * -g * x ** 2) + vI * (Math.sin((angle) * (Math.PI / 180))) * x + h;
     const mafFuncVel = (x) => x * -g + vIY;
     const mafFuncAccel = (x) => -g;
-    const domainCutoff = () => ((-vIY - Math.sqrt(vIY ** 2 + 2 * g * h)) / -g)
+    const mafFuncPosH = (x) => (x * vIX);
+    const mafFuncVelH = (x) => vIX;
+    const maxRange = ((-vIY - Math.sqrt(vIY ** 2 + 2 * g * h)) / -g)
     const coord = useMovablePoint([0, h], {
         constrain: ([x]) => {
-            const clampedX = Math.max(0, Math.min(x, domainCutoff()));
+            const clampedX = Math.max(0, Math.min(x, maxRange));
             const yValue = mafFunc(clampedX);
             return [clampedX, yValue];
         }
     })
     const coordVel = useMovablePoint([0, vI], {
         constrain: ([x]) => {
-            const clampedX = Math.max(0, x)
-            return [clampedX, -g * clampedX + vI]
+            const clampedX = Math.max(0, Math.min(x, maxRange));
+            return [clampedX, -g * clampedX + vIY]
         }
     })
     const coordAccel = useMovablePoint([0, -g], {
         constrain: ([x]) => {
-            const clampedX = Math.max(0, x)
+            const clampedX = Math.max(0, Math.min(x, maxRange));
             return [clampedX, -g]
         }
     })
-    const maxRange = domainCutoff();
+    const coordPos = useMovablePoint([0, 0], {
+        constrain: ([x]) => {
+            const clampedX = Math.max(0, Math.min(x, maxRange));
+            return [clampedX, clampedX * vIX]
+        }
+    })
+    const coordVelH = useMovablePoint([0, vIX], {
+        constrain: ([x]) => {
+            const clampedX = Math.max(0, Math.min(x, maxRange));
+            return [clampedX, vIX]
+        }
+    })
+    const coordAccelH = useMovablePoint([0, vIX], {
+        constrain: ([x]) => {
+            const clampedX = Math.max(0, Math.min(x, maxRange));
+            return [clampedX, 0]
+        }
+    })
+
     const peakHeight = (vIY ** 2) / (2 * g) + h;
 
     const handleInputChange = (e) =>{ 
@@ -48,12 +69,6 @@ function ProjectileMotionGraph() {
             [name]: finalValue,
         }));
     };
-
-    useEffect(() => {
-        if(coord.x > maxRange){
-            coord.setPoint([maxRange, mafFunc(maxRange)])
-        }
-    }, [projGraph, maxRange]);
 
 
 
@@ -125,7 +140,7 @@ function ProjectileMotionGraph() {
                         <Coordinates.Cartesian />
                         <Plot.OfX 
                             y={mafFunc}
-                            domain={[0, domainCutoff()]}
+                            domain={[0, maxRange]}
                             color={Theme.red}
                         />
                         <Text
@@ -146,11 +161,23 @@ function ProjectileMotionGraph() {
                     </Mafs>
                 ))}
     */
-    function repeatGraph(inputArray, viewX, viewY){
+    function repeatGraph(inputArray, viewX, viewY, xLabel, yLabel){
         return(
             <div>
+                    <div className="graphTitle">
+                        <p>{yLabel} vs. {xLabel} graph</p>
+                    </div>
                     <Mafs viewBox={{x: viewX, y: viewY}} height={500} width={1200}>
-                        <Coordinates.Cartesian />
+                        <Coordinates.Cartesian 
+                          xAxis={{
+                                lines: Math.max(5, Math.round(maxRange / 50) * 10),
+                                labels: (n) => (n % 5 == 0 ? n : ""),
+                            }}
+                            yAxis={{
+                                lines: Math.max(5, Math.round(maxRange / 50) * 10),
+                                labels: (n) => (n % 5 == 0 ? n : ""),
+                            }}
+                        />
                         <Plot.OfX 
                             y={inputArray[0]}
                             domain={inputArray[1]}
@@ -162,27 +189,20 @@ function ProjectileMotionGraph() {
                         >
                             ({inputArray[2].x.toFixed(2)}, {inputArray[2].y.toFixed(2)})
                         </Text>
-                        <Text
-                            x={inputArray[3]}
-                            y={inputArray[4]}
-                        >{inputArray[5]}</Text>
-                        <Text
-                            x={inputArray[6]}
-                            y={inputArray[7]}
-                        >{inputArray[8]}</Text>
                         {inputArray[2].element}
                     </Mafs>
-              
+                    <div className="xLabel">x-axis: {xLabel}</div>
+                    <div className="yLabel">y-axis: {yLabel}</div>
             </div>
         );
     }
     return (
     <div>
         {repeatGraphMod([
-            ["initial velocity(m/s)", "velI", 0, 50, projGraph.velI],
-            ["elevation(m)", "elevation", 0, 15, projGraph.elevation],
-            ["acceleration due to gravity(m/s²)", "gravConst", 1, 20, projGraph.gravConst],
-            ["angle of launch(deg)", "angleI", 0, 90, projGraph.angleI]
+            ["initial velocity(m/s)", "velI", 0, 50, vI],
+            ["elevation(m)", "elevation", 0, 15, h],
+            ["acceleration due to gravity(m/s²)", "gravConst", 1, 20, g],
+            ["angle of launch(deg)", "angleI", 0, 90, angle]
         ])}
 
         <div className="graphSelecter">
@@ -196,91 +216,67 @@ function ProjectileMotionGraph() {
         {(graphShow.heightGraph) && (
             repeatGraph(
                 [mafFunc,
-                [0, domainCutoff()],
-                coord,
-                ((peakHeight + 2) * 1.11 + 5),
-                0.8,
-                "time",
-                (-Math.max(2.5, 2.5 + peakHeight * 0.1)),
-                (Math.max((peakHeight + 2) - 1, 2.1)),
-                "position"],
+                [0, maxRange],
+                coord],
                 [0, Math.max(4, maxRange)],
-                [-2, Math.max(2, peakHeight + 2)]
+                [-2, Math.max(2, peakHeight + 2)],
+                "time",
+                "position(vertical)"
             )
         )}
         {(graphShow.velGraph) && (
             repeatGraph(
                 [mafFuncVel,
-                [-10000000, 100000000],
-                coordVel,
-                (Math.max(vIY * 1.8 + 19 + g, 20 + 1.4 * g)),
-                0.8,
+                [0, maxRange],
+                coordVel],
+                [0, maxRange + 20],
+                [mafFuncVel(maxRange) - 3, Math.max(vI + 3, 10)],
                 "time",
-                (1.5 + Math.max(vIY * 0.2, 0.1 * g)),
-                (vIY + 3),
-                "velocity"],
-                [-1, 20 + g * 1.5 + vIY * 1.5],
-                [-5 - 0.5 * g, vIY + 4]
+                "velocity(vertical)"
             )
         )}
         {(graphShow.accelGraph) && (
             repeatGraph(
                 [mafFuncAccel,
-                [-10000000, 100000000],
-                coordAccel,
-                (Math.max(20, 2 * g + 18)),
-                0.8,
+                [0, maxRange],
+                coordAccel],
+                [-1, Math.max(9, maxRange + 2)],
+                [-g - 2, 2],
                 "time",
-                (3 + 0.25 * g),
-                (-4.2 - 0.9 * g),
-                "acceleration"],
-                [-1, 20 + 2 * g],
-                [-g - 2, 2]
+                "acceleration(vertical)"
             )
         )}
         {(graphShow.posGraphH) && (
             repeatGraph(
-                [mafFunc,
-                [0, domainCutoff()],
-                coord,
-                ((peakHeight + 2) * 1.11 + 5),
-                0.8,
+                [(mafFuncPosH),
+                [0, maxRange],
+                coordPos],
+                [-2, maxRange],
+                [-2, Math.max(maxRange * vIX + 4, 11)],
                 "time",
-                (-Math.max(2.5, 2.5 + peakHeight * 0.1)),
-                (Math.max((peakHeight + 2) - 1, 2.1)),
-                "position"],
-                [0, Math.max(4, maxRange)],
-                [-2, Math.max(2, peakHeight + 2)]
+                "position(horizontal)"
             )
         )}
         {(graphShow.velGraphH) && (
             repeatGraph(
-                [mafFuncVel,
-                [-10000000, 100000000],
-                coordVel,
-                (Math.max(vI * 1.8 + 19 + g, 20 + 1.4 * g)),
-                0.8,
+                [mafFuncVelH,
+                [0, maxRange],
+                coordVelH],
+                [0, Math.max(maxRange, 10)],
+                [0, Math.max(10, vIX * 3/2)],
                 "time",
-                (1.5 + Math.max(vI * 0.2, 0.1 * g)),
-                (vI + 3),
-                "velocity"],
-                [-1, 20 + g * 1.5 + vI * 1.5],
-                [-5 - 0.5 * g, vI + 4]
+                "velocity(horizontal)"
             )
         )}
         {(graphShow.accelGraphH) && (
             repeatGraph(
-                [mafFuncAccel,
-                [-10000000, 100000000],
-                coordAccel,
-                (Math.max(20, 2 * g + 18)),
-                0.8,
+                [(x) => 0,
+                [0, maxRange],
+                coordAccelH],
+                [-1, Math.max(9, maxRange + 2)],
+                [-2, 2],
                 "time",
-                (3 + 0.25 * g),
-                (-4.2 - 0.9 * g),
-                "acceleration"],
-                [-1, 20 + 2 * g],
-                [-g - 2, 2]
+                "acceleration(horizontal)"
             )
         )}
     </div>

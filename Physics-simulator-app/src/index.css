@@ -283,7 +283,7 @@ body{
 }
 .graphContainer{
   position: absolute;
-  top: -62vh;
+  top: -61vh;
   left: 14vw;
   font-size: 1.5vh;
   border: 0.5vh solid;
@@ -292,7 +292,7 @@ body{
 }
 .graphModContainer{
   position: absolute;
-  top: 72vh;
+  top: 71vh;
   width: 145vh;
   left: -14vw;
   height: 20vh;
@@ -328,18 +328,19 @@ body{
   display: flex;
   flex-direction: column;
   gap: 1vh;
-  justify-content: center;
+  justify-content: start;
   left: 3.5vw;
-  top: -22.5vh;
-  height: 100%;
+  top: 3vh;
+  height: 50%;
+  width: 14vw;
 }
 .graphSelecterBtn{
   position: relative;
   margin: 1vh;
-  font-size: 1.25vh;
+  font-size: 1.5vh;
   padding: 1vh;
   font-family: monospace;
-  border: 1vh solid;
+  border: 0.8vh solid;
   border-radius: 1vh;
   background-color: rgb(111, 60, 199);
   border-color: rgb(139, 95, 214);
@@ -351,4 +352,30 @@ body{
   transform: scale(105%);
   background-color: rgb(123, 78, 201);
   border-color: rgb(162, 129, 218);
+}
+.xLabel{
+  position: absolute;
+  top: 510px;
+  font-size: 1.75vh;
+}
+.yLabel{
+  position: absolute;
+  top: 0vh;
+  left: 1220px;
+  font-size: 1.75vh;
+}
+.graphTitle{
+  position: absolute;
+  top: -50px;
+  left: -1vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.graphTitle p{
+  border: 0.5vh solid;
+  padding: 0vh 2vh;
+  border-radius: 1vh;
+  background-color: rgb(111, 60, 199);
+  border-color: rgb(139, 95, 214);
 }

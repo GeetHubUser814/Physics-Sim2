@@ -1,61 +1,65 @@
-import { Mafs, Coordinates, Plot, Theme, useMovablePoint, Line, Text } from "mafs";
+import { Mafs, Coordinates, Plot, Theme, useMovablePoint, Line, Text, Point } from "mafs";
 import React, {useEffect, useRef, useState} from 'react';
 
 function OneDMotionGraph() {
-    const [projGraph, setProjGraph] = useState({
-        velI: 10,
-        elevation: 5,
-        gravConst: 10
+    const [oneDGraph, setOneDGraph] = useState({
+        position: 0,
+        velI: 5,
+        accel: 2,
+        time: 10
     }); 
-    const g = projGraph.gravConst;
-    const vI = projGraph.velI;
-    const h = projGraph.elevation;
-    const mafFunc = (x) => (0.5 * -g * x ** 2) + vI * x + h;
-    const domainCutoff = () => ((-vI - Math.sqrt(vI ** 2 + 2 * g * h)) / -g)
-    const coord = useMovablePoint([0, h], {
+    const pos = oneDGraph.position;
+    const vI = oneDGraph.velI;
+    const accel = oneDGraph.accel;
+    const time = oneDGraph.time;
+    const posFunc = (x) => ((pos) + (vI * x + 0.5 * accel * x ** 2));
+    const velFunc = (x) => (vI + x * accel);
+    const accelFunc = (x) => (accel);
+    const maxRange = time;
+    const vertexTime = accel == 0 ? 2 : -vI / accel;
+
+    
+
+    const coordPos = useMovablePoint([0, pos], {
         constrain: ([x]) => {
-            const clampedX = Math.max(0, Math.min(x, domainCutoff()));
-            const yValue = mafFunc(clampedX);
+            const clampedX = Math.max(0, Math.min(x, maxRange));
+            const yValue = posFunc(clampedX);
             return [clampedX, yValue];
         }
     })
     const coordVel = useMovablePoint([0, vI], {
         constrain: ([x]) => {
-            const clampedX = Math.max(0, x)
-            return [clampedX, -g * clampedX + vI]
+            const clampedX = Math.max(0, Math.min(x, maxRange));
+            const yValue = velFunc(clampedX);
+            return [clampedX, yValue];
         }
     })
-    const coordAccel = useMovablePoint([0, -g], {
+    const coordAccel = useMovablePoint([0, accel], {
         constrain: ([x]) => {
-            const clampedX = Math.max(0, x)
-            return [clampedX, -g]
+            const clampedX = Math.max(0, Math.min(x, maxRange));
+            const yValue = accelFunc(clampedX);
+            return [clampedX, yValue];
         }
     })
-    const maxRange = domainCutoff();
-    const peakHeight = (vI - g * maxRange) ** 2 / (2 * g);
 
     const handleInputChange = (e) =>{ 
         const {name, value, type} = e.target;
 
         const finalValue = type === 'range' ? Number(value) : value;
-        setProjGraph((preProjGraph) => ({
+        setOneDGraph((preProjGraph) => ({
             ...preProjGraph,
             [name]: finalValue,
         }));
     };
 
-    useEffect(() => {
-        if(coord.x > maxRange){
-            coord.setPoint([maxRange, mafFunc(maxRange)])
-        }
-    }, [projGraph, maxRange]);
+
 
 
 
     const [graphShow, setGraphShow] = useState({
         heightGraph: true,
         velGraph: false,
-        accelGraph: false
+        accelGraph: false,
     });
     function changeGraph(e){
         if(e === "velGraph"){
@@ -68,7 +72,7 @@ function OneDMotionGraph() {
                 ...false,
                 heightGraph: true
             }))
-        }else{
+        }else if(e === "accelGraph"){
             setGraphShow((prev) => ({
                 ...false,
                 accelGraph: true
@@ -79,7 +83,7 @@ function OneDMotionGraph() {
         return(
             <div className="graphModContainer">
                 {inputArray.map((_, rowIndex) => (
-                <form className="graphMod">
+                <form className="graphMod" key={rowIndex}>
                     <label>
                         {inputArray[rowIndex][0]}: {inputArray[rowIndex][4]} 
                     </label>
@@ -96,92 +100,120 @@ function OneDMotionGraph() {
             </div>
         );
     }
+    /*
+                {inputArray.map((_, index) => (
+                    <Mafs viewBox={{x: [0, Math.max(4, maxRange)], y: [-2, Math.max(2, peakHeight + 2)]}} height={500} width={1200}>
+                        <Coordinates.Cartesian />
+                        <Plot.OfX 
+                            y={mafFunc}
+                            domain={[0, domainCutoff()]}
+                            color={Theme.red}
+                        />
+                        <Text
+                            x={coord.x}
+                            y={coord.y}
+                        >
+                            ({coord.x.toFixed(2)}, {coord.y.toFixed(2)})
+                        </Text>
+                        <Text
+                            x={(peakHeight + 2) * 1.11 + 5}
+                            y={0.8}
+                        >time</Text>
+                        <Text
+                            x={-Math.max(2.5, 2.5 + peakHeight * 0.1)}
+                            y={Math.max((peakHeight + 2) - 1, 2.1)}
+                        >position</Text>
+                        {coord.element}
+                    </Mafs>
+                ))}
+    */
+    function repeatGraph(inputArray, viewX, viewY, xLabel, yLabel){
+        return(
+            <div>
+                    <div className="graphTitle">
+                        <p>{yLabel} vs. {xLabel} graph</p>
+                    </div>
+                    <Mafs viewBox={{x: viewX, y: viewY}} height={500} width={1200}>
+                        <Coordinates.Cartesian 
+                            xAxis={{
+                                lines: Math.max(5, Math.round(time / (graphShow.heightGraph ? 5 : 50)) * 10),
+                                labels: (n) => (n % 5 == 0 ? n : ""),
+                            }}
+                            yAxis={{
+                                lines: Math.max(5, Math.round(time / (graphShow.heightGraph ? 5 : 50)) * 10),
+                                labels: (n) => (n % 5 == 0 ? n : ""),
+                            }}
+                        />
+                        <Plot.OfX 
+                            y={inputArray[0]}
+                            domain={inputArray[1]}
+                            color={Theme.red}
+                        />
+                        <Text
+                            x={inputArray[2].x}
+                            y={inputArray[2].y}
+                            size={25}
+                        >
+                            ({inputArray[2].x.toFixed(2)}, {inputArray[2].y.toFixed(2)})
+                        </Text>
+                        {inputArray[2].element}
+                        
+                    </Mafs>
+                    <div className="xLabel">x-axis: {xLabel}</div>
+                    <div className="yLabel">y-axis: {yLabel}</div>
+            </div>
+        );
+    }
     return (
     <div>
         {repeatGraphMod([
-            ["initial velocity(m/s)", "velI", 0, 50, projGraph.velI],
-            ["elevation(m)", "elevation", 0, 15, projGraph.elevation],
-            ["acceleration due to gravity(m/s²)", "gravConst", 1, 20, projGraph.gravConst]
+            ["initial position(m)", "position", -50, 50, pos],
+            ["initial velocity(m/s)", "velI", -10, 10, vI],
+            ["acceleration(m/s²)", "accel", -10, 10, accel],
+            ["time(s)", "time", 0, 20, time]
         ])}
 
         <div className="graphSelecter">
-            <button className="graphSelecterBtn" onClick={() => changeGraph("heightGraph")}>height vs time</button>
+            <button className="graphSelecterBtn" onClick={() => changeGraph("heightGraph")}>position vs time</button>
             <button className="graphSelecterBtn" onClick={() => changeGraph("velGraph")}>velocity vs time</button>
-            <button className="graphSelecterBtn" onClick={() => changeGraph("else")}>acceleration vs time</button>
+            <button className="graphSelecterBtn" onClick={() => changeGraph("accelGraph")}>acceleration vs time</button>
         </div>
         {(graphShow.heightGraph) && (
-            <Mafs viewBox={{x: [0, Math.max(4, maxRange)], y: [-2, Math.max(2, peakHeight + 2)]}} height={500} width={1200}>
-                <Coordinates.Cartesian />
-                <Plot.OfX 
-                    y={mafFunc}
-                    domain={[0, domainCutoff()]}
-                    color={Theme.red}
-                />
-                <Text
-                    x={coord.x}
-                    y={coord.y}
-                >
-                    ({coord.x.toFixed(2)}, {coord.y.toFixed(2)})
-                </Text>
-                <Text
-                    x={(peakHeight + 2) * 1.11 + 5}
-                    y={0.8}
-                >time</Text>
-                <Text
-                    x={-Math.max(2.5, 2.5 + peakHeight * 0.1)}
-                    y={Math.max((peakHeight + 2) - 1, 2.1)}
-                >height</Text>
-                {coord.element}
-            </Mafs>
+            repeatGraph(
+                [posFunc,
+                [0, maxRange],
+                coordPos],
+                [-2, maxRange + 20],
+                [Math.min(pos - 3, posFunc(vertexTime) - 3, posFunc(maxRange) * 1.05, -2), Math.max(pos + 3, posFunc(vertexTime) + 3, posFunc(maxRange) * 1.05, 2)],
+                "time",
+                "position"
+            )
         )}
         {(graphShow.velGraph) && (
-            <Mafs viewBox={{x: [-1, 20 + g * 1.5 + vI * 1.5], y: [-5 - 0.5 * g, vI + 4]}} height={500} width={1200}>
-                <Coordinates.Cartesian />
-                <Plot.OfX 
-                    y={(x) => x * -g + vI}
-                    color={Theme.red}
-                />
-                <Text
-                    x={coordVel.x}
-                    y={coordVel.y}
-                >
-                    ({coordVel.x.toFixed(2)}, {coordVel.y.toFixed(2)})
-                </Text>
-                <Text
-                    x={Math.max(vI * 1.8 + 19 + g, 20 + 1.4 * g)}
-                    y={0.8}
-                >time</Text>
-                <Text
-                    x={1.5 + Math.max(vI * 0.2, 0.1 * g)}
-                    y={vI + 3}
-                >velocity</Text>
-                {coordVel.element}
-            </Mafs>
+            repeatGraph(
+                [velFunc,
+                [0, maxRange],
+                coordVel,
+                (10),
+                0.8],
+                [-2, maxRange],
+                [Math.min(vI - 3, velFunc(maxRange) - 3, -2), Math.max(vI + 3, velFunc(maxRange) + 3, 2)],
+                "time",
+                "velocity"
+            )
         )}
         {(graphShow.accelGraph) && (
-            <Mafs viewBox={{x: [-1, 20 + 2 * g], y: [-g - 2, 2]}} height={500} width={1200}>
-                <Coordinates.Cartesian />
-                <Plot.OfX 
-                    y={(x) => -g}
-                    color={Theme.red}
-                />
-                <Text
-                    x={coordAccel.x}
-                    y={coordAccel.y}
-                >
-                    ({coordAccel.x.toFixed(2)}, {coordAccel.y.toFixed(2)})
-                </Text>
-                <Text
-                    x={Math.max(20, 2 * g + 18)}
-                    y={0.8}
-                >time</Text>
-                <Text
-                    x={3 + 0.25 * g}
-                    y={-4.2 - 0.9 * g}
-                >acceleration</Text>
-                {coordAccel.element}
-            </Mafs>
+            repeatGraph(
+                [accelFunc,
+                [0, maxRange],
+                coordAccel],
+                [-2, maxRange],
+                [Math.min(accel - 3, -2), Math.max(accel + 3, 2)],
+                "time",
+                "acceleration"
+            )
         )}
+
     </div>
     );
 }

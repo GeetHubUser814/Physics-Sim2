@@ -83,7 +83,7 @@ function DashKinematics() {
     const setStoreProjectileSim = useProjectileStore((state) => state.setStoreProjectileSim);
 
     const [projectileSim, setProjectileSim] = useState({
-        elevation: 200,
+        elevation: 30,
         velocity: 10,
         launchAngle: 45,
         gravAcceleration: 9.81,
@@ -137,14 +137,14 @@ function DashKinematics() {
 
     const roundingConstant = 1000000;
  
-    const [projRange, setProjRange] = useState(50.536);
-    const [projTime, setProjTime] = useState(7.147);
+    const [projRange, setProjRange] = useState(23.312);
+    const [projTime, setProjTime] = useState(3.297);
     const [projHeight, setProjHeight] = useState(2.548);
-    const [projVelocityMag, setProjVelocityMag] = useState(63.435);
-    const [projVelocityAngle, setProjVelocityAngle] = useState(-83.6);
+    const [projVelocityMag, setProjVelocityMag] = useState(26.241);
+    const [projVelocityAngle, setProjVelocityAngle] = useState(-74.368);
 
     const [odDisplace, setOdDisplace] = useState(-12.5);
-    const [odDistance, setOdDistance] = useState(62.5);
+    const [odDistance, setOdDistance] = useState(32.5);
     const [odFinalVelocity, setOdFinalVelocity] = useState(-15);
     const [odTime, setOdTime] = useState(2);
     const [odVelDistance, setOdVelDistance] = useState(10);
@@ -158,7 +158,7 @@ function DashKinematics() {
         setProjRange(
             Math.round((
                 (((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant) - 
-                Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) - 4 * (-9.81 / 2) * (projectileSim.elevation))) / -9.81) * 
+                Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) - 4 * (-projectileSim.gravAcceleration / 2) * (projectileSim.elevation))) / -projectileSim.gravAcceleration) * 
                 (projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant)
             ) * 1000) / 1000
         );
@@ -166,26 +166,26 @@ function DashKinematics() {
         setProjTime(
             Math.round((
                 ((-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant) - 
-                Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) - 4 * (-9.81 / 2) * (projectileSim.elevation))) / -9.81
+                Math.sqrt(Math.pow(projectileSim.velocity * (Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) - 4 * (-projectileSim.gravAcceleration / 2) * (projectileSim.elevation))) / -projectileSim.gravAcceleration
             ) * 1000) / 1000
         );
 
         setProjHeight(
             Math.round((
                 -Math.pow(-projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant, 2)
-            ) / (2 * -9.81) * 1000) / 1000
+            ) / (2 * -projectileSim.gravAcceleration) * 1000) / 1000
         );
 
         setProjVelocityMag(
             Math.round((
                 Math.sqrt(Math.pow(projectileSim.velocity, 2) + 
-                (2 * -9.81 * -projectileSim.elevation))
+                (2 * -projectileSim.gravAcceleration * -projectileSim.elevation))
             ) * 1000) / 1000
         );
 
         setProjVelocityAngle(
             Math.round((
-                Math.atan((-Math.sqrt(Math.pow((projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) + 2 * -9.81 * -projectileSim.elevation)) / 
+                Math.atan((-Math.sqrt(Math.pow((projectileSim.velocity * Math.round((Math.sin(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant), 2) + 2 * -projectileSim.gravAcceleration * -projectileSim.elevation)) / 
                 (projectileSim.velocity * Math.round((Math.cos(projectileSim.launchAngle * Math.PI / 180)) * roundingConstant) / roundingConstant)) * (180 / Math.PI)
             ) * 1000) / 1000  
         )
@@ -196,13 +196,13 @@ function DashKinematics() {
         
         setOdDistance(
             Math.round((
-                (aDirect ? (
+                ((!aDirect || ((oneDSim.velocity / oneDSim.acceleration) > oneDSim.time)) ? (oneDSim.velocity * oneDSim.time + (aDirect ? -1 : 1) * 0.5 * oneDSim.acceleration * Math.pow(oneDSim.time, 2)) : (
                     Math.abs((oneDSim.velocity * (oneDSim.velocity / oneDSim.acceleration) - 0.5 * oneDSim.acceleration * Math.pow((oneDSim.velocity / oneDSim.acceleration), 2))) + 
-                    Math.abs((oneDSim.velocity * (oneDSim.time - (oneDSim.velocity / oneDSim.acceleration)) + 0.5 * oneDSim.acceleration * Math.pow((oneDSim.time - (oneDSim.velocity / oneDSim.acceleration)), 2)))
-                ) : (oneDSim.velocity * oneDSim.time + 0.5 * oneDSim.acceleration * Math.pow(oneDSim.time, 2)))
+                    Math.abs((0.5 * oneDSim.acceleration * Math.pow((oneDSim.time - (oneDSim.velocity / oneDSim.acceleration)), 2)))
+                ))
             ) * 1000) / 1000
         );
-
+(oneDSim.velocity * oneDSim.time + 0.5 * oneDSim.acceleration * Math.pow(oneDSim.time, 2))
         setOdFinalVelocity(
             Math.round((
                 oneDSim.velocity + (aDirect ? -1 : 1) * oneDSim.acceleration * oneDSim.time
@@ -284,13 +284,15 @@ function DashKinematics() {
         return(
             <form className="containerForm" onSubmit={handleSubmit}>
                 {inputArray.map((_, rowIndex) => (
-                    <div className="inputDiv">
+                    <div className="inputDiv" key={rowIndex}>
                         <label>{inputArray[rowIndex][0]}: </label>
                         <input
                         type={inputArray[rowIndex][1]}
                         name={inputArray[rowIndex][2]}
                         value={inputArray[rowIndex][3]}
                         onChange={inputArray[rowIndex][4]}
+                        min={inputArray[rowIndex][5]}
+                        max={inputArray[rowIndex][6]}
                         />
                     </div>
                 ))}
@@ -303,7 +305,7 @@ function DashKinematics() {
         return(
             <div className={containerDiv}>
                 {inputArray.map((_, rowIndex) => (
-                    <p>{inputArray[rowIndex][0]}: {inputArray[rowIndex][1]}</p>
+                    <p key={rowIndex}>{inputArray[rowIndex][0]}: {inputArray[rowIndex][1]}</p>
                 ))}
             </div>
         );
@@ -346,10 +348,10 @@ function DashKinematics() {
             )}
             {(isOpen && isOpenProjectile) && (
                 repeatInputDiv([
-                    ["elevation", "number", "elevation", projectileSim.elevation, handleInputChangeProj],
-                    ["velocity", "number", "velocity", projectileSim.velocity, handleInputChangeProj],
-                    ["angle of launch", "number", "launchAngle", projectileSim.launchAngle, handleInputChangeProj],
-                    ["acceleration due to gravity", "number", "gravAcceleration", projectileSim.gravAcceleration, handleInputChangeProj]
+                    ["elevation", "number", "elevation", projectileSim.elevation, handleInputChangeProj, 0],
+                    ["velocity", "number", "velocity", projectileSim.velocity, handleInputChangeProj, 0],
+                    ["angle of launch", "number", "launchAngle", projectileSim.launchAngle, handleInputChangeProj, 0, 89],
+                    ["acceleration due to gravity", "number", "gravAcceleration", projectileSim.gravAcceleration, handleInputChangeProj, 1]
                 ])
             )}
             {(isOpen && isOpenOneDMotion) && (

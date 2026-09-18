@@ -2,7 +2,7 @@ import {create} from 'zustand';
 
 export const useProjectileStore = create((set) => ({
     projectileSim: {
-        elevation: 200,
+        elevation: 30,
         velocity: 10,
         launchAngle: 45,
         gravAcceleration: 9.81,
@@ -20,7 +20,7 @@ export const useProjectileStore = create((set) => ({
 
         logout: () => set({
             projectileSim: {
-                elevation: 20,
+                elevation: 30,
                 velocity: 10,
                 mass: 1,
                 launchAngle: 45,

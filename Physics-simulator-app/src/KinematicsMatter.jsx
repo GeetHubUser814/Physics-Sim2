@@ -14,8 +14,9 @@ const KinematicsMatter = () => {
     const isProj = useRef(true);
 
     const velocityValue = useRef(10);
-    const elevationValue = useRef(200);
+    const elevationValue = useRef(30);
     const launchAngle = useRef(45);
+    const grav = useRef(9.81);
 
     const odVelocityValue = useRef(10);
     const odAccelValue = useRef(5);
@@ -25,6 +26,13 @@ const KinematicsMatter = () => {
     
     const storeProjectileSim = useProjectileStore((state) => state.projectileSim);
     const storeOneDSim = useOneDStore((state) => state.oneDSim);
+
+    const hConst = 7.6;//higher equals higher h
+    const vConst = 3.67 * 2;//higher equals less vel
+    const gConst = 9.81 * 6.1 * 2;//higher equals less accel
+
+    const oneDVConst = 10;//higher equals less vel
+    const accelPower = 6.35;//higher equals less accel
 
     const projSim = () => startEndSim("proj");
     const oneDSim = () => startEndSim("oneD");
@@ -86,7 +94,7 @@ const KinematicsMatter = () => {
         const oneDAccel = (event) => {
             if(!isProj.current){
                 Body.applyForce(ballRef.current, ballRef.current.position, {
-                    x: odAccelDirection.current ? odAccelValue.current / (Math.pow(10, 6)) : -odAccelValue.current / (Math.pow(10, 6)),
+                    x: odAccelDirection.current ? odAccelValue.current / (Math.pow(10, accelPower)) : -odAccelValue.current / (Math.pow(10, accelPower)),
                     y: 0,
                 });
             }
@@ -95,22 +103,21 @@ const KinematicsMatter = () => {
         Matter.Events.on(engine, 'collisionStart', handleBounce);
         Matter.Events.on(engine, 'beforeUpdate', oneDAccel);
         Matter.Events.on(engine, 'afterUpdate', () => {
-            if(engine.timing.timestamp >= odTimeValue.current * 1000){
-                Body.setStatic(ballRef.current, true);
-                console.log("timer");
-            }
-            if(ballRef.current.isStatic){
-                engine.timing.timestamp = 0;
-                Runner.stop(runner);
-
-                console.log("stop timer");
-                console.log(engine.timing.timestamp);
+            if(!isProj.current){
+                
+                if(engine.timing.timestamp >= odTimeValue.current * 1000){
+                    Body.setStatic(ballRef.current, true);
+                }
+                if(ballRef.current.isStatic){
+                    engine.timing.timestamp = 0;
+                    Runner.stop(runner);
+                }
             }
         });
 
-        const ball = Bodies.circle(250, 269 + 191 - elevationValue.current, 5, {frictionAir: 0, restitution: 0});
+        const ball = Bodies.circle(103, 269 + 191 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0});
         const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
-        const elevation = Bodies.rectangle(0, 465 - elevationValue.current / 2, 500, elevationValue.current, {isStatic: true});
+        const elevation = Bodies.rectangle(0, 465 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
         
         ballRef.current = ball;
         elevationRef.current = elevation;
@@ -133,7 +140,8 @@ const KinematicsMatter = () => {
         elevationValue.current = storeProjectileSim.elevation;
         velocityValue.current = storeProjectileSim.velocity;
         launchAngle.current = storeProjectileSim.launchAngle * (Math.PI / 180);
-    }, [storeProjectileSim.elevation, storeProjectileSim.velocity, storeProjectileSim.launchAngle]);
+        grav.current = storeProjectileSim.gravAcceleration;
+    }, [storeProjectileSim.elevation, storeProjectileSim.velocity, storeProjectileSim.launchAngle, storeProjectileSim.gravAcceleration]);
 
     useEffect(() => {
         odVelocityValue.current = storeOneDSim.velocity;
@@ -150,11 +158,13 @@ const KinematicsMatter = () => {
             const {Runner, Composite, Bodies, Body} = Matter;
 
             if(!isRunning.current){
-                const newBall = Bodies.circle(255, 269 + 191 - elevationValue.current, 5, {frictionAir: 0, restitution: 0});
-                const newElevation = Bodies.rectangle(0, 465 - elevationValue.current / 2, 500, elevationValue.current, {isStatic: true});
+                const newBall = Bodies.circle(103, 269 + 191 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0});
+                const newElevation = Bodies.rectangle(0, 465 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
+
+                engineRef.current.gravity.y = grav.current / (gConst);
                 Body.setVelocity(newBall, {
-                    x: velocityValue.current * Math.cos(launchAngle.current),
-                    y: velocityValue.current * Math.sin(launchAngle.current) * -1
+                    x: velocityValue.current * Math.cos(launchAngle.current) / vConst,
+                    y: velocityValue.current * Math.sin(launchAngle.current) * -1 / vConst
                 });
 
                 Composite.remove(engineRef.current.world, [ballRef.current, elevationRef.current]);
@@ -164,6 +174,7 @@ const KinematicsMatter = () => {
 
                 Runner.run(runnerRef.current, engineRef.current);
 
+
             }else if(isRunning.current){
                 Matter.Runner.stop(runnerRef.current);
                 //Matter.Engine.clear(engineRef.current);
@@ -171,6 +182,7 @@ const KinematicsMatter = () => {
             isRunning.current = !isRunning.current;
         }else if(sim === "oneD"){
             isProj.current = false;
+            engineRef.current.timing.timestamp = 0;
             if(!runnerRef.current) return;
 
             const {Runner, Composite, Bodies, Body, Render, Engine} = Matter;
@@ -179,7 +191,7 @@ const KinematicsMatter = () => {
                 const newElevation = Bodies.rectangle(0, 0, 0, 0, {isStatic: true});
 
                 Body.setVelocity(newBall, {
-                    x: odVelocityValue.current / 10,
+                    x: odVelocityValue.current / oneDVConst,
                     y: 0,
                 });
 

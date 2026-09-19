@@ -5,12 +5,20 @@ const ForceMatter = () => {
     const sceneRef = useRef(null);    
 
     useEffect(() => {
-
         window.addEventListener("forceCanvas", forceCanvasHS);
 
         window.addEventListener("fromKinBtn", otherHide);
         window.addEventListener("fromWEPBtn", otherHide);
         window.addEventListener("fromLinearMBtn", otherHide);
+
+        return () => {
+            window.removeEventListener("forceCanvas", forceCanvasHS);
+            window.removeEventListener("fromKinBtn", otherHide);
+            window.removeEventListener("fromWEPBtn", otherHide);
+            window.removeEventListener("fromLinearMBtn", otherHide);
+        }
+    }, [])
+    useEffect(() => {
 
         const {Engine, Render, Runner, Bodies, Composite} = Matter;
 
@@ -75,7 +83,7 @@ const ForceMatter = () => {
         justifyContent: "center",
         justifySelf: "center",
         position: "absolute",
-        top: "8vh",
+        top: "4vh",
     }
     
     return(

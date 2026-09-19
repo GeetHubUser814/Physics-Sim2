@@ -202,7 +202,6 @@ function DashKinematics() {
                 ))
             ) * 1000) / 1000
         );
-(oneDSim.velocity * oneDSim.time + 0.5 * oneDSim.acceleration * Math.pow(oneDSim.time, 2))
         setOdFinalVelocity(
             Math.round((
                 oneDSim.velocity + (aDirect ? -1 : 1) * oneDSim.acceleration * oneDSim.time

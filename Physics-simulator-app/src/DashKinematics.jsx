@@ -292,6 +292,7 @@ function DashKinematics() {
                         onChange={inputArray[rowIndex][4]}
                         min={inputArray[rowIndex][5]}
                         max={inputArray[rowIndex][6]}
+                        step="any"
                         />
                     </div>
                 ))}
@@ -309,33 +310,6 @@ function DashKinematics() {
             </div>
         );
     }
-
-    function repeatSolveBtn(inputArray){
-        return(
-            <div className="containerForm">
-                {inputArray.map((_, rowIndex) => (
-                    <div className="solveDiv">
-                        <button onClick={() => setSubProj(inputArray[rowIndex][0])}>{inputArray[rowIndex][1]}</button>
-                    </div>
-                ))}
-            </div>
-        );
-    }
-
-    function solveOptionBtn(inputArray, condition){
-        return(
-            <div className={subProj === condition ? "b" : "a"}>
-                {inputArray.map((_, rowIndex) => (
-                    <div key={rowIndex} className="solveOptionsBtnContainer">
-                        <button className="inputDiv solveOptionBtn" onClick={() => setSubProj(inputArray[rowIndex][0])}>
-                            {inputArray[rowIndex][1]}
-                        </button>
-                    </div>
-                ))}
-            </div>
-        );
-    }
-
     return(
         <div>
             {isOpen && (
@@ -350,7 +324,7 @@ function DashKinematics() {
                     ["elevation", "number", "elevation", projectileSim.elevation, handleInputChangeProj, 0],
                     ["velocity", "number", "velocity", projectileSim.velocity, handleInputChangeProj, 0],
                     ["angle of launch", "number", "launchAngle", projectileSim.launchAngle, handleInputChangeProj, 0, 89],
-                    ["acceleration due to gravity", "number", "gravAcceleration", projectileSim.gravAcceleration, handleInputChangeProj, 1]
+                    ["acceleration due to gravity", "number", "gravAcceleration", projectileSim.gravAcceleration, handleInputChangeProj, 0.01]
                 ])
             )}
             {(isOpen && isOpenOneDMotion) && (

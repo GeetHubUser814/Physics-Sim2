@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
+import { useRampStore } from './RampSimStore';
 
 function DashForce() {
 
@@ -13,6 +14,7 @@ function DashForce() {
     const openCanvas = new CustomEvent("openCanvas");
     const closeCanvas = new CustomEvent("closeCanvas");
 
+    const [isRunning, setIsRunning] = useState(false);
 
     function dashOpenClose(){
         setIsOpen((prev) => !prev);
@@ -67,13 +69,14 @@ function DashForce() {
         window.dispatchEvent(openCanvas);
     }
 
+    const setStoreRampSim = useRampStore((state) => state.setStoreRampSim);
+
     const [rampSim, setRampSim] = useState({
         angle: 30,
-        length: 10,
+        length: 600,
         vI: 45,
         friction: 0,
         topBottom: true,
-        gravAcceleration: 9.81
     });
 
     const [atwoodSim, setAtwoodSim] = useState({
@@ -107,6 +110,7 @@ function DashForce() {
         }
     };
 
+    //HTML FUNCTIONS
     function repeatInputDiv(inputArray){
         return(
             <form className="containerForm" onSubmit={handleSubmit}>
@@ -127,10 +131,36 @@ function DashForce() {
             </form>
         );
     }
+    function repeatDisplay(inputArray, containerDiv){
+        return(
+            <div className={containerDiv}>
+                {inputArray.map((_, rowIndex) => (
+                    <p key={rowIndex}>{inputArray[rowIndex][0]}: {inputArray[rowIndex][1]}</p>
+                ))}
+            </div>
+        );
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        setStoreRampSim(rampSim);
     };
+
+    function startSimulation(){
+        if(isOpenRamp){
+            const startEndSimRamp = new CustomEvent("startEndSimRamp");
+            window.dispatchEvent(startEndSimRamp);    
+        }else if(isOpenAtwood){
+            const startEndSimAtwood = new CustomEvent("isOpenAtwood");
+            window.dispatchEvent(startEndSimAtwood);
+        }
+        if(!isRunning){
+            setIsRunning(true);
+        }else{
+            setIsRunning(false);
+        }
+    }
 
     return(
         <div>
@@ -140,6 +170,7 @@ function DashForce() {
                     <button className="dashBtn" onClick={atwoodBtn}>Atwood Sim</button>
                     <button className="dashBtn" onClick={FBDBtn}>Free Body Diagrams</button>
                     <button className="dashBtn" onClick={graphBtn}>Graphs</button>
+                    <button className="dashBtn">Equations</button>{/*page with equations used, given equations on exam and niche equations*/}
                 </div>
             )}
             {(isOpen && isOpenRamp) && (
@@ -157,6 +188,15 @@ function DashForce() {
                     ["right mass", "number", "rMass", atwoodSim.rMass, handleInputChange],
                     ["how high is left mass from right mass", "number", "lMassHeight", atwoodSim.lMassHeight, handleInputChange],
                 ])
+            )}
+            {(isOpen && (isOpenRamp || isOpenAtwood)) && (
+                <button className="startBtn" onClick={startSimulation}>{isRunning ? "Stop Simulation" : "Start Simualtion"}</button>
+            )}
+            {(isOpen && isOpenRamp) && (
+                repeatDisplay([
+                    ["angle(TEST)", rampSim.angle],
+                    ["length(TEST)", rampSim.length],
+                ], "simResult")
             )}
         </div>
     );

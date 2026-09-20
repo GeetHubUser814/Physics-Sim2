@@ -427,4 +427,31 @@ Sovle-
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     ];
 
+
+        function repeatSolveBtn(inputArray){
+        return(
+            <div className="containerForm">
+                {inputArray.map((_, rowIndex) => (
+                    <div className="solveDiv">
+                        <button onClick={() => setSubProj(inputArray[rowIndex][0])}>{inputArray[rowIndex][1]}</button>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
+    function solveOptionBtn(inputArray, condition){
+        return(
+            <div className={subProj === condition ? "b" : "a"}>
+                {inputArray.map((_, rowIndex) => (
+                    <div key={rowIndex} className="solveOptionsBtnContainer">
+                        <button className="inputDiv solveOptionBtn" onClick={() => setSubProj(inputArray[rowIndex][0])}>
+                            {inputArray[rowIndex][1]}
+                        </button>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
 */

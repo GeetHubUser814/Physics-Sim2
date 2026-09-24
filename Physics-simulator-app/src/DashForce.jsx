@@ -74,9 +74,7 @@ function DashForce() {
     const [rampSim, setRampSim] = useState({
         angle: 30,
         length: 600,
-        vI: 45,
         friction: 0,
-        topBottom: true,
     });
 
     const [atwoodSim, setAtwoodSim] = useState({
@@ -152,7 +150,7 @@ function DashForce() {
             const startEndSimRamp = new CustomEvent("startEndSimRamp");
             window.dispatchEvent(startEndSimRamp);    
         }else if(isOpenAtwood){
-            const startEndSimAtwood = new CustomEvent("isOpenAtwood");
+            const startEndSimAtwood = new CustomEvent("startEndSimAtwood");
             window.dispatchEvent(startEndSimAtwood);
         }
         if(!isRunning){
@@ -177,9 +175,7 @@ function DashForce() {
                 repeatInputDiv([
                     ["angle with horizontal", "number", "angle", rampSim.angle, handleInputChange, 0],
                     ["length of ramp", "number", "length", rampSim.length, handleInputChange, 0],
-                    ["initial velocity", "number", "vI", rampSim.vI, handleInputChange, 0, 89],
-                    ["friction", "number", "friction", rampSim.friction, handleInputChange, 0, 89],
-                    ["start at bottom", "checkbox", "topBottom", rampSim.topBottom, handleInputChange, 0, 89]
+                    ["friction", "number", "friction", rampSim.friction, handleInputChange, 0, 89]
                 ])
             )}
             {(isOpen && isOpenAtwood) && (

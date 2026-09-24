@@ -4,9 +4,7 @@ export const useRampStore = create((set) => ({
     rampSim: {
         angle: 30,
         length: 600,
-        vI: 45,
         friction: 0,
-        topBottom: true,
     },
 
     setStoreRampSim: (newRampSim) => set(() => ({rampSim: newRampSim})),
@@ -23,9 +21,7 @@ export const useRampStore = create((set) => ({
             rampSim: {
                 angle: 30,
                 length: 600,
-                vI: 45,
                 friction: 0,
-                topBottom: true,
             }
         })
 

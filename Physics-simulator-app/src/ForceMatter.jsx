@@ -59,6 +59,9 @@ const ForceMatter = () => {
         window.addEventListener("startEndSimRamp", rampSim);
         window.addEventListener("startEndSimAtwood", atwoodSim);
 
+        window.addEventListener("openCanvasForce", forceCanvasHS);
+        window.addEventListener("closeCanvasForce", otherHide);
+
         return () => {
             window.removeEventListener("forceCanvas", forceCanvasHS);
             window.removeEventListener("fromKinBtn", otherHide);
@@ -66,6 +69,8 @@ const ForceMatter = () => {
             window.removeEventListener("fromLinearMBtn", otherHide);
             window.removeEventListener("startEndSimRamp", rampSim);
             window.removeEventListener("startEndSimAtwood", atwoodSim);
+            window.removeEventListener("openCanvasForce", forceCanvasHS);
+            window.removeEventListener("closeCanvasForce", otherHide);
         }
     }, [])
 
@@ -263,7 +268,7 @@ const ForceMatter = () => {
         }
         setCanvasDisplay(canvasHidden.current);
     };
-
+ 
     const otherHide = () => {
         if(!canvasHidden.current){
             canvasHidden.current = true;

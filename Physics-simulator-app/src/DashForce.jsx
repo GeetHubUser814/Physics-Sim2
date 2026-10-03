@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import { useRampStore } from './RampSimStore';
+import ForceFBDgg from './ForceFBDgg';
 
 function DashForce() {
 
@@ -9,10 +10,18 @@ function DashForce() {
     const [isOpenFBD, setIsOpenFBD] = useState(false);
     const [isOpenGraph, setIsOpenGraph] = useState(false);
 
+    const [FBDDisplay, setFBDDisplay] = useState({
+        isRamp: false,
+        isAtwood: false,
+        isSpring: false,
+        isElevator: false,
+        isCircular: false
+    });
+
     const [subForce, setSubForce] = useState("");
 
-    const openCanvas = new CustomEvent("openCanvas");
-    const closeCanvas = new CustomEvent("closeCanvas");
+    const openCanvas = new CustomEvent("openCanvasForce");
+    const closeCanvas = new CustomEvent("closeCanvasForce");
 
     const [isRunning, setIsRunning] = useState(false);
 
@@ -56,7 +65,10 @@ function DashForce() {
             setIsOpenRamp(false);
             setIsOpenGraph(false);
         }
-        window.dispatchEvent(openCanvas);
+        window.dispatchEvent(closeCanvas);
+        setFBDDisplay({
+            ...false,
+        });
     }
     function graphBtn(){
         setIsOpenGraph((prev) => !prev);
@@ -66,7 +78,8 @@ function DashForce() {
             setIsOpenFBD(false);
             setIsOpenRamp(false);
         }
-        window.dispatchEvent(openCanvas);
+        window.dispatchEvent(closeCanvas);
+        console.log("graphBtn");
     }
 
     const setStoreRampSim = useRampStore((state) => state.setStoreRampSim);
@@ -160,6 +173,11 @@ function DashForce() {
         }
     }
 
+    const rampFBD = new CustomEvent("rampFBD");
+    const atwoodFBD = new CustomEvent("atwoodFBD");
+    const springFBD = new CustomEvent("springFBD");
+    const elevatorFBD = new CustomEvent("elevatorFBD");
+    const circularFBD = new CustomEvent("circularFBD");
     return(
         <div>
             {isOpen && (
@@ -193,6 +211,40 @@ function DashForce() {
                     ["angle(TEST)", rampSim.angle],
                     ["length(TEST)", rampSim.length],
                 ], "simResult")
+            )}
+            {(isOpen && isOpenFBD) && (
+                <div className="containerForm">
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...FBDDisplay, isRamp: true}), setIsOpenFBD(false), window.dispatchEvent(rampFBD)}}>Ramp FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...FBDDisplay, isAtwood: true}), setIsOpenFBD(false), window.dispatchEvent(atwoodFBD)}}>Atwood FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...FBDDisplay, isSpring: true}), setIsOpenFBD(false), window.dispatchEvent(springFBD)}}>Spring FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...FBDDisplay, isElevator: true}), setIsOpenFBD(false), window.dispatchEvent(elevatorFBD)}}>Elevator FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...FBDDisplay, isCircular: true}), setIsOpenFBD(false), window.dispatchEvent(circularFBD)}}>Circular Motion FBD</button>
+                </div>
+            )}
+            {(isOpen && FBDDisplay.isRamp) && (
+                <div className="forceFBDContainer">
+                    <ForceFBDgg />
+                </div>
+            )}
+            {(isOpen && FBDDisplay.isAtwood) && (
+                <div className="forceFBDContainer">
+                    <ForceFBDgg />
+                </div>
+            )}
+            {(isOpen && FBDDisplay.isSpring) && (
+                <div className="forceFBDContainer">
+                    <ForceFBDgg />
+                </div>
+            )}
+            {(isOpen && FBDDisplay.isElevator) && (
+                <div className="forceFBDContainer">
+                    <ForceFBDgg />
+                </div>
+            )}
+            {(isOpen && FBDDisplay.isCircular) && (
+                <div className="forceFBDContainer">
+                    <ForceFBDgg />
+                </div>
             )}
         </div>
     );

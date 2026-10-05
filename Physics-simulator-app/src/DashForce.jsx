@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import { useRampStore } from './RampSimStore';
-import ForceFBDgg from './ForceFBDgg';
+import ForceFBD from './ForceFBD';
 
 function DashForce() {
 
@@ -17,6 +17,15 @@ function DashForce() {
         isElevator: false,
         isCircular: false
     });
+    function getFBDDisplay(){
+        for(let i = 0; i < Object.keys(FBDDisplay).length; i++){
+            const key = Object.keys(FBDDisplay)[i];
+            if(FBDDisplay[key]){
+                return key;
+            }
+        }
+        return null;
+    }
 
     const [subForce, setSubForce] = useState("");
 
@@ -214,36 +223,36 @@ function DashForce() {
             )}
             {(isOpen && isOpenFBD) && (
                 <div className="containerForm">
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...FBDDisplay, isRamp: true}), setIsOpenFBD(false), window.dispatchEvent(rampFBD)}}>Ramp FBD</button>
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...FBDDisplay, isAtwood: true}), setIsOpenFBD(false), window.dispatchEvent(atwoodFBD)}}>Atwood FBD</button>
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...FBDDisplay, isSpring: true}), setIsOpenFBD(false), window.dispatchEvent(springFBD)}}>Spring FBD</button>
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...FBDDisplay, isElevator: true}), setIsOpenFBD(false), window.dispatchEvent(elevatorFBD)}}>Elevator FBD</button>
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...FBDDisplay, isCircular: true}), setIsOpenFBD(false), window.dispatchEvent(circularFBD)}}>Circular Motion FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isRamp: true}), setIsOpenFBD(false)}}>Ramp FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isAtwood: true}), setIsOpenFBD(false)}}>Atwood FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isSpring: true}), setIsOpenFBD(false)}}>Spring FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isElevator: true}), setIsOpenFBD(false)}}>Elevator FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isCircular: true}), setIsOpenFBD(false)}}>Circular Motion FBD</button>
                 </div>
             )}
             {(isOpen && FBDDisplay.isRamp) && (
                 <div className="forceFBDContainer">
-                    <ForceFBDgg />
+                    <ForceFBD show={getFBDDisplay()} />
                 </div>
             )}
             {(isOpen && FBDDisplay.isAtwood) && (
                 <div className="forceFBDContainer">
-                    <ForceFBDgg />
+                    <ForceFBD show={getFBDDisplay()} />
                 </div>
             )}
             {(isOpen && FBDDisplay.isSpring) && (
                 <div className="forceFBDContainer">
-                    <ForceFBDgg />
+                    <ForceFBD show={getFBDDisplay()} />
                 </div>
             )}
             {(isOpen && FBDDisplay.isElevator) && (
                 <div className="forceFBDContainer">
-                    <ForceFBDgg />
+                    <ForceFBD show={getFBDDisplay()} />
                 </div>
             )}
             {(isOpen && FBDDisplay.isCircular) && (
                 <div className="forceFBDContainer">
-                    <ForceFBDgg />
+                    <ForceFBD show={getFBDDisplay()} />
                 </div>
             )}
         </div>

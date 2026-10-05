@@ -383,6 +383,10 @@ body{
   background-color: var(--primary-color);
   border-color: var(--border-color);
 }
+.FBD-container{
+  position: relative;
+  top: -65vh;
+}
 :root{
   --primary-color: rgb(237, 222, 238);
   --border-color: rgb(217, 196, 216);

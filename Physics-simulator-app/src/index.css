@@ -387,6 +387,12 @@ body{
   position: relative;
   top: -65vh;
 }
+.FBD-info{
+  position: relative;
+  top: -48vh;
+  font-size: 2.5vh;
+
+}
 :root{
   --primary-color: rgb(237, 222, 238);
   --border-color: rgb(217, 196, 216);

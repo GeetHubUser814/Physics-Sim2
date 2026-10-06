@@ -54,6 +54,9 @@ function DashForce() {
             setIsOpenFBD(false);
             setIsOpenGraph(false);
         }
+        setFBDDisplay({
+            ...false,
+        });
         window.dispatchEvent(openCanvas);
     }
     function atwoodBtn(){
@@ -64,6 +67,9 @@ function DashForce() {
             setIsOpenFBD(false);
             setIsOpenGraph(false);
         }
+        setFBDDisplay({
+            ...false,
+        });
         window.dispatchEvent(openCanvas);
     }
     function FBDBtn(){
@@ -87,6 +93,9 @@ function DashForce() {
             setIsOpenFBD(false);
             setIsOpenRamp(false);
         }
+        setFBDDisplay({
+            ...false,
+        });
         window.dispatchEvent(closeCanvas);
         console.log("graphBtn");
     }
@@ -182,11 +191,6 @@ function DashForce() {
         }
     }
 
-    const rampFBD = new CustomEvent("rampFBD");
-    const atwoodFBD = new CustomEvent("atwoodFBD");
-    const springFBD = new CustomEvent("springFBD");
-    const elevatorFBD = new CustomEvent("elevatorFBD");
-    const circularFBD = new CustomEvent("circularFBD");
     return(
         <div>
             {isOpen && (

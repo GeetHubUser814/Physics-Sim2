@@ -16,7 +16,7 @@ function DashBoard(){
         }else if(String === "linear"){
             setHideName(String);
         }
-    };
+    };//ashdokashfko
     const kinematicsHide = (e) => hideFunc(e, "kinematics");
     const forceHide = (e) => hideFunc(e, "force");
     const workHide = (e) => hideFunc(e, "work");

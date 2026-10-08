@@ -7,16 +7,10 @@ function DashBoard(){
     const [hideName, setHideName] = useState("kinematics");
     const [isOpen, setIsOpen] = useState(true);
     const hideFunc = (event, String) => {
-        if(String === "kinematics"){
-            setHideName(String);
-        }else if(String === "force"){
-            setHideName(String);
-        }else if(String === "work"){
-            setHideName(String) ;
-        }else if(String === "linear"){
+        if(String === "kinematics" || String === "force" || String === "work" || String === "linear"){
             setHideName(String);
         }
-    };//ashdokashfko
+    };
     const kinematicsHide = (e) => hideFunc(e, "kinematics");
     const forceHide = (e) => hideFunc(e, "force");
     const workHide = (e) => hideFunc(e, "work");

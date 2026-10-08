@@ -52,10 +52,10 @@ const KinematicsMatter = () => {
         window.addEventListener("openCanvas", kinCanvasHS);
         window.addEventListener("closeCanvas", otherHide);
 
-        //window.addEventListener("submitValues", submitValues);
+        window.addEventListener("submitValues", submitValues);
 
         return () => {
-            window.removeEventListener("kinCanvas", kinCanvasHS);
+            //window.removeEventListener("kinCanvas", kinCanvasHS);
             window.removeEventListener("fromForceBtn", otherHide);
             window.removeEventListener("fromWEPBtn", otherHide);
             window.removeEventListener("fromLinearMBtn", otherHide);

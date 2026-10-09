@@ -396,19 +396,46 @@ body{
 }
 .FBD-info{
   position: absolute;
-  top: 8vh;
-  left: 1vh; 
+  top: 68vh;
+  height: 20vh;
+  width: 60vw;
+  left: 2vw; 
   font-size: 2.5vh;
+  border: var(--dash-border-size) solid;
+  border-color: var(--border-color);
+  border-radius: var(--display-border-radius);
+  display: flex;
+  flex-direction: row;
+  gap: 0.2vw;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
 }
+.FBD-info-normal{
+  background-color: var(--btn-primary-color);
+  border: var(--button-border-size) solid;
+  border-color: var(--border-color);
+  border-radius: var(--display-border-radius);
+  height: max-content;
+  padding: 0.5vh;
+}
+.FBD-info-pinkDot{
+  background-color: rgb(255, 64, 207);
+  border: var(--button-border-size) solid;
+  border-color: rgb(215, 57, 176);
+  border-radius: var(--display-border-radius);
+  height: max-content;
+  padding: 0.5vh;
+}
+
 :root{
   --primary-color: rgb(237, 222, 238);
-  --border-color: rgb(217, 196, 216);
+  --border-color: rgb(234, 181, 232);
   --hover-color: rgb(210, 199, 211);
   --text-color: rgb(83, 49, 78);
   --button-border-size: 0.75vh;
   --dash-border-size: 1vh;
   --btn-border-radius: 3vh;
-  --display-border-radius: 0.5vh;
+  --display-border-radius: 0.8vh;
 
   --btn-primary-color: rgb(241, 185, 246);
   --btn-border-color: var(--btn-primary-color);

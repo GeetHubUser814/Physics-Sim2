@@ -3,12 +3,16 @@ import React, {useEffect, useRef, useState} from 'react';
 
 function ForceFBD({show}) {
 
+    function distance(p1, p2){
+        return Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+    }
+    //ramp start
     const rampHeight = 2;
-    const rampWidth = 1.5;
+    const rampWidth = 1;
     const rampTop = useMovablePoint([-3, rampHeight], {
         constrain: ([x, y]) => [-3, Math.max(-3, y)]
     });
-    const gravEnd = useMovablePoint([-2, -1], {
+    const gravEnd = useMovablePoint([(-3 + rampWidth) / 2 + 0.12, -2], {
         constrain: ([x, y]) => [(-3 + rampWidth) / 2 + 0.12, Math.min((rampTop.y / 2) - 1.3, y)]
     });
     const ramp = {
@@ -29,14 +33,33 @@ function ForceFBD({show}) {
                          ramp.centerY - gravMagnitude * Math.pow(Math.sin(ramp.thetaRads), 2)];
     const normalMagnitude = distance([ramp.centerX, ramp.centerY], gravNormal);
     const tangentMagnitude = distance(gravEnd.point, gravTangent);
-    function distance(p1, p2){
-        return Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+    //ramp end
+
+    //atwood start
+    const atwood = {
+        pulleyRad: 0.7,
+        pulleyCenterX: 0,
+        pulleyCenterY: 2,
+        length: -3
     }
+    const masses = {
+        mass1Pos: [atwood.pulleyCenterX - atwood.pulleyRad, atwood.pulleyCenterY + atwood.length / 1.13],
+        mass2Pos: [atwood.pulleyCenterX + atwood.pulleyRad, atwood.pulleyCenterY + atwood.length / 1.13]
+    }
+    const mass1GravEnd = useMovablePoint([masses.mass1Pos[0], masses.mass1Pos[1] - 1], {
+        constrain: ([x, y]) => [masses.mass1Pos[0], Math.min(masses.mass1Pos[1] - 0.5, y)]
+    });
+    const mass2GravEnd = useMovablePoint([masses.mass2Pos[0], masses.mass2Pos[1] - 1], {
+        constrain: ([x, y]) => [masses.mass2Pos[0], Math.min(masses.mass2Pos[1] - 0.5, y)]
+    });
+    const mass1Weight = distance(masses.mass1Pos, mass1GravEnd.point) * 10;
+    const mass2Weight = distance(masses.mass2Pos, mass2GravEnd.point) * 10;
+    //atwood end
     return (
         <div>
             {show === "isRamp" && (
                 <div className="FBD-container">
-                    <Mafs pan={false} zoom={false}>
+                    <Mafs pan={false} zoom={false} height={550} viewBox={{x: [-5, 5], y: [gravEnd.point[1] - 2, Math.max(rampTop.point[1] + 2, gravNormalReal[1] + 2)]}}>
   
                         <Circle
                             center={[ramp.centerX, ramp.centerY]}
@@ -67,14 +90,58 @@ function ForceFBD({show}) {
                         {rampTop.element}
 
                     </Mafs>
+                    <div className="FBD-info">
+                        <p className="FBD-info-pinkDot">theta: {ramp.theta.toFixed(3)}</p>
+                        <p className="FBD-info-pinkDot">weight: {gravMagnitude.toFixed(3)}</p>
+                        <p className="FBD-info-normal">normal force: {normalMagnitude.toFixed(3)}</p>
+                        <p className="FBD-info-normal">parallel component of gravity: {tangentMagnitude.toFixed(3)}</p>
+                        <p className="FBD-info-normal">friction: </p>
+                    </div>
                 </div>  
             )}
-            <div className="FBD-info">
-                <p>theta: {ramp.theta.toFixed(3)}</p>
-                <p>normal force: {normalMagnitude.toFixed(3)}</p>
-                <p>weight: {gravMagnitude.toFixed(3)}</p>
-                <p>parallel component of gravity: {tangentMagnitude.toFixed(3)}</p>
-            </div>
+            {show === "isAtwood" && (
+                <div className="FBD-container">
+                    <Mafs pan={false} zoom={false} height={550} viewBox={{x: [-5, 5], y: [Math.min(mass1GravEnd.point[1] - 1, mass2GravEnd.point[1]) - 1, 5]}}>
+                        {/*pulley*/}
+                        <Circle
+                            center={[atwood.pulleyCenterX, atwood.pulleyCenterY]}
+                            radius={atwood.pulleyRad}
+                        />
+                        {/*mass1*/}
+                        <Circle
+                            center={masses.mass1Pos}
+                            radius={atwood.pulleyRad / 2}
+                        />
+                        {/*mass2*/}
+                        <Circle
+                            center={masses.mass2Pos}
+                            radius={atwood.pulleyRad / 2}
+                        />
+                        <Line.Segment
+                            point1={[atwood.pulleyCenterX - atwood.pulleyRad, atwood.pulleyCenterY]}
+                            point2={[atwood.pulleyCenterX - atwood.pulleyRad, atwood.pulleyCenterY * (1.35) + atwood.length]}
+                        />
+                        <Line.Segment
+                            point1={[atwood.pulleyCenterX + atwood.pulleyRad, atwood.pulleyCenterY]}
+                            point2={[atwood.pulleyCenterX + atwood.pulleyRad, atwood.pulleyCenterY * (1.35) + atwood.length]}
+                        />
+                        <Vector
+                            tail={masses.mass1Pos}
+                            tip={mass1GravEnd.point}
+                        />
+                        <Vector
+                            tail={masses.mass2Pos}
+                            tip={mass2GravEnd.point}
+                        />
+                        {mass1GravEnd.element}
+                        {mass2GravEnd.element}
+                    </Mafs>
+                    <div className="FBD-info">
+                        <p className="FBD-info-pinkDot">weight of mass 1: {mass1Weight.toFixed(3)}</p>
+                        <p className="FBD-info-pinkDot">weight of mass 2: {mass2Weight.toFixed(3)}</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

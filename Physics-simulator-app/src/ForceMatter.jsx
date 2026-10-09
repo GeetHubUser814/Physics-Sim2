@@ -60,7 +60,17 @@ const ForceMatter = () => {
         window.addEventListener("startEndSimAtwood", atwoodSim);
 
         window.addEventListener("openCanvasForce", forceCanvasHS);
-        window.addEventListener("closeCanvasForce", otherHide);
+        window.addEventListener("closeCanvasForce", () => {
+            otherHide();
+            canvasCover.current = false;
+        });
+        window.addEventListener("coverCanvasForce", () => {
+            canvasCover.current = true;
+        });
+        window.addEventListener("coverDownCanvasForce", () => {
+            canvasCover.current = false;
+            forceCanvasHS();
+        });
 
         return () => {
             window.removeEventListener("forceCanvas", forceCanvasHS);
@@ -70,7 +80,17 @@ const ForceMatter = () => {
             window.removeEventListener("startEndSimRamp", rampSim);
             window.removeEventListener("startEndSimAtwood", atwoodSim);
             window.removeEventListener("openCanvasForce", forceCanvasHS);
-            window.removeEventListener("closeCanvasForce", otherHide);
+            window.removeEventListener("closeCanvasForce", () => {
+                otherHide();
+                canvasCover.current = false;
+            });
+            window.removeEventListener("coverCanvasForce", () => {
+                canvasCover.current = true;
+            });
+            window.removeEventListener("coverDownCanvasForce", () => {
+                canvasCover.current = false;
+                forceCanvasHS();
+            });
         }
     }, [])
 
@@ -92,7 +112,6 @@ const ForceMatter = () => {
         });
         const runner = Runner.create();
         runnerRef.current = runner;
-
 
         const ball = Bodies.circle(25, 456 - rampY.current, 10, {friction: rampRef.friction, frictionAir: 0, restitution: 0});
         const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
@@ -262,8 +281,9 @@ const ForceMatter = () => {
     };
 
     const canvasHidden = useRef(true);
+    const canvasCover = useRef(false);
     const forceCanvasHS = () => {
-        if(canvasHidden.current){
+        if(canvasHidden.current && !canvasCover.current){
             canvasHidden.current = false;
         }
         setCanvasDisplay(canvasHidden.current);

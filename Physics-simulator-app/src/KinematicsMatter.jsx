@@ -50,20 +50,37 @@ const KinematicsMatter = () => {
         window.addEventListener("startEndSimOneD", oneDSim);
 
         window.addEventListener("openCanvas", kinCanvasHS);
-        window.addEventListener("closeCanvas", otherHide);
-
-        window.addEventListener("submitValues", submitValues);
+        window.addEventListener("closeCanvas", () => {
+            otherHide();
+            canvasCover.current = false;
+        });
+        window.addEventListener("coverCanvas", () => {
+            canvasCover.current = true;
+        });
+        window.addEventListener("coverDownCanvas", () => {
+            canvasCover.current = false;
+            kinCanvasHS();
+        });
 
         return () => {
-            //window.removeEventListener("kinCanvas", kinCanvasHS);
+            window.removeEventListener("kinCanvas", kinCanvasHS);
             window.removeEventListener("fromForceBtn", otherHide);
             window.removeEventListener("fromWEPBtn", otherHide);
             window.removeEventListener("fromLinearMBtn", otherHide);
             window.removeEventListener("startEndSimProj", projSim);
             window.removeEventListener("startEndSimOneD", oneDSim);
             window.removeEventListener("openCanvas", kinCanvasHS);
-            window.removeEventListener("closeCanvas", otherHide);
-            //window.removeEventListener("submitValues", submitValues);
+            window.removeEventListener("closeCanvas", () => {
+                otherHide();
+                canvasCover.current = false;
+            });
+            window.removeEventListener("coverCanvas", () => {
+                canvasCover.current = true;
+            });
+            window.removeEventListener("coverDownCanvas", () => {
+                canvasCover.current = false;
+            });
+
         }
     }, []);
 
@@ -210,15 +227,11 @@ const KinematicsMatter = () => {
         }
     };
 
-    /*
-    function submitValues(){
-
-    }
-    */
 
     const canvasHidden = useRef(false);
+    const canvasCover = useRef(false);
     const kinCanvasHS = () => {
-        if(canvasHidden.current){
+        if(canvasHidden.current && !canvasCover.current){
             canvasHidden.current = false;
         }
         setCanvasDisplay(canvasHidden.current);

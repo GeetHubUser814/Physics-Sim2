@@ -16,6 +16,8 @@ function DashKinematics() {
 
     const openCanvas = new CustomEvent("openCanvas");
     const closeCanvas = new CustomEvent("closeCanvas");
+    const coverCanvas = new CustomEvent("coverCanvas");
+    const coverDownCanvas = new CustomEvent("coverDownCanvas");
 
     const [subProj, setSubProj] = useState("");
 
@@ -32,6 +34,7 @@ function DashKinematics() {
             setIsOpenGraphOneD(false);
         }
         window.dispatchEvent(openCanvas);
+        window.dispatchEvent(coverDownCanvas);
     }
 
     function oneDMotionBtn (){
@@ -43,6 +46,7 @@ function DashKinematics() {
             setIsOpenGraphOneD(false);
         }
         window.dispatchEvent(openCanvas);
+        window.dispatchEvent(coverDownCanvas);
     }
 
     function GraphBtn(){
@@ -59,11 +63,13 @@ function DashKinematics() {
     function projGraphBtn(){
         setIsOpenGraphProjectile(true);
         setIsOpenGraph(false);
+        window.dispatchEvent(coverCanvas);
     }
 
     function oneDGraphBtn(){
         setIsOpenGraphOneD(true);
         setIsOpenGraph(false);
+        window.dispatchEvent(coverCanvas);
     }
 
 

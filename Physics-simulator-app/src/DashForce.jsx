@@ -31,6 +31,8 @@ function DashForce() {
 
     const openCanvas = new CustomEvent("openCanvasForce");
     const closeCanvas = new CustomEvent("closeCanvasForce");
+    const coverCanvas = new CustomEvent("coverCanvasForce");
+    const coverDownCanvas = new CustomEvent("coverDownCanvasForce");
 
     const [isRunning, setIsRunning] = useState(false);
 
@@ -58,6 +60,7 @@ function DashForce() {
             ...false,
         });
         window.dispatchEvent(openCanvas);
+        window.dispatchEvent(coverDownCanvas);
     }
     function atwoodBtn(){
         setIsOpenAtwood((prev) => !prev);
@@ -71,6 +74,7 @@ function DashForce() {
             ...false,
         });
         window.dispatchEvent(openCanvas);
+        window.dispatchEvent(coverDownCanvas);
     }
     function FBDBtn(){
         setSubForce("FBD");
@@ -227,11 +231,11 @@ function DashForce() {
             )}
             {(isOpen && isOpenFBD) && (
                 <div className="containerForm">
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isRamp: true}), setIsOpenFBD(false)}}>Ramp FBD</button>
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isAtwood: true}), setIsOpenFBD(false)}}>Atwood FBD</button>
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isSpring: true}), setIsOpenFBD(false)}}>Spring FBD</button>
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isElevator: true}), setIsOpenFBD(false)}}>Elevator FBD</button>
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isCircular: true}), setIsOpenFBD(false)}}>Circular Motion FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isRamp: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Ramp FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isAtwood: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Atwood FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isSpring: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Spring FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isElevator: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Elevator FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isCircular: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Circular Motion FBD</button>
                 </div>
             )}
             {(isOpen && FBDDisplay.isRamp) && (

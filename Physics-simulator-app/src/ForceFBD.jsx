@@ -24,15 +24,20 @@ function ForceFBD({show}) {
         theta: Math.atan2((rampTop.y) + 3, (rampWidth) + 3) * 180 / Math.PI,
         thetaRads: Math.atan2((rampTop.y) + 3, (rampWidth) + 3)
     };
+    const pointOfContact = [ramp.centerX - ramp.rad * Math.sin(ramp.thetaRads), ramp.centerY - ramp.rad * Math.cos(ramp.thetaRads)];
     const gravMagnitude = distance([ramp.centerX, ramp.centerY], gravEnd.point);
     const gravNormal = [ramp.centerX - gravMagnitude * Math.sin(2 * ramp.thetaRads) / 2, 
                         ramp.centerY - gravMagnitude * Math.pow(Math.cos(ramp.thetaRads), 2)];
-    const gravNormalReal = [ramp.centerX + gravMagnitude * Math.sin(2 * ramp.thetaRads) / 2, 
-                            ramp.centerY + gravMagnitude * Math.pow(Math.cos(ramp.thetaRads), 2)];
+    const gravNormalReal = [pointOfContact[0] + gravMagnitude * Math.sin(2 * ramp.thetaRads) / 2, 
+                            pointOfContact[1] + gravMagnitude * Math.pow(Math.cos(ramp.thetaRads), 2)];
     const gravTangent = [ramp.centerX + gravMagnitude * Math.sin(2 * ramp.thetaRads) / 2, 
                          ramp.centerY - gravMagnitude * Math.pow(Math.sin(ramp.thetaRads), 2)];
     const normalMagnitude = distance([ramp.centerX, ramp.centerY], gravNormal);
     const tangentMagnitude = distance(gravEnd.point, gravTangent);
+    const [coeffOfFriction, setCoeffOfFriction] = useState(0.5);
+    const [coeffOfFrictionTemp,setCoeffOfFrictionTemp] = useState(0.5);
+    const frictionMagnitude = normalMagnitude * coeffOfFriction;
+    const frictionTip = [pointOfContact[0] - frictionMagnitude * Math.cos(ramp.thetaRads), pointOfContact[1] + frictionMagnitude * Math.sin(ramp.thetaRads)];
     //ramp end
 
     //atwood start
@@ -68,13 +73,33 @@ function ForceFBD({show}) {
     const tensionMagnitude = 2 / 10 * (mass1Weight * mass2Weight) / (mass1Weight + mass2Weight);
     const mass1NetForce = Math.abs(mass1Weight - tensionMagnitude * 10);
     const mass2NetForce = Math.abs(mass2Weight - tensionMagnitude * 10);
-
     //atwood end
+
+    //spring start
+    const [springIsHorizontal, setSpringIsHorizontal] = useState(null);
+    const springMassCenter = useMovablePoint([0, -1], {
+        constrain: ([x, y]) => [Math.max(Math.min(x, 7.5), -7.5), -1],
+    });
+    const spring = {
+        massSize: 2,
+    };
+    const springMassPoints = {
+        massTopLeft: [springMassCenter.point[0] - spring.massSize / 2, springMassCenter.point[1] + spring.massSize / 2],
+        massBottomRight: [springMassCenter.point[0] + spring.massSize / 2, springMassCenter.point[1] - spring.massSize / 2],
+        massTopRight: [springMassCenter.point[0] + spring.massSize / 2, springMassCenter.point[1] + spring.massSize / 2],
+        massBottomLeft: [springMassCenter.point[0] - spring.massSize / 2, springMassCenter.point[1] - spring.massSize / 2]
+    };
+    const [springConst, setSpringConst] = useState(100);
+    const [maxDisplacement, setMaxDisplacement] = useState(2);
+    const [maxDisplacementTemp, setMaxDisplacementTemp] = useState(2);
+    const isMassPosRight = springMassCenter.point[0] > 0;
+    const displacement = (isMassPosRight ? 1 : -1) * distance(springMassCenter.point, [0, -1]) * (maxDisplacement / 7.5);
+    //spring end
     return (
-        <div>
+        <div className="bigForceFBDContainer">
             {show === "isRamp" && (
                 <div className="FBD-container">
-                    <Mafs pan={false} zoom={false} height={500} viewBox={{x: [-5, 5], y: [gravEnd.point[1] - 2, Math.max(rampTop.point[1] + 2, gravNormalReal[1] + 2)]}}>
+                    <Mafs pan={false} zoom={false} height={500} width={1700} viewBox={{x: [-5, 5], y: [gravEnd.point[1] - 2, Math.max(rampTop.point[1] + 2, gravNormalReal[1] + 2)]}}>
   
                         <Circle
                             center={[ramp.centerX, ramp.centerY]}
@@ -83,13 +108,14 @@ function ForceFBD({show}) {
                         />
                         <Polygon
                             points={[rampTop.point, ramp.b, ramp.c]}
+                            color="gray"
                         />
                         <Vector
                             tail={[ramp.centerX, ramp.centerY]}
                             tip={gravEnd.point}
                         />
                         <Vector
-                            tail={[ramp.centerX, ramp.centerY]}
+                            tail={pointOfContact}
                             tip={gravNormal}
                         />
                         <Vector
@@ -97,9 +123,15 @@ function ForceFBD({show}) {
                             tip={gravTangent}
                         />
                         <Vector
-                            tail={[ramp.centerX, ramp.centerY]}
+                            tail={pointOfContact}
                             tip={gravNormalReal}
                         />
+                        {(coeffOfFriction > 0) && (
+                            <Vector
+                                tail={pointOfContact}
+                                tip={frictionTip}
+                            />
+                        )}
                         {gravEnd.element}
 
                         {rampTop.element}
@@ -108,19 +140,39 @@ function ForceFBD({show}) {
                     <div className="FBD-info">
                         <p className="FBD-info-pinkDot">theta: {ramp.theta.toFixed(3)}</p>
                         <p className="FBD-info-pinkDot">weight: {gravMagnitude.toFixed(3)}</p>
+                        <p>
+                            <form className="FBD-form" onSubmit={(e) => {
+                                e.preventDefault();
+                                setCoeffOfFriction(coeffOfFrictionTemp);
+                            }}>
+                                <label>
+                                    coefficient of friction (0-1.5): ({coeffOfFriction.toFixed(2)}):
+                                    <input
+                                        type="number"
+                                        value={coeffOfFrictionTemp}
+                                        onChange={(e) => setCoeffOfFrictionTemp(parseFloat(e.target.value))}
+                                        step="0.01"
+                                        min="0"
+                                        max="1.5"
+                                    />
+                                </label>
+                            </form>
+                        </p>
                         <p className="FBD-info-normal">normal force: {normalMagnitude.toFixed(3)}</p>
                         <p className="FBD-info-normal">parallel component of gravity: {tangentMagnitude.toFixed(3)}</p>
-                        <p className="FBD-info-normal">friction: </p>
+                        <p className="FBD-info-normal">friction: {frictionMagnitude.toFixed(3)}</p>
+
                     </div>
                 </div>  
             )}
             {show === "isAtwood" && (
                 <div className="FBD-container">
-                    <Mafs pan={false} zoom={false} height={550} viewBox={{x: [-5, 5], y: [Math.min(mass1GravEnd.point[1] - 1, mass2GravEnd.point[1]) - 1, Math.max(masses.mass1Pos[1] + tensionMagnitude, atwood.pulleyCenterY + atwood.pulleyRad)]}}>
+                    <Mafs pan={false} zoom={false} height={550} width={1700} viewBox={{x: [-5, 5], y: [Math.min(mass1GravEnd.point[1] - 1, mass2GravEnd.point[1]) - 1, Math.max(masses.mass1Pos[1] + tensionMagnitude, atwood.pulleyCenterY + atwood.pulleyRad)]}}>
                         {/*pulley*/}
                         <Circle
                             center={[atwood.pulleyCenterX, atwood.pulleyCenterY]}
                             radius={atwood.pulleyRad}
+                            color="gray"
                         />
                         {/*mass1*/}
                         <Polygon
@@ -176,6 +228,87 @@ function ForceFBD({show}) {
                         <p className="FBD-info-normal">magnitude net force on mass 1: {mass1NetForce.toFixed(3)}</p>
                         <p className="FBD-info-normal">magnitude net force on mass 2: {mass2NetForce.toFixed(3)}</p>
                     </div>
+                </div>
+            )}
+            {(show === "isSpring") && (
+                <div className="multiple-FBD-container">
+                    <div className="containerForm">
+                        {(springIsHorizontal === null) && (
+                            <div className="spring-options">
+                                <button className="dashBtn" onClick={() => setSpringIsHorizontal(true)}>
+                                    horizontal spring
+                                </button>
+                                <button className="dashBtn" onClick={() => setSpringIsHorizontal(false)}>
+                                    vertical spring
+                                </button>
+                            </div>
+                        )}
+                        {(springIsHorizontal) && (
+                            <div className="FBD-info spring-FBD-info">
+                                <p>
+                                    <form className="FBD-form" onSubmit={(e) => {
+                                        e.preventDefault();
+                                        setMaxDisplacement(maxDisplacementTemp);
+                                    }}>
+                                        <label>
+                                            maximum displacement (0-5): ({maxDisplacement.toFixed(2)}):
+                                            <input
+                                                type="number"
+                                                value={maxDisplacementTemp}
+                                                onChange={(e) => setMaxDisplacementTemp(parseFloat(e.target.value))}
+                                                step="0.01"
+                                                min="0.1"
+                                                max="5"
+                                            />
+                                        </label>
+                                    </form>
+                                </p>
+                                <p className="FBD-info-pinkDot">displacement from equilibrium: {displacement.toFixed(2)}</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {springIsHorizontal && (
+                        <div className="FBD-container multipleFBD">
+                            <Mafs pan={false} zoom={false} height={500} width={1700}>
+                                {/*floor and wall*/}
+                                <Line.Segment
+                                    point1={[-10, -2]}
+                                    point2={[100000, -2]}
+                                />
+                                <Line.Segment
+                                    point1={[-10, -2]}
+                                    point2={[-10, 2]}
+                                />
+                                <Line.Segment
+                                    point1={[-10, 2]}
+                                    point2={[-10000, 2]}
+                                />
+                                {/*floor and wall*/}
+
+                                <Line.Segment
+                                    point1={[0, -2]}
+                                    point2={[0, 1000]}
+                                    style="dashed" 
+                                />
+                                <Polygon
+                                    points={[
+                                        springMassPoints.massTopLeft,
+                                        springMassPoints.massTopRight,
+                                        springMassPoints.massBottomRight,
+                                        springMassPoints.massBottomLeft
+                                    ]}
+                                    
+                                />
+                                <Vector
+                                    tail={[0, -2.75]}
+                                    tip={[springMassCenter.point[0], -2.75]}
+                                />
+
+                                {springMassCenter.element}
+                            </Mafs>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

@@ -386,13 +386,14 @@ body{
   border-color: var(--border-color);
 }
 .FBD-container{
-  position: relative;
-  top: -68.2vh;
+  position: absolute;
+  top: -60vh;
   left: 2.5vh;
   font-size: 1.5vh;
   border: 1.25vh solid;
   border-radius: 0.5vh;
   border-color: var(--border-color);
+  width: max-content;
 }
 .FBD-info{
   position: absolute;
@@ -400,10 +401,11 @@ body{
   height: 20vh;
   width: 60vw;
   left: 2vw; 
-  font-size: 2.5vh;
+  font-size: 2vh;
   border: var(--dash-border-size) solid;
   border-color: var(--border-color);
   border-radius: var(--display-border-radius);
+  background-color: var(--primary-color);
   display: flex;
   flex-direction: row;
   gap: 0.2vw;
@@ -426,7 +428,38 @@ body{
   height: max-content;
   padding: 0.5vh;
 }
-
+.FBD-form{
+  background-color: rgb(255, 64, 207);
+  border: var(--button-border-size) solid;
+  border-color: rgb(215, 57, 176);
+  border-radius: var(--display-border-radius);
+  height: max-content;
+  padding: 0.5vh;
+  position: relative;
+}
+.forceFBDContainer{
+  height: max-content;
+}
+.bigForceFBDContainer{
+  height: 24vh;
+}
+.multiple-FBD-container{
+  height: 1vh;
+  position: absolute;
+}
+.multipleFBD{
+  position: relative;
+  top: -93vh;
+}
+.spring-options{
+  display: flex;
+  justify-content: space-evenly;
+  width: 50vw;
+}
+.spring-FBD-info{
+  position: absolute;
+  top: 1vh;
+}
 :root{
   --primary-color: rgb(237, 222, 238);
   --border-color: rgb(234, 181, 232);

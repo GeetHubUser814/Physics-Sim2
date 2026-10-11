@@ -82,19 +82,32 @@ function ForceFBD({show}) {
     });
     const spring = {
         massSize: 2,
+        verticalMassSize: 0.8
     };
-    const springMassPoints = {
-        massTopLeft: [springMassCenter.point[0] - spring.massSize / 2, springMassCenter.point[1] + spring.massSize / 2],
-        massBottomRight: [springMassCenter.point[0] + spring.massSize / 2, springMassCenter.point[1] - spring.massSize / 2],
-        massTopRight: [springMassCenter.point[0] + spring.massSize / 2, springMassCenter.point[1] + spring.massSize / 2],
-        massBottomLeft: [springMassCenter.point[0] - spring.massSize / 2, springMassCenter.point[1] - spring.massSize / 2]
-    };
+    const springMassPoints = createSquare(springMassCenter.point, spring.massSize);
     const [springConst, setSpringConst] = useState(100);
+    const [springConstTemp, setSpringConstTemp] = useState(100);
     const [maxDisplacement, setMaxDisplacement] = useState(2);
     const [maxDisplacementTemp, setMaxDisplacementTemp] = useState(2);
     const isMassPosRight = springMassCenter.point[0] > 0;
     const displacement = (isMassPosRight ? 1 : -1) * distance(springMassCenter.point, [0, -1]) * (maxDisplacement / 7.5);
+    const springForce = -springConst * displacement;
+
+    const springMassCenterVertical = useMovablePoint([0, -1], {
+        constrain: ([x, y]) => [0, Math.max(Math.min(y, 2), -2)],
+    });
+    const springMassPointsVertical = createSquare(springMassCenterVertical.point, spring.verticalMassSize);
     //spring end
+
+    function createSquare(center, size){
+        const points = [
+            [center[0] - size / 2, center[1] + size / 2],
+            [center[0] + size / 2, center[1] + size / 2],
+            [center[0] + size / 2, center[1] - size / 2],
+            [center[0] - size / 2, center[1] - size / 2]
+        ];
+        return points;
+    }
     return (
         <div className="bigForceFBDContainer">
             {show === "isRamp" && (
@@ -161,7 +174,6 @@ function ForceFBD({show}) {
                         <p className="FBD-info-normal">normal force: {normalMagnitude.toFixed(3)}</p>
                         <p className="FBD-info-normal">parallel component of gravity: {tangentMagnitude.toFixed(3)}</p>
                         <p className="FBD-info-normal">friction: {frictionMagnitude.toFixed(3)}</p>
-
                     </div>
                 </div>  
             )}
@@ -244,71 +256,123 @@ function ForceFBD({show}) {
                             </div>
                         )}
                         {(springIsHorizontal) && (
-                            <div className="FBD-info spring-FBD-info">
-                                <p>
-                                    <form className="FBD-form" onSubmit={(e) => {
-                                        e.preventDefault();
-                                        setMaxDisplacement(maxDisplacementTemp);
-                                    }}>
-                                        <label>
-                                            maximum displacement (0-5): ({maxDisplacement.toFixed(2)}):
-                                            <input
-                                                type="number"
-                                                value={maxDisplacementTemp}
-                                                onChange={(e) => setMaxDisplacementTemp(parseFloat(e.target.value))}
-                                                step="0.01"
-                                                min="0.1"
-                                                max="5"
-                                            />
-                                        </label>
-                                    </form>
-                                </p>
-                                <p className="FBD-info-pinkDot">displacement from equilibrium: {displacement.toFixed(2)}</p>
+                            <div className="FBD-container multipleFBD">
+                                <Mafs pan={false} zoom={false} height={500} width={1700} viewBox={{ x: [-12, 12], y: [-5.5, 5] }}>
+                                    {/*floor and wall*/}
+                                    <Line.Segment
+                                        point1={[-10, -2]}
+                                        point2={[100000, -2]}
+                                    />
+                                    <Line.Segment
+                                        point1={[-10, -2]}
+                                        point2={[-10, 2]}
+                                    />
+                                    <Line.Segment
+                                        point1={[-10, 2]}
+                                        point2={[-10000, 2]}
+                                    />
+                                    {/*floor and wall*/}
+
+                                    <Line.Segment
+                                        point1={[0, -2]}
+                                        point2={[0, 1000]}
+                                        style="dashed" 
+                                    />
+                                    <Line.Segment
+                                        point1={[-7.5, -2]}
+                                        point2={[-7.5, 100]}
+                                        style="dashed"
+                                    />
+                                    <Line.Segment
+                                        point1={[7.5, -2]}
+                                        point2={[7.5, 100]}
+                                        style="dashed"
+                                    />
+                                    <Polygon
+                                        points={springMassPoints}
+                                        
+                                    />
+                                    <Vector
+                                        tail={[0, -2.75]}
+                                        tip={[springMassCenter.point[0], -2.75]}
+                                    />
+                                    <Vector
+                                        tail={[springMassCenter.point[0] + (isMassPosRight ? -1 : 1) * spring.massSize / 2, springMassCenter.point[1]]}
+                                        tip={[springMassCenter.point[0] + springForce / 100 + (isMassPosRight ? -1 : 1) * spring.massSize / 2, springMassCenter.point[1]]}
+                                    />
+                                    <Vector
+                                        tail={[springMassCenter.point[0], springMassCenter.point[1]]}
+                                        tip={[springMassCenter.point[0], springMassCenter.point[1] - 3]}
+                                    />
+                                    <Vector
+                                        tail={[springMassCenter.point[0], springMassCenter.point[1] - spring.massSize / 2]}
+                                        tip={[springMassCenter.point[0], springMassCenter.point[1] + 3 - spring.massSize / 2]}
+                                    />
+
+                                    {springMassCenter.element}
+                                </Mafs>
+                                <div className="FBD-info spring-FBD-info">
+                                    <p>
+                                        <form className="FBD-form" onSubmit={(e) => {
+                                            e.preventDefault();
+                                            setMaxDisplacement(maxDisplacementTemp);
+                                        }}>
+                                            <label>
+                                                maximum displacement (0.1-5): ({maxDisplacement.toFixed(2)}):
+                                                <input
+                                                    type="number"
+                                                    value={maxDisplacementTemp}
+                                                    onChange={(e) => setMaxDisplacementTemp(parseFloat(e.target.value))}
+                                                    step="0.01"
+                                                    min="0.1"
+                                                    max="5"
+                                                />
+                                            </label>
+                                        </form>
+                                    </p>
+                                    <p className="FBD-info-pinkDot">displacement from equilibrium: {displacement.toFixed(2)}</p>
+                                    <p>
+                                        <form className="FBD-form" onSubmit={(e) => {
+                                            e.preventDefault();
+                                            setSpringConst(springConstTemp);
+                                        }}>
+                                            <label>
+                                                spring constant (50-500): ({springConst.toFixed(2)}):
+                                                <input
+                                                    type="number"
+                                                    value={springConstTemp}
+                                                    onChange={(e) => setSpringConstTemp(parseFloat(e.target.value))}
+                                                    step="1"
+                                                    min="50"
+                                                    max="500"
+                                                />
+                                            </label>
+                                        </form>
+                                    </p>
+                                    <p className="FBD-info-normal">spring force: {springForce.toFixed(2)}</p>
+                                </div>
+                            </div>
+                        )}
+                        {springIsHorizontal === false && (
+                            <div className="FBD-container multipleFBD">
+                                <Mafs pan={false} zoom={false} height={500} width={1700}>
+                                    <Line.Segment
+                                        point1={[-100, 3]}
+                                        point2={[100, 3]}
+                                    />
+                                    <Polygon
+                                        points={springMassPointsVertical}
+                                    />
+                                    {springMassCenterVertical.element}
+                                </Mafs>
+                                <div className="FBD-info spring-FBD-info">
+
+                                </div>
                             </div>
                         )}
                     </div>
 
-                    {springIsHorizontal && (
-                        <div className="FBD-container multipleFBD">
-                            <Mafs pan={false} zoom={false} height={500} width={1700}>
-                                {/*floor and wall*/}
-                                <Line.Segment
-                                    point1={[-10, -2]}
-                                    point2={[100000, -2]}
-                                />
-                                <Line.Segment
-                                    point1={[-10, -2]}
-                                    point2={[-10, 2]}
-                                />
-                                <Line.Segment
-                                    point1={[-10, 2]}
-                                    point2={[-10000, 2]}
-                                />
-                                {/*floor and wall*/}
 
-                                <Line.Segment
-                                    point1={[0, -2]}
-                                    point2={[0, 1000]}
-                                    style="dashed" 
-                                />
-                                <Polygon
-                                    points={[
-                                        springMassPoints.massTopLeft,
-                                        springMassPoints.massTopRight,
-                                        springMassPoints.massBottomRight,
-                                        springMassPoints.massBottomLeft
-                                    ]}
-                                    
-                                />
-                                <Vector
-                                    tail={[0, -2.75]}
-                                    tip={[springMassCenter.point[0], -2.75]}
-                                />
-
-                                {springMassCenter.element}
-                            </Mafs>
-                        </div>
-                    )}
                 </div>
             )}
         </div>

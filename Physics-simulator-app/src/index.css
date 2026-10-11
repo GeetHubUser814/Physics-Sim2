@@ -449,7 +449,7 @@ body{
 }
 .multipleFBD{
   position: relative;
-  top: -93vh;
+  top: -58vh;
 }
 .spring-options{
   display: flex;
@@ -458,7 +458,7 @@ body{
 }
 .spring-FBD-info{
   position: absolute;
-  top: 1vh;
+  top: 68vh;
 }
 :root{
   --primary-color: rgb(237, 222, 238);

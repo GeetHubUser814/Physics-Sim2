@@ -401,12 +401,8 @@ body{
   height: 17vh;
   width: 65vw;
   font-size: 1.8vh;
-  border: var(--dash-border-size) solid;
-  border-color: var(--border-color);
-  border-radius: var(--display-border-radius);
-  background-color: var(--primary-color);
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 1vh;
@@ -425,6 +421,7 @@ body{
   height: max-content;
   width: max-content;
   padding: 0.8vh;
+  margin: 0vh 2vh;
   display: flex;
   justify-content: center;  
   align-items: center;

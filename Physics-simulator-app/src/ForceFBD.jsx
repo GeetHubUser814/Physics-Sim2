@@ -82,7 +82,7 @@ function ForceFBD({show}) {
     });
     const spring = {
         massSize: 2,
-        verticalMassSize: 0.8
+        vsMassSize: 0.8
     };
     const springMassPoints = createSquare(springMassCenter.point, spring.massSize);
     const [springConst, setSpringConst] = useState(100);
@@ -92,16 +92,35 @@ function ForceFBD({show}) {
     const isMassPosRight = springMassCenter.point[0] > 0;
     const displacement = (isMassPosRight ? 1 : -1) * distance(springMassCenter.point, [0, -1]) * (maxDisplacement / 7.5);
     const springForce = -springConst * displacement;
+    //actual spring
+    const wallMassDist = distance([springMassCenter.point[0] - spring.massSize / 2, 0], [-10, 0]);
+    const springHAxis = springMassCenter.point[1];
+    const springRad= 0.6;
+    const coilDenominator = 14;
+    const increment = wallMassDist / (coilDenominator);
 
-    const verticalSpringMassCenter = useMovablePoint([0, -1], {
+    const vsMassCenter = useMovablePoint([0, -1], {
         constrain: ([x, y]) => [0, Math.max(Math.min(y, 2), -4)],
     });
-    const verticalSpringMassPoints = createSquare(verticalSpringMassCenter.point, spring.verticalMassSize);
-    const verticalSpringWeight = 2;
-    const isMassPosHigh = verticalSpringMassCenter.point[1] > -1;
-    const verticalSpringDisplacement = (isMassPosHigh ? 1 : -1) * distance(verticalSpringMassCenter.point, [0, -1]) / 50;
-    const verticalSpringForce = -springConst * verticalSpringDisplacement;
-    const staticEquilibrium = verticalSpringWeight / (springConst / 50);
+    const vsMassCenterX = vsMassCenter.point[0];
+    const vsMassCenterY = vsMassCenter.point[1];
+    const vsMassPoints = createSquare(vsMassCenter.point, spring.vsMassSize);
+    const [vsWeight, setVsWeight] = useState(50);
+    const [vsWeightTemp, setVsWeightTemp] = useState(50);
+    const vsEquillibriumDistFromRest = vsWeight / springConst;
+    const vsUnitDispFromEq = (vsMassCenterY + 1) / 3
+    const vsDispFromEq = vsUnitDispFromEq * maxDisplacement;
+    const vsDispFromRest = vsEquillibriumDistFromRest - vsDispFromEq;
+    const vsIsMassPosAboveRest = vsDispFromRest < 0;
+    const vsDisplayedSpringForce = 2 * (vsDispFromRest / vsEquillibriumDistFromRest);
+    const vsSpringForce = -springConst * vsDispFromRest;
+    const vsNetForce = -vsWeight - vsSpringForce;
+    const springForceTip = vsMassCenterY + (vsIsMassPosAboveRest ? -1 : 1) * spring.vsMassSize / 2 + vsDisplayedSpringForce;
+    //actual spring
+    const vsCeilingMassDist = distance([0, vsMassCenterY + spring.vsMassSize / 2], [0, 3]);
+    const vsRad= 0.6;
+    const vsCoilDenominator = 16;
+    const vsIncrement = vsCeilingMassDist / (vsCoilDenominator);
     //spring end
 
     function createSquare(center, size){
@@ -132,6 +151,7 @@ function ForceFBD({show}) {
             </div>
         );
     }
+
     return (
         <div className="bigForceFBDContainer">
             {show === "isRamp" && (
@@ -175,8 +195,8 @@ function ForceFBD({show}) {
 
                     </Mafs>
                     <div className="FBD-info">
-                        <div className="FBD-info-sub">theta: {ramp.theta.toFixed(3)}</div>
-                        <div className="FBD-info-sub">weight: {gravMagnitude.toFixed(3)}</div>
+                        <p className="FBD-info-sub">theta: {ramp.theta.toFixed(3)}</p>
+                        <p className="FBD-info-sub">weight: {gravMagnitude.toFixed(3)}</p>
                         {createForm(
                             (e) => {
                                 e.preventDefault();
@@ -184,9 +204,9 @@ function ForceFBD({show}) {
                             }
                             , "coefficient of friction (0-1.5):", coeffOfFrictionTemp, (e) => setCoeffOfFrictionTemp(parseFloat(e.target.value)), 0, 1.5, 0.1
                         )}
-                        <div className="FBD-info-sub FBD-info-normal">normal force: {normalMagnitude.toFixed(3)}</div>
-                        <div className="FBD-info-sub FBD-info-normal">parallel component of gravity: {tangentMagnitude.toFixed(3)}</div>
-                        <div className="FBD-info-sub FBD-info-normal">friction: {frictionMagnitude.toFixed(3)}</div>
+                        <p className="FBD-info-sub FBD-info-normal">normal force: {normalMagnitude.toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">parallel component of gravity: {tangentMagnitude.toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">friction: {frictionMagnitude.toFixed(3)}</p>
                     </div>
                 </div>  
             )}
@@ -250,8 +270,8 @@ function ForceFBD({show}) {
                         <p className="FBD-info-sub ">weight of mass 1: {mass1Weight.toFixed(3)}</p>
                         <p className="FBD-info-sub">weight of mass 2: {mass2Weight.toFixed(3)}</p>
                         <p className="FBD-info-sub FBD-info-normal">tension in the rope: {(tensionMagnitude * 10).toFixed(3)}</p>
-                        <p className="FBD-info-sub FBD-info-normal">magnitude net force on mass 1: {mass1NetForce.toFixed(3)}</p>
-                        <p className="FBD-info-sub FBD-info-normal">magnitude net force on mass 2: {mass2NetForce.toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">magnitude of net force on mass 1: {mass1NetForce.toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">magnitude of net force on mass 2: {mass2NetForce.toFixed(3)}</p>
                     </div>
                 </div>
             )}
@@ -321,8 +341,49 @@ function ForceFBD({show}) {
                                         tail={[springMassCenter.point[0], springMassCenter.point[1] - spring.massSize / 2]}
                                         tip={[springMassCenter.point[0], springMassCenter.point[1] + 3 - spring.massSize / 2]}
                                     />
-
                                     {springMassCenter.element}
+                                    {/* actual spring */}
+                                    <Line.Segment
+                                        point1={[-10, springHAxis]}
+                                        point2={[-10 + increment, springHAxis + springRad]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[-10 + increment, springHAxis + springRad]}
+                                        point2={[-10 + 3 * increment, springHAxis - springRad]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[-10 + 3 * increment, springHAxis - springRad]}
+                                        point2={[-10 + 5 * increment, springHAxis + springRad]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[-10 + 5 * increment, springHAxis + springRad]}
+                                        point2={[-10 + 7 * increment, springHAxis - springRad]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[-10 + 7 * increment, springHAxis - springRad]}
+                                        point2={[-10 + 9 * increment, springHAxis + springRad]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[-10 + 9 * increment, springHAxis + springRad]}
+                                        point2={[-10 + 11 * increment, springHAxis - springRad]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[-10 + 11 * increment, springHAxis - springRad]}
+                                        point2={[-10 + 13 * increment, springHAxis + springRad]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[-10 + 13 * increment, springHAxis + springRad]}
+                                        point2={[-10 + 14 * increment, springHAxis]}
+                                        color="gray"
+                                    />
+                                    {/* actual spring */}
                                 </Mafs>
                                 <div className="FBD-info FBD-info-spring">
                                     {createForm(
@@ -330,7 +391,7 @@ function ForceFBD({show}) {
                                             e.preventDefault();
                                             setMaxDisplacement(maxDisplacementTemp);
                                         }, 
-                                        "maximum displacement from equilibrium: ", maxDisplacementTemp, (e) => setMaxDisplacementTemp(parseFloat(e.target.value)), "0.1" , "5", "0.1")
+                                        "maximum displacement from equilibrium (0.1-5): ", maxDisplacementTemp, (e) => setMaxDisplacementTemp(parseFloat(e.target.value)), "0.1" , "5", "0.1")
                                     }
                                     <p className="FBD-info-sub">displacement from equilibrium: {displacement.toFixed(2)}</p>
                                     {createForm(
@@ -352,7 +413,7 @@ function ForceFBD({show}) {
                                         point2={[100, 3]}
                                     />
                                     <Polygon
-                                        points={verticalSpringMassPoints}
+                                        points={vsMassPoints}
                                     />
                                     <Line.Segment
                                         point1={[-100, 2]}
@@ -364,31 +425,87 @@ function ForceFBD({show}) {
                                         point2={[100, -4]}
                                         style="dashed"
                                     />
+                                    {/* EQUILIBRIUM */}
                                     <Line.Segment
                                         point1={[-100, -1]}
                                         point2={[100, -1]}
                                         style="dashed"
                                     />
-                                    <Vector
-                                        tail={[-2, -1]}
-                                        tip={[-2, verticalSpringMassCenter.point[1]]}
-                                    />
-                                    <Vector
-                                        tail={verticalSpringMassCenter.point}
-                                        tip={[verticalSpringMassCenter.point[0], verticalSpringMassCenter.point[1] - verticalSpringWeight]}
-                                    />
-                                    <Vector
-                                        tail={verticalSpringMassCenter.point}
-                                        tip={[verticalSpringMassCenter.point[0], verticalSpringMassCenter.point[1] + verticalSpringForce]}
-                                    />
                                     <Line.Segment
-                                        point1={[-100, - 1 - staticEquilibrium]}
-                                        point2={[100, - 1 - staticEquilibrium]}
+                                        point1={[-100, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
+                                        point2={[100, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
                                         style="dashed"
                                     />
-                                    {verticalSpringMassCenter.element}
+                                    <Vector
+                                        tail={vsMassCenter.point}
+                                        tip={[vsMassCenterX, vsMassCenterY - 2]}
+                                    />
+                                    <Vector
+                                        tail={[vsMassCenterX, vsMassCenterY + (vsIsMassPosAboveRest ? -1 : 1) * spring.vsMassSize / 2]}
+                                        tip={[vsMassCenterX, springForceTip]}
+                                    />
+                                    {vsMassCenter.element}
+                                    {/* actual spring */}
+                                    <Line.Segment
+                                        point1={[0, 3]}
+                                        point2={[vsRad, 3 - vsIncrement]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[vsRad, 3 - vsIncrement]}
+                                        point2={[-vsRad, 3 - 3 * vsIncrement]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[-vsRad, 3 - 3 * vsIncrement]}
+                                        point2={[vsRad, 3 - 5 * vsIncrement]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[vsRad, 3 - 5 * vsIncrement]}
+                                        point2={[-vsRad, 3 - 7 * vsIncrement]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[vsRad, 3 - 5 * vsIncrement]}
+                                        point2={[-vsRad, 3 - 7 * vsIncrement]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[-vsRad, 3 - 7 * vsIncrement]}
+                                        point2={[vsRad, 3 - 9 * vsIncrement]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[vsRad, 3 - 9 * vsIncrement]}
+                                        point2={[-vsRad, 3 - 11 * vsIncrement]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[-vsRad, 3 - 11 * vsIncrement]}
+                                        point2={[vsRad, 3 - 13 * vsIncrement]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[vsRad, 3 - 13 * vsIncrement]}
+                                        point2={[-vsRad, 3 - 15 * vsIncrement]}
+                                        color="gray"
+                                    />
+                                    <Line.Segment
+                                        point1={[-vsRad, 3 - 15 * vsIncrement]}
+                                        point2={[0, 3 - 16 * vsIncrement]}
+                                        color="gray"
+                                    />
+                                    {/* actual spring */}
                                 </Mafs>
                                 <div className="FBD-info FBD-info-spring">
+                                    {createForm(
+                                        (e) => {
+                                            e.preventDefault();
+                                            setVsWeight(vsWeightTemp);
+                                        }, 
+                                        "weight (1-100):", vsWeightTemp, (e) => setVsWeightTemp(parseFloat(e.target.value)), 1, 100, 1)
+                                    }
                                     {createForm(
                                         (e) => {
                                             e.preventDefault();
@@ -396,7 +513,18 @@ function ForceFBD({show}) {
                                         }, 
                                         "spring constant (50-500):", springConstTemp, (e) => setSpringConstTemp(parseFloat(e.target.value)), 50, 500, 1)
                                     }
-
+                                    {createForm(
+                                        (e) => {
+                                            e.preventDefault();
+                                            setMaxDisplacement(maxDisplacementTemp);
+                                        }, 
+                                        "maximum displacement from equilibrium (0.1-5): ", maxDisplacementTemp, (e) => setMaxDisplacementTemp(parseFloat(e.target.value)), "0.1" , "5", "0.1")
+                                    }
+                                    <p className="FBD-info-sub">distance of equilibrium from resting position: {vsEquillibriumDistFromRest.toFixed(2)}</p>
+                                    <p className="FBD-info-sub">displacement from resting position: {vsDispFromRest.toFixed(2)}</p>
+                                    <p className="FBD-info-sub">displacement from equilibrium: {vsDispFromEq.toFixed(2)}</p>
+                                    <p className="FBD-info-sub FBD-info-normal">spring force: {vsSpringForce.toFixed(2)}</p>
+                                    <p className="FBD-info-sub FBD-info-normal">net force: {vsNetForce.toFixed(2)}</p>
                                 </div>
                             </div>
                         )}

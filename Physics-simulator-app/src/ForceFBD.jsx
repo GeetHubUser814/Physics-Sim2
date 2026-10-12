@@ -93,10 +93,15 @@ function ForceFBD({show}) {
     const displacement = (isMassPosRight ? 1 : -1) * distance(springMassCenter.point, [0, -1]) * (maxDisplacement / 7.5);
     const springForce = -springConst * displacement;
 
-    const springMassCenterVertical = useMovablePoint([0, -1], {
-        constrain: ([x, y]) => [0, Math.max(Math.min(y, 2), -2)],
+    const verticalSpringMassCenter = useMovablePoint([0, -1], {
+        constrain: ([x, y]) => [0, Math.max(Math.min(y, 2), -4)],
     });
-    const springMassPointsVertical = createSquare(springMassCenterVertical.point, spring.verticalMassSize);
+    const verticalSpringMassPoints = createSquare(verticalSpringMassCenter.point, spring.verticalMassSize);
+    const verticalSpringWeight = 2;
+    const isMassPosHigh = verticalSpringMassCenter.point[1] > -1;
+    const verticalSpringDisplacement = (isMassPosHigh ? 1 : -1) * distance(verticalSpringMassCenter.point, [0, -1]) / 50;
+    const verticalSpringForce = -springConst * verticalSpringDisplacement;
+    const staticEquilibrium = verticalSpringWeight / (springConst / 50);
     //spring end
 
     function createSquare(center, size){
@@ -107,6 +112,25 @@ function ForceFBD({show}) {
             [center[0] - size / 2, center[1] - size / 2]
         ];
         return points;
+    }
+    function createForm(submit, text, val, change, min, max, stepNum){
+        return(
+            <div className="FBD-info-sub">
+                <form onSubmit = {submit}>
+                    <label>
+                        {text}
+                        <input
+                            type="number"
+                            value={val}
+                            onChange={change}
+                            min={min}
+                            max={max}
+                            step={stepNum}
+                        />
+                    </label>
+                </form>
+            </div>
+        );
     }
     return (
         <div className="bigForceFBDContainer">
@@ -151,29 +175,18 @@ function ForceFBD({show}) {
 
                     </Mafs>
                     <div className="FBD-info">
-                        <p className="FBD-info-pinkDot">theta: {ramp.theta.toFixed(3)}</p>
-                        <p className="FBD-info-pinkDot">weight: {gravMagnitude.toFixed(3)}</p>
-                        <p>
-                            <form className="FBD-form" onSubmit={(e) => {
+                        <div className="FBD-info-sub">theta: {ramp.theta.toFixed(3)}</div>
+                        <div className="FBD-info-sub">weight: {gravMagnitude.toFixed(3)}</div>
+                        {createForm(
+                            (e) => {
                                 e.preventDefault();
                                 setCoeffOfFriction(coeffOfFrictionTemp);
-                            }}>
-                                <label>
-                                    coefficient of friction (0-1.5): ({coeffOfFriction.toFixed(2)}):
-                                    <input
-                                        type="number"
-                                        value={coeffOfFrictionTemp}
-                                        onChange={(e) => setCoeffOfFrictionTemp(parseFloat(e.target.value))}
-                                        step="0.01"
-                                        min="0"
-                                        max="1.5"
-                                    />
-                                </label>
-                            </form>
-                        </p>
-                        <p className="FBD-info-normal">normal force: {normalMagnitude.toFixed(3)}</p>
-                        <p className="FBD-info-normal">parallel component of gravity: {tangentMagnitude.toFixed(3)}</p>
-                        <p className="FBD-info-normal">friction: {frictionMagnitude.toFixed(3)}</p>
+                            }
+                            , "coefficient of friction (0-1.5):", coeffOfFrictionTemp, (e) => setCoeffOfFrictionTemp(parseFloat(e.target.value)), 0, 1.5, 0.1
+                        )}
+                        <div className="FBD-info-sub FBD-info-normal">normal force: {normalMagnitude.toFixed(3)}</div>
+                        <div className="FBD-info-sub FBD-info-normal">parallel component of gravity: {tangentMagnitude.toFixed(3)}</div>
+                        <div className="FBD-info-sub FBD-info-normal">friction: {frictionMagnitude.toFixed(3)}</div>
                     </div>
                 </div>  
             )}
@@ -234,11 +247,11 @@ function ForceFBD({show}) {
                         {mass2GravEnd.element}
                     </Mafs>
                     <div className="FBD-info">
-                        <p className="FBD-info-pinkDot">weight of mass 1: {mass1Weight.toFixed(3)}</p>
-                        <p className="FBD-info-pinkDot">weight of mass 2: {mass2Weight.toFixed(3)}</p>
-                        <p className="FBD-info-normal">tension in the rope: {(tensionMagnitude * 10).toFixed(3)}</p>
-                        <p className="FBD-info-normal">magnitude net force on mass 1: {mass1NetForce.toFixed(3)}</p>
-                        <p className="FBD-info-normal">magnitude net force on mass 2: {mass2NetForce.toFixed(3)}</p>
+                        <p className="FBD-info-sub ">weight of mass 1: {mass1Weight.toFixed(3)}</p>
+                        <p className="FBD-info-sub">weight of mass 2: {mass2Weight.toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">tension in the rope: {(tensionMagnitude * 10).toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">magnitude net force on mass 1: {mass1NetForce.toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">magnitude net force on mass 2: {mass2NetForce.toFixed(3)}</p>
                     </div>
                 </div>
             )}
@@ -311,61 +324,78 @@ function ForceFBD({show}) {
 
                                     {springMassCenter.element}
                                 </Mafs>
-                                <div className="FBD-info spring-FBD-info">
-                                    <p>
-                                        <form className="FBD-form" onSubmit={(e) => {
+                                <div className="FBD-info FBD-info-spring">
+                                    {createForm(
+                                        (e) => {
                                             e.preventDefault();
                                             setMaxDisplacement(maxDisplacementTemp);
-                                        }}>
-                                            <label>
-                                                maximum displacement (0.1-5): ({maxDisplacement.toFixed(2)}):
-                                                <input
-                                                    type="number"
-                                                    value={maxDisplacementTemp}
-                                                    onChange={(e) => setMaxDisplacementTemp(parseFloat(e.target.value))}
-                                                    step="0.01"
-                                                    min="0.1"
-                                                    max="5"
-                                                />
-                                            </label>
-                                        </form>
-                                    </p>
-                                    <p className="FBD-info-pinkDot">displacement from equilibrium: {displacement.toFixed(2)}</p>
-                                    <p>
-                                        <form className="FBD-form" onSubmit={(e) => {
+                                        }, 
+                                        "maximum displacement from equilibrium: ", maxDisplacementTemp, (e) => setMaxDisplacementTemp(parseFloat(e.target.value)), "0.1" , "5", "0.1")
+                                    }
+                                    <p className="FBD-info-sub">displacement from equilibrium: {displacement.toFixed(2)}</p>
+                                    {createForm(
+                                        (e) => {
                                             e.preventDefault();
                                             setSpringConst(springConstTemp);
-                                        }}>
-                                            <label>
-                                                spring constant (50-500): ({springConst.toFixed(2)}):
-                                                <input
-                                                    type="number"
-                                                    value={springConstTemp}
-                                                    onChange={(e) => setSpringConstTemp(parseFloat(e.target.value))}
-                                                    step="1"
-                                                    min="50"
-                                                    max="500"
-                                                />
-                                            </label>
-                                        </form>
-                                    </p>
-                                    <p className="FBD-info-normal">spring force: {springForce.toFixed(2)}</p>
+                                        }, 
+                                        "spring constant (50-500):", springConstTemp, (e) => setSpringConstTemp(parseFloat(e.target.value)), 50, 500, 1)
+                                    }
+                                    <p className="FBD-info-sub FBD-info-normal">spring force: {springForce.toFixed(2)}</p>
                                 </div>
                             </div>
                         )}
                         {springIsHorizontal === false && (
                             <div className="FBD-container multipleFBD">
-                                <Mafs pan={false} zoom={false} height={500} width={1700}>
+                                <Mafs pan={false} zoom={false} height={500} width={1700} viewBox={{ x: [-2, 2], y: [-5, 3] }}>
                                     <Line.Segment
                                         point1={[-100, 3]}
                                         point2={[100, 3]}
                                     />
                                     <Polygon
-                                        points={springMassPointsVertical}
+                                        points={verticalSpringMassPoints}
                                     />
-                                    {springMassCenterVertical.element}
+                                    <Line.Segment
+                                        point1={[-100, 2]}
+                                        point2={[100, 2]}
+                                        style="dashed"
+                                    />
+                                    <Line.Segment
+                                        point1={[-100, -4]}
+                                        point2={[100, -4]}
+                                        style="dashed"
+                                    />
+                                    <Line.Segment
+                                        point1={[-100, -1]}
+                                        point2={[100, -1]}
+                                        style="dashed"
+                                    />
+                                    <Vector
+                                        tail={[-2, -1]}
+                                        tip={[-2, verticalSpringMassCenter.point[1]]}
+                                    />
+                                    <Vector
+                                        tail={verticalSpringMassCenter.point}
+                                        tip={[verticalSpringMassCenter.point[0], verticalSpringMassCenter.point[1] - verticalSpringWeight]}
+                                    />
+                                    <Vector
+                                        tail={verticalSpringMassCenter.point}
+                                        tip={[verticalSpringMassCenter.point[0], verticalSpringMassCenter.point[1] + verticalSpringForce]}
+                                    />
+                                    <Line.Segment
+                                        point1={[-100, - 1 - staticEquilibrium]}
+                                        point2={[100, - 1 - staticEquilibrium]}
+                                        style="dashed"
+                                    />
+                                    {verticalSpringMassCenter.element}
                                 </Mafs>
-                                <div className="FBD-info spring-FBD-info">
+                                <div className="FBD-info FBD-info-spring">
+                                    {createForm(
+                                        (e) => {
+                                            e.preventDefault();
+                                            setSpringConst(springConstTemp);
+                                        }, 
+                                        "spring constant (50-500):", springConstTemp, (e) => setSpringConstTemp(parseFloat(e.target.value)), 50, 500, 1)
+                                    }
 
                                 </div>
                             </div>

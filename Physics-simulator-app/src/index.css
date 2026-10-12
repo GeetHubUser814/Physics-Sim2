@@ -398,37 +398,43 @@ body{
 .FBD-info{
   position: absolute;
   top: 68vh;
-  height: 20vh;
-  width: 60vw;
-  left: 2vw; 
-  font-size: 2vh;
+  height: 17vh;
+  width: 65vw;
+  font-size: 1.8vh;
   border: var(--dash-border-size) solid;
   border-color: var(--border-color);
   border-radius: var(--display-border-radius);
   background-color: var(--primary-color);
   display: flex;
-  flex-direction: row;
-  gap: 0.2vw;
   justify-content: space-evenly;
+  align-items: center;
   flex-wrap: wrap;
+  gap: 1vh;
+  padding: 1vh;
 }
-.FBD-info-normal{
-  background-color: var(--btn-primary-color);
-  border: var(--button-border-size) solid;
-  border-color: var(--border-color);
-  border-radius: var(--display-border-radius);
-  height: max-content;
-  padding: 0.5vh;
+.FBD-info-spring{
+  position: fixed;
+  top: 73vh;
+  left: 7vw;
 }
-.FBD-info-pinkDot{
+.FBD-info-sub{
   background-color: rgb(255, 64, 207);
   border: var(--button-border-size) solid;
   border-color: rgb(215, 57, 176);
   border-radius: var(--display-border-radius);
   height: max-content;
-  padding: 0.5vh;
+  width: max-content;
+  padding: 0.8vh;
+  display: flex;
+  justify-content: center;  
+  align-items: center;
 }
-.FBD-form{
+.FBD-info-normal{
+  background-color: var(--btn-primary-color);
+  border: var(--button-border-size) solid;
+  border-color: var(--border-color);
+}
+.FBD-form-container{
   background-color: rgb(255, 64, 207);
   border: var(--button-border-size) solid;
   border-color: rgb(215, 57, 176);
@@ -436,7 +442,9 @@ body{
   height: max-content;
   padding: 0.5vh;
   position: relative;
+  top: 2.01vh;
 }
+
 .forceFBDContainer{
   height: max-content;
 }

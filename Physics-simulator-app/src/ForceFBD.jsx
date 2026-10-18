@@ -3,6 +3,9 @@ import React, {useEffect, useRef, useState} from 'react';
 
 function ForceFBD({show}) {
 
+    //canvas
+    const canvasHeight = 500;
+    const canvasWidth = 1560;
     function distance(p1, p2){
         return Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
     }
@@ -84,7 +87,7 @@ function ForceFBD({show}) {
         massSize: 2,
         vsMassSize: 0.8
     };
-    const springMassPoints = createSquare(springMassCenter.point, spring.massSize);
+    const springMassPoints = createRectangle(springMassCenter.point, spring.massSize, spring.massSize);
     const [springConst, setSpringConst] = useState(100);
     const [springConstTemp, setSpringConstTemp] = useState(100);
     const [maxDisplacement, setMaxDisplacement] = useState(2);
@@ -104,7 +107,7 @@ function ForceFBD({show}) {
     });
     const vsMassCenterX = vsMassCenter.point[0];
     const vsMassCenterY = vsMassCenter.point[1];
-    const vsMassPoints = createSquare(vsMassCenter.point, spring.vsMassSize);
+    const vsMassPoints = createRectangle(vsMassCenter.point, spring.vsMassSize, spring.vsMassSize);
     const [vsWeight, setVsWeight] = useState(50);
     const [vsWeightTemp, setVsWeightTemp] = useState(50);
     const vsEquillibriumDistFromRest = vsWeight / springConst;
@@ -123,12 +126,38 @@ function ForceFBD({show}) {
     const vsIncrement = vsCeilingMassDist / (vsCoilDenominator);
     //spring end
 
-    function createSquare(center, size){
+
+    //elevator start
+    const elevator = {
+        centerX: 0,
+        centerY: 0,
+        massCenterX: 0,
+        massCenterY: -2
+    };
+    const elevatorPoints = createRectangle([elevator.centerX, elevator.centerY], 4.5, 5);
+    const objectPoints = createRectangle([elevator.massCenterX, elevator.massCenterY], 1, 1);
+    const [eGrav, setEGrav] = useState(9.8);
+    const [eGravTemp, setEGravTemp] = useState(9.8);
+    const [eMass, setEMass] = useState(5);
+    const [eMassTemp, setEMassTemp] = useState(5);
+    const eWeight = eMass * eGrav;
+    const eDisplayedWeight = eWeight / 10;
+    const eWeightVectorEnd = elevator.massCenterY - eDisplayedWeight / 2;
+    const eAccelerationEnd = useMovablePoint([5, 2], {
+        constrain: ([x, y]) => [5, Math.min(10, Math.max(-10, y))]
+    });
+    const eIsAcceleratingUp = eAccelerationEnd.point[1] > 0;
+    const eDisplayedAcceleration = distance([5, 0], eAccelerationEnd.point) * (eIsAcceleratingUp ? 1 : -1) * 2;
+    const eNormalForce = Math.max(0, eMass * (eDisplayedAcceleration + eGrav));
+    const eNetForce = eNormalForce - eWeight;
+    const isPastFreeFall = eDisplayedAcceleration < -eGrav;
+    //elevator end
+    function createRectangle(center, width, height){
         const points = [
-            [center[0] - size / 2, center[1] + size / 2],
-            [center[0] + size / 2, center[1] + size / 2],
-            [center[0] + size / 2, center[1] - size / 2],
-            [center[0] - size / 2, center[1] - size / 2]
+            [center[0] - width / 2, center[1] + height / 2],
+            [center[0] + width / 2, center[1] + height / 2],
+            [center[0] + width / 2, center[1] - height / 2],
+            [center[0] - width / 2, center[1] - height / 2]
         ];
         return points;
     }
@@ -156,7 +185,7 @@ function ForceFBD({show}) {
         <div className="bigForceFBDContainer">
             {show === "isRamp" && (
                 <div className="FBD-container">
-                    <Mafs pan={false} zoom={false} height={500} width={1700} viewBox={{x: [-5, 5], y: [gravEnd.point[1] - 2, Math.max(rampTop.point[1] + 2, gravNormalReal[1] + 2)]}}>
+                    <Mafs pan={false} zoom={false} height={canvasHeight} width={canvasWidth} viewBox={{x: [-5, 5], y: [gravEnd.point[1] - 2, Math.max(rampTop.point[1] + 2, gravNormalReal[1] + 2)]}}>
   
                         <Circle
                             center={[ramp.centerX, ramp.centerY]}
@@ -212,7 +241,7 @@ function ForceFBD({show}) {
             )}
             {show === "isAtwood" && (
                 <div className="FBD-container">
-                    <Mafs pan={false} zoom={false} height={550} width={1700} viewBox={{x: [-5, 5], y: [Math.min(mass1GravEnd.point[1] - 1, mass2GravEnd.point[1]) - 1, Math.max(masses.mass1Pos[1] + tensionMagnitude, atwood.pulleyCenterY + atwood.pulleyRad)]}}>
+                    <Mafs pan={false} zoom={false} height={canvasHeight} width={canvasWidth} viewBox={{x: [-5, 5], y: [Math.min(mass1GravEnd.point[1] - 1, mass2GravEnd.point[1]) - 1, Math.max(masses.mass1Pos[1] + tensionMagnitude, atwood.pulleyCenterY + atwood.pulleyRad)]}}>
                         {/*pulley*/}
                         <Circle
                             center={[atwood.pulleyCenterX, atwood.pulleyCenterY]}
@@ -276,21 +305,23 @@ function ForceFBD({show}) {
                 </div>
             )}
             {(show === "isSpring") && (
-                <div className="multiple-FBD-container">
-                    <div className="containerForm">
-                        {(springIsHorizontal === null) && (
-                            <div className="spring-options">
-                                <button className="dashBtn" onClick={() => setSpringIsHorizontal(true)}>
-                                    horizontal spring
-                                </button>
-                                <button className="dashBtn" onClick={() => setSpringIsHorizontal(false)}>
-                                    vertical spring
-                                </button>
-                            </div>
-                        )}
+                <div className="I-DO-NOTHING">
+                    <div className="I-DO-NOTHING">
+                        <div className="containerForm">
+                            {(springIsHorizontal === null) && (
+                                <div className="spring-options">
+                                    <button className="dashBtn" onClick={() => setSpringIsHorizontal(true)}>
+                                        horizontal spring
+                                    </button>
+                                    <button className="dashBtn" onClick={() => setSpringIsHorizontal(false)}>
+                                        vertical spring
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                         {(springIsHorizontal) && (
-                            <div className="FBD-container multipleFBD">
-                                <Mafs pan={false} zoom={false} height={500} width={1700} viewBox={{ x: [-12, 12], y: [-5.5, 5] }}>
+                            <div className="FBD-container">
+                                <Mafs pan={false} zoom={false} height={canvasHeight} width={canvasWidth} viewBox={{ x: [-12, 12], y: [-5.5, 5] }}>
                                     {/*floor and wall*/}
                                     <Line.Segment
                                         point1={[-10, -2]}
@@ -406,8 +437,8 @@ function ForceFBD({show}) {
                             </div>
                         )}
                         {springIsHorizontal === false && (
-                            <div className="FBD-container multipleFBD">
-                                <Mafs pan={false} zoom={false} height={500} width={1700} viewBox={{ x: [-2, 2], y: [-5, 3] }}>
+                            <div className="FBD-container">
+                                <Mafs pan={false} zoom={false} height={canvasHeight} width={canvasWidth} viewBox={{ x: [-2, 2], y: [-5, 3] }}>
                                     <Line.Segment
                                         point1={[-100, 3]}
                                         point2={[100, 3]}
@@ -529,8 +560,51 @@ function ForceFBD({show}) {
                             </div>
                         )}
                     </div>
+                </div>
+            )}
+            {(show === "isElevator") && (
+                <div className="FBD-container">
+                    <Mafs pan={false} zoom={false} height={canvasHeight} width={canvasWidth} viewBox={{x:[-2, 2], y: [Math.min(-5, eWeightVectorEnd, eAccelerationEnd.point[1]), Math.max(5, eAccelerationEnd.point[1])]}}>
+                        <Polygon
+                            points={elevatorPoints}
+                        />
+                        <Polygon
+                            points={objectPoints}
+                        />
+                        {/* gravity vector */}
+                        <Vector
+                            tail={[elevator.massCenterX, elevator.massCenterY]}
+                            tip={[elevator.massCenterX, eWeightVectorEnd]}
+                        />
+                        {/* acceleration vector */}
+                        <Vector
+                            tail={[5, 0]}
+                            tip={eAccelerationEnd.point}
+                        />
+                        {eAccelerationEnd.element}
 
-
+                    </Mafs>
+                    <div className="FBD-info">
+                        {createForm(
+                            (e) => {
+                                e.preventDefault();
+                                setEGrav(eGravTemp);
+                            }, 
+                            "acceleration due to gravity(1-20): ", eGravTemp, (e) => setEGravTemp(parseFloat(e.target.value)), "1" , "20", "0.1")
+                        }
+                        {createForm(
+                            (e) => {
+                                e.preventDefault();
+                                setEMass(eMassTemp);
+                            }, 
+                            "mass of the object(1-20): ", eMassTemp, (e) => setEMassTemp(parseFloat(e.target.value)), "1" , "20", "0.1")
+                        }
+                        <p className="FBD-info-sub">weight: {eWeight.toFixed(2)}</p>
+                        <p className="FBD-info-sub">acceleration of the elevator: {eDisplayedAcceleration.toFixed(2)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">normal force(apparent weight): {eNormalForce.toFixed(2)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">net force on the object: {eNetForce.toFixed(2)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">Where is the object?: {isPastFreeFall  ? "leaving the floor" : "on the ceiling"}</p>
+                    </div>
                 </div>
             )}
         </div>

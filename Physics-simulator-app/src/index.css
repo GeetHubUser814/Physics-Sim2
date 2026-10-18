@@ -115,10 +115,10 @@ body{
   justify-content: center;
   justify-self: center;
   position: absolute;
-  top: 63vh;
+  top: 61vh;
   left: 3vw;
   width: 150vh;
-  height: 32vh;
+  height: 34vh;
   background-color: var(--primary-color);
   color: var(--text-color);
   font-family: monospace;
@@ -287,7 +287,7 @@ body{
 }
 .graphContainer{
   position: absolute;
-  top: -60vh;
+  top: -59vh;
   left: 14vw;
   font-size: 1.5vh;
   border: 1.25vh solid;
@@ -342,7 +342,7 @@ body{
   position: relative;
   margin: 1vh;
   font-size: 1.5vh;
-  padding: 1vh;
+  padding: 0.6vh;
   font-family: monospace;
   border: var(--button-border-size) solid;
   border-radius: var(--btn-border-radius);
@@ -370,7 +370,7 @@ body{
 }
 .graphTitle{
   position: absolute;
-  top: -50px;
+  top: -26px;
   left: -1vh;
   width: 100%;
   display: flex;
@@ -447,14 +447,6 @@ body{
 }
 .bigForceFBDContainer{
   height: 24vh;
-}
-.multiple-FBD-container{
-  height: 1vh;
-  position: absolute;
-}
-.multipleFBD{
-  position: relative;
-  top: -58vh;
 }
 .spring-options{
   display: flex;

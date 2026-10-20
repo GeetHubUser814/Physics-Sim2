@@ -397,9 +397,9 @@ body{
 }
 .FBD-info{
   position: absolute;
-  top: 68vh;
+  top: 70vh;
   height: 17vh;
-  width: 65vw;
+  width: 67vw;
   font-size: 1.8vh;
   display: flex;
   justify-content: center;

@@ -136,6 +136,7 @@ function ForceFBD({show}) {
     };
     const elevatorPoints = createRectangle([elevator.centerX, elevator.centerY], 4.5, 5);
     const objectPoints = createRectangle([elevator.massCenterX, elevator.massCenterY], 1, 1);
+    const objectPointsCeiling = createRectangle([elevator.massCenterX, elevator.massCenterY + 4], 1, 1)
     const [eGrav, setEGrav] = useState(9.8);
     const [eGravTemp, setEGravTemp] = useState(9.8);
     const [eMass, setEMass] = useState(5);
@@ -148,9 +149,10 @@ function ForceFBD({show}) {
     });
     const eIsAcceleratingUp = eAccelerationEnd.point[1] > 0;
     const eDisplayedAcceleration = distance([5, 0], eAccelerationEnd.point) * (eIsAcceleratingUp ? 1 : -1) * 2;
-    const eNormalForce = Math.max(0, eMass * (eDisplayedAcceleration + eGrav));
+    const eNormalForce = eMass * (eDisplayedAcceleration + eGrav);
+    const eDisplayedNormalForce = eNormalForce / 20;
     const eNetForce = eNormalForce - eWeight;
-    const isPastFreeFall = eDisplayedAcceleration < -eGrav;
+    const isNotPastFreeFall = eDisplayedAcceleration >= -eGrav;
     //elevator end
     function createRectangle(center, width, height){
         const points = [
@@ -462,11 +464,13 @@ function ForceFBD({show}) {
                                         point2={[100, -1]}
                                         style="dashed"
                                     />
-                                    <Line.Segment
-                                        point1={[-100, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
-                                        point2={[100, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
-                                        style="dashed"
-                                    />
+                                    {((-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)) < 2) && (
+                                        <Line.Segment
+                                            point1={[-100, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
+                                            point2={[100, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
+                                            style="dashed"
+                                        />
+                                    )}
                                     <Vector
                                         tail={vsMassCenter.point}
                                         tip={[vsMassCenterX, vsMassCenterY - 2]}
@@ -568,13 +572,20 @@ function ForceFBD({show}) {
                         <Polygon
                             points={elevatorPoints}
                         />
-                        <Polygon
-                            points={objectPoints}
-                        />
+                        {(isNotPastFreeFall) && (
+                            <Polygon
+                                points={objectPoints}
+                            />
+                        )}
+                        {(!isNotPastFreeFall) && (
+                            <Polygon
+                                points={objectPointsCeiling}
+                            />
+                        )}
                         {/* gravity vector */}
                         <Vector
-                            tail={[elevator.massCenterX, elevator.massCenterY]}
-                            tip={[elevator.massCenterX, eWeightVectorEnd]}
+                            tail={[elevator.massCenterX, elevator.massCenterY + (isNotPastFreeFall ? 0 : 4)]}
+                            tip={[elevator.massCenterX, eWeightVectorEnd + (isNotPastFreeFall ? 0 : 4)]}
                         />
                         {/* acceleration vector */}
                         <Vector
@@ -582,6 +593,11 @@ function ForceFBD({show}) {
                             tip={eAccelerationEnd.point}
                         />
                         {eAccelerationEnd.element}
+                        {/* normal force vector */}
+                        <Vector
+                            tail={[elevator.massCenterX, elevator.massCenterY + (isNotPastFreeFall ? -0.5 : 4.5)]}
+                            tip={[elevator.massCenterX, elevator.massCenterY + (isNotPastFreeFall ? -0.5 + eDisplayedNormalForce : 4.5 + eDisplayedNormalForce)]}
+                        />
 
                     </Mafs>
                     <div className="FBD-info">
@@ -601,9 +617,9 @@ function ForceFBD({show}) {
                         }
                         <p className="FBD-info-sub">weight: {eWeight.toFixed(2)}</p>
                         <p className="FBD-info-sub">acceleration of the elevator: {eDisplayedAcceleration.toFixed(2)}</p>
-                        <p className="FBD-info-sub FBD-info-normal">normal force(apparent weight): {eNormalForce.toFixed(2)}</p>
-                        <p className="FBD-info-sub FBD-info-normal">net force on the object: {eNetForce.toFixed(2)}</p>
-                        <p className="FBD-info-sub FBD-info-normal">Where is the object?: {isPastFreeFall  ? "leaving the floor" : "on the ceiling"}</p>
+                        <p className="FBD-info-sub FBD-info-normal">normal force({isNotPastFreeFall ? "apparent weight" : "force from ceiling"}): {eNormalForce.toFixed(2)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">net force on the object: {eNetForce.toFixed(2)}</p>                    
+                        <p className="FBD-info-sub FBD-info-normal">acceleration of the object: {eDisplayedAcceleration.toFixed(2)}</p>
                     </div>
                 </div>
             )}

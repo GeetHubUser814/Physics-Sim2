@@ -7,7 +7,7 @@ body{
   width: max-content;
   position: absolute;
   right: 1vh;
-  color: red;
+  color: black;
 }
 .physCanvas{
   display: flex;

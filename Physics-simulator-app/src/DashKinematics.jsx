@@ -213,17 +213,20 @@ function DashKinematics() {
                 oneDSim.velocity + (aDirect ? -1 : 1) * oneDSim.acceleration * oneDSim.time
             ) * 1000) / 1000
         )
-
         setOdTime(
-            Math.round((
-                oneDSim.velocity / oneDSim.acceleration
-            ) * 1000) / 1000
+            (oneDSim.accelDirection ? "N/A" : 
+                Math.round((
+                    oneDSim.velocity / oneDSim.acceleration
+                ) * 1000) / 1000
+            )
         )
 
         setOdVelDistance(
-            Math.round((
-                Math.abs((oneDSim.velocity * (oneDSim.velocity / oneDSim.acceleration) - 0.5 * oneDSim.acceleration * Math.pow((oneDSim.velocity / oneDSim.acceleration), 2)))
-            ) * 1000) / 1000
+            (oneDSim.accelDirection ? "N/A" :
+                Math.round((
+                    Math.abs((oneDSim.velocity * (oneDSim.velocity / oneDSim.acceleration) - 0.5 * oneDSim.acceleration * Math.pow((oneDSim.velocity / oneDSim.acceleration), 2)))
+                ) * 1000) / 1000
+            )
         )
     };
     

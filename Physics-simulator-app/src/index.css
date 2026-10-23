@@ -116,9 +116,9 @@ body{
   justify-self: center;
   position: absolute;
   top: 61vh;
-  left: 4%;
-  width: 1400px;
-  height: 300px;
+  left: 3vw;
+  width: 150vh;
+  height: 34vh;
   background-color: var(--primary-color);
   color: var(--text-color);
   font-family: monospace;
@@ -150,8 +150,8 @@ body{
 }
 .dashBtn{
   position: relative;
-  margin: 16px;
-  font-size: 20px;
+  margin: 1vh;
+  font-size: 2.5vh;
   padding: 1vh;
   font-family: monospace;
   border: var(--button-border-size) solid;
@@ -210,25 +210,22 @@ body{
 }
 .kinematicsBtns{
   position: relative;
-  top: 0px;
-  width: 1300px;
-  display: flex;
-  justify-self: center;
-  background: red;
+  top: 0.5vh;
+  width: 145vh;
+  left: 5vh;
 }
 .containerForm{
-  height: 215px;
-  width: 1400px;
+  height: 25vh;
+  width: 145vh;
   display: flex;
   flex-wrap: wrap;  
   align-content: center;
   justify-content: center;
-  gap: 16px;
-  background: red;
+  gap: 3vh;
 }
 .inputDiv{
   border: 0.1vh solid;
-  font-size: 18px;
+  font-size: 2vh;
   height: max-content;
   padding: 1vh;
   font-family: monospace;

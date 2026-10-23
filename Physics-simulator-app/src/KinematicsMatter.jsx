@@ -84,6 +84,20 @@ const KinematicsMatter = () => {
         }
     }, []);
 
+    const canvasWidth = window.innerWidth * 0.6;
+    const canvasHeight = window.innerHeight * 0.5;
+    const [cw, setCw] = useState(typeof window !== 'undefined' ? window.innerWidth * 0.6 : 0);
+    const [ch, setCh] = useState(typeof window !== 'undefined' ? window.innerHeight * 0.5 : 0);
+    useEffect(() => {
+        function handleResize(){
+            setCw(window.innerWidth * 0.6);
+            setCh(window.innerHeight * 0.5);
+        }
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
     useEffect(() => {
         const {Engine, Render, Runner, Bodies, Composite, Body} = Matter;
         const engine = Engine.create();
@@ -93,11 +107,32 @@ const KinematicsMatter = () => {
             element: sceneRef.current,
             engine: engine,
             options: {
-                width: 1100,
-                height: 500,
+                width: canvasWidth,
+                height: canvasHeight,
                 wireframes: false,
                 background: 'rgb(105, 48, 174)',
             },
+        });
+
+        window.addEventListener('resize', () => {
+            const newCanvasWidth = window.innerWidth * 0.6;
+            const newCanvasHeight = window.innerHeight * 0.5;
+            render.options.width = newCanvasWidth;
+            render.options.height = newCanvasHeight;
+            render.bounds.max.x = newCanvasWidth;
+            render.bounds.max.y = newCanvasHeight;
+            render.canvas.width = newCanvasWidth;
+            render.canvas.height = newCanvasHeight;
+            Matter.Render.setSize(render, newCanvasWidth, newCanvasHeight);
+            Matter.Render.lookAt(render, {
+                min: {x: 0, y: 0},
+                max: {x: 1250, y: 400}
+            });
+        });
+        Matter.Render.setSize(render, canvasWidth, canvasHeight);
+        Matter.Render.lookAt(render, {
+            min: {x: 0, y: 0},
+            max: {x: 1250, y: 400}
         });
         const runner = Runner.create();
         runnerRef.current = runner;
@@ -132,9 +167,9 @@ const KinematicsMatter = () => {
             }
         });
 
-        const ball = Bodies.circle(103, 269 + 191 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0});
-        const floor = Bodies.rectangle(550, 490, 1200, 50, {isStatic: true});
-        const elevation = Bodies.rectangle(0, 465 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
+        const ball = Bodies.circle(103, 269 + 150 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0});
+        const floor = Bodies.rectangle(550, 450, 1400, 50, {isStatic: true});
+        const elevation = Bodies.rectangle(0, 425 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
         
         ballRef.current = ball;
         elevationRef.current = elevation;
@@ -175,8 +210,8 @@ const KinematicsMatter = () => {
             const {Runner, Composite, Bodies, Body} = Matter;
 
             if(!isRunning.current){
-                const newBall = Bodies.circle(103, 269 + 191 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0});
-                const newElevation = Bodies.rectangle(0, 465 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
+                const newBall = Bodies.circle(103, 269 + 150 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0});
+                const newElevation = Bodies.rectangle(0, 425 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
 
                 engineRef.current.gravity.y = grav.current / (gConst);
                 Body.setVelocity(newBall, {
@@ -204,7 +239,7 @@ const KinematicsMatter = () => {
 
             const {Runner, Composite, Bodies, Body, Render, Engine} = Matter;
             if(!isRunning.current){
-                const newBall = Bodies.circle(570, 460, 5, {friction: 0, frictionAir: 0, restitution: 0});
+                const newBall = Bodies.circle(570, 421, 5, {friction: 0, frictionAir: 0, restitution: 0});
                 const newElevation = Bodies.rectangle(0, 0, 0, 0, {isStatic: true});
 
                 Body.setVelocity(newBall, {
@@ -251,6 +286,7 @@ const KinematicsMatter = () => {
         justifySelf: "center",
         position: "absolute",
         top: "4vh",
+        left: "22vh",
     }
     
 
@@ -258,6 +294,7 @@ const KinematicsMatter = () => {
     return(
         <div className="physCanvas" style={canvasStyle}>
             <div ref={sceneRef}/>
+            <div>{cw}</div>
         </div>
     );
 }

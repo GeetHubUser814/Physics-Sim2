@@ -7,7 +7,9 @@ body{
   width: max-content;
   position: absolute;
   right: 1vh;
+  top: 1vh;
   color: black;
+  font-size: 2vh;
 }
 .physCanvas{
   display: flex;
@@ -359,19 +361,26 @@ body{
 }
 .xLabel{
   position: absolute;
-  top: 510px;
-  font-size: 1.75vh;
+  width: max-content;
+  top: 0vh;
+  left: 125vh;
+  font-size: 1.5vh;
+  background-color: var(--btn-primary-color);
+  padding: 1vh;
 }
 .yLabel{
   position: absolute;
-  top: 0vh;
-  left: 1220px;
-  font-size: 1.75vh;
+  max-width: 20vh;
+  top: 5vh;
+  left: 125vh;
+  font-size: 1.5vh;
+  background-color: var(--btn-primary-color);
+  padding: 1vh;
 }
 .graphTitle{
   position: absolute;
-  top: -26px;
-  left: -1vh;
+  top: -2.6vh;
+  left: 0vh;
   width: 100%;
   display: flex;
   justify-content: center;

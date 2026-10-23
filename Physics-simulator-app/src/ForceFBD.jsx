@@ -4,8 +4,16 @@ import React, {useEffect, useRef, useState} from 'react';
 function ForceFBD({show}) {
 
     //canvas
-    const canvasHeight = 500;
-    const canvasWidth = 1560;
+    const [dimensions, setDimensions] = useState({ width: window.innerWidth * 0.7, height: window.innerHeight * 0.5})
+    useEffect(() => {
+        window.addEventListener('resize', () => {
+            setDimensions({
+                width: window.innerWidth * 0.7,
+                height: window.innerHeight * 0.5
+            });
+        });
+    }, [])
+
     function distance(p1, p2){
         return Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
     }
@@ -187,7 +195,7 @@ function ForceFBD({show}) {
         <div className="bigForceFBDContainer">
             {show === "isRamp" && (
                 <div className="FBD-container">
-                    <Mafs pan={false} zoom={false} height={canvasHeight} width={canvasWidth} viewBox={{x: [-5, 5], y: [gravEnd.point[1] - 2, Math.max(rampTop.point[1] + 2, gravNormalReal[1] + 2)]}}>
+                    <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{x: [-5, 5], y: [gravEnd.point[1] - 2, Math.max(rampTop.point[1] + 2, gravNormalReal[1] + 2)]}}>
   
                         <Circle
                             center={[ramp.centerX, ramp.centerY]}
@@ -243,7 +251,7 @@ function ForceFBD({show}) {
             )}
             {show === "isAtwood" && (
                 <div className="FBD-container">
-                    <Mafs pan={false} zoom={false} height={canvasHeight} width={canvasWidth} viewBox={{x: [-5, 5], y: [Math.min(mass1GravEnd.point[1] - 1, mass2GravEnd.point[1]) - 1, Math.max(masses.mass1Pos[1] + tensionMagnitude, atwood.pulleyCenterY + atwood.pulleyRad)]}}>
+                    <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{x: [-5, 5], y: [Math.min(mass1GravEnd.point[1] - 1, mass2GravEnd.point[1]) - 1, Math.max(masses.mass1Pos[1] + tensionMagnitude, atwood.pulleyCenterY + atwood.pulleyRad)]}}>
                         {/*pulley*/}
                         <Circle
                             center={[atwood.pulleyCenterX, atwood.pulleyCenterY]}
@@ -323,7 +331,7 @@ function ForceFBD({show}) {
                         </div>
                         {(springIsHorizontal) && (
                             <div className="FBD-container">
-                                <Mafs pan={false} zoom={false} height={canvasHeight} width={canvasWidth} viewBox={{ x: [-12, 12], y: [-5.5, 5] }}>
+                                <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{ x: [-12, 12], y: [-5.5, 5] }}>
                                     {/*floor and wall*/}
                                     <Line.Segment
                                         point1={[-10, -2]}
@@ -440,7 +448,7 @@ function ForceFBD({show}) {
                         )}
                         {springIsHorizontal === false && (
                             <div className="FBD-container">
-                                <Mafs pan={false} zoom={false} height={canvasHeight} width={canvasWidth} viewBox={{ x: [-2, 2], y: [-5, 3] }}>
+                                <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{ x: [-2, 2], y: [-5, 3] }}>
                                     <Line.Segment
                                         point1={[-100, 3]}
                                         point2={[100, 3]}
@@ -568,7 +576,7 @@ function ForceFBD({show}) {
             )}
             {(show === "isElevator") && (
                 <div className="FBD-container">
-                    <Mafs pan={false} zoom={false} height={canvasHeight} width={canvasWidth} viewBox={{x:[-2, 2], y: [Math.min(-5, eWeightVectorEnd, eAccelerationEnd.point[1]), Math.max(5, eAccelerationEnd.point[1])]}}>
+                    <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{x:[-2, 2], y: [Math.min(-5, eWeightVectorEnd, eAccelerationEnd.point[1]), Math.max(5, eAccelerationEnd.point[1])]}}>
                         <Polygon
                             points={elevatorPoints}
                         />

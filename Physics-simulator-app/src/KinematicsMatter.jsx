@@ -110,7 +110,7 @@ const KinematicsMatter = () => {
                 width: canvasWidth,
                 height: canvasHeight,
                 wireframes: false,
-                background: 'rgb(105, 48, 174)',
+                background: 'rgb(209, 165, 208)',
             },
         });
 
@@ -294,7 +294,6 @@ const KinematicsMatter = () => {
     return(
         <div className="physCanvas" style={canvasStyle}>
             <div ref={sceneRef}/>
-            <div>{cw}</div>
         </div>
     );
 }

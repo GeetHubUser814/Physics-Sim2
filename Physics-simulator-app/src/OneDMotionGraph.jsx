@@ -100,40 +100,23 @@ function OneDMotionGraph() {
             </div>
         );
     }
-    /*
-                {inputArray.map((_, index) => (
-                    <Mafs viewBox={{x: [0, Math.max(4, maxRange)], y: [-2, Math.max(2, peakHeight + 2)]}} height={500} width={1200}>
-                        <Coordinates.Cartesian />
-                        <Plot.OfX 
-                            y={mafFunc}
-                            domain={[0, domainCutoff()]}
-                            color={Theme.red}
-                        />
-                        <Text
-                            x={coord.x}
-                            y={coord.y}
-                        >
-                            ({coord.x.toFixed(2)}, {coord.y.toFixed(2)})
-                        </Text>
-                        <Text
-                            x={(peakHeight + 2) * 1.11 + 5}
-                            y={0.8}
-                        >time</Text>
-                        <Text
-                            x={-Math.max(2.5, 2.5 + peakHeight * 0.1)}
-                            y={Math.max((peakHeight + 2) - 1, 2.1)}
-                        >position</Text>
-                        {coord.element}
-                    </Mafs>
-                ))}
-    */
+
+    const [dimensions, setDimensions] = useState({ width: window.innerWidth * 0.6, height: window.innerHeight * 0.5})
+    useEffect(() => {
+        window.addEventListener('resize', () => {
+            setDimensions({
+                width: window.innerWidth * 0.6,
+                height: window.innerHeight * 0.5
+            });
+        });
+    }, [])
     function repeatGraph(inputArray, viewX, viewY, xLabel, yLabel){
         return(
             <div>
                     <div className="graphTitle">
                         <p>{yLabel} vs. {xLabel} graph</p>
                     </div>
-                    <Mafs viewBox={{x: viewX, y: viewY}} height={500} width={1200}>
+                    <Mafs viewBox={{x: viewX, y: viewY}} width={dimensions.width} height={dimensions.height}>
                         <Coordinates.Cartesian 
                             xAxis={{
                                 lines: Math.max(5, Math.round(time / (graphShow.heightGraph ? 5 : 50)) * 10),
@@ -218,3 +201,30 @@ function OneDMotionGraph() {
     );
 }
 export default OneDMotionGraph
+    /*
+                {inputArray.map((_, index) => (
+                    <Mafs viewBox={{x: [0, Math.max(4, maxRange)], y: [-2, Math.max(2, peakHeight + 2)]}} height={500} width={1200}>
+                        <Coordinates.Cartesian />
+                        <Plot.OfX 
+                            y={mafFunc}
+                            domain={[0, domainCutoff()]}
+                            color={Theme.red}
+                        />
+                        <Text
+                            x={coord.x}
+                            y={coord.y}
+                        >
+                            ({coord.x.toFixed(2)}, {coord.y.toFixed(2)})
+                        </Text>
+                        <Text
+                            x={(peakHeight + 2) * 1.11 + 5}
+                            y={0.8}
+                        >time</Text>
+                        <Text
+                            x={-Math.max(2.5, 2.5 + peakHeight * 0.1)}
+                            y={Math.max((peakHeight + 2) - 1, 2.1)}
+                        >position</Text>
+                        {coord.element}
+                    </Mafs>
+                ))}
+    */

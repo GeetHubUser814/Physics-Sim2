@@ -97,7 +97,7 @@ body{
   justify-self: center;
   position: absolute;
   top: 95vh;
-  left: 3vw;
+  left: 9vw;
   width: 150vh;
   height: 0.01vh;
   background-color: var(--primary-color);
@@ -118,7 +118,7 @@ body{
   justify-self: center;
   position: absolute;
   top: 61vh;
-  left: 3vw;
+  left: 9vw;
   width: 150vh;
   height: 34vh;
   background-color: var(--primary-color);
@@ -132,8 +132,8 @@ body{
 }
 .startBtn{
   position: absolute;
-  left: 80vw;
-  top: -2vh;
+  left: 75vw;
+  top: 5vh;
   font-size: 3vh;
   padding: 1vh;
   font-family: monospace;
@@ -217,6 +217,8 @@ body{
   left: 5vh;
 }
 .containerForm{
+  position: absolute;
+  top: 6vh;
   height: 25vh;
   width: 145vh;
   display: flex;
@@ -250,8 +252,8 @@ body{
   padding: 1vh;
   color: var(--text-color);
   position: absolute;
-  top: 25vh;
-  left: 77vw;
+  top: 21vh;
+  left: 67vw;
   transition: all, 0.1s ease-in-out;
 }
 .submitBtn:hover{
@@ -267,7 +269,7 @@ body{
   max-height: 38vh;
   position: absolute;
   top: -50vh;
-  left: 77vw;
+  left: 70vw;
   font-size: 1.9vh;
   padding: 1vh;
   font-family: monospace;
@@ -335,7 +337,7 @@ body{
   flex-direction: column;
   gap: 1vh;
   justify-content: start;
-  left: 3.5vw;
+  left: 9vw;
   top: 3vh;
   height: 50%;
   width: 14vw;
@@ -363,7 +365,7 @@ body{
   position: absolute;
   width: max-content;
   top: 0vh;
-  left: 125vh;
+  left: 61vw;
   font-size: 1.5vh;
   background-color: var(--btn-primary-color);
   padding: 1vh;
@@ -372,7 +374,7 @@ body{
   position: absolute;
   max-width: 20vh;
   top: 5vh;
-  left: 125vh;
+  left: 61vw;
   font-size: 1.5vh;
   background-color: var(--btn-primary-color);
   padding: 1vh;
@@ -420,7 +422,7 @@ body{
 .FBD-info-spring{
   position: fixed;
   top: 73vh;
-  left: 7vw;
+  left: 13vw;
 }
 .FBD-info-sub{
   background-color: rgb(255, 64, 207);
@@ -466,6 +468,48 @@ body{
   position: absolute;
   top: 68vh;
 }
+.equationsContainer{
+  position: absolute;
+  top: -58vh;
+  left: 7vw;
+  background-color: var(--primary-color);
+  border: var(--dash-border-size) solid var(--border-color);
+  height: 48vh;
+  width: 58vw;
+  padding: 2vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+}
+.equationSub{
+  height: 6vh;
+  width: 25vw;
+  font-size: 1.7vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3vw;
+  padding: 0vh 0.4vw;
+  border: var(--button-border-size) solid var(--border-color);
+  border-radius: var(--equation-sub-border-radius)
+}
+.equationDesc{
+  width: 100%;
+  background: none;
+  margin: auto;
+  position: relative;
+  left: 1.5vw;
+}
+.equation{
+  display: flex;
+  width: 50%;
+  position: relative;
+  right: 1vw;
+}
+.equationSub button{
+  font-size: 1.7vh;
+  height: 5vh;
+}
 :root{
   --primary-color: rgb(237, 222, 238);
   --border-color: rgb(234, 181, 232);
@@ -479,4 +523,6 @@ body{
   --btn-primary-color: rgb(241, 185, 246);
   --btn-border-color: var(--btn-primary-color);
   --btn-hover-color: rgb(238, 166, 245);
+
+  --equation-sub-border-radius: 2vh;
 }

@@ -286,7 +286,7 @@ const KinematicsMatter = () => {
         justifySelf: "center",
         position: "absolute",
         top: "4vh",
-        left: "22vh",
+        left: "18vw",
     }
     
 

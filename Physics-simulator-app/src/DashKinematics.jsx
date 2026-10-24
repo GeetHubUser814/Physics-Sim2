@@ -47,6 +47,8 @@ function DashKinematics() {
     }
     function equationsBtn(){
         setOpen((prev) => ({...false, equations: !prev.equations}));
+        window.dispatchEvent(closeCanvas);
+        window.dispatchEvent(coverCanvas);
     }
     function projGraphBtn(){
         setOpen((prev) => ({...false, graphProjectile: true}));
@@ -374,7 +376,23 @@ function DashKinematics() {
                 </div>
             )}
             {(isOpen && open.equations) && (
-                <div>lksadhlkasdjasf</div>
+                <div className="equationsContainer">
+                    <div className="equationSub">
+                        <p className="equationDesc">first kinematic equation: </p>
+                        <p className="equation">v=at</p>
+                        <button className="dashBtn">derivation</button>
+                    </div>
+                    <div className="equationSub">
+                        <p className="equationDesc">second kinematic equation: </p>
+                        <p className="equation">x=vt+1/2at^2</p>
+                        <button className="dashBtn">derivation</button>
+                    </div>
+                    <div className="equationSub">
+                        <p className="equationDesc">third kinematic equation: </p>
+                        <p className="equation">v^2=v^2+2ax</p>
+                        <button className="dashBtn">derivation</button>
+                    </div>
+                </div>
             )}
         </div>
     );

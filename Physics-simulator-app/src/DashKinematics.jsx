@@ -376,20 +376,43 @@ function DashKinematics() {
                 </div>
             )}
             {(isOpen && open.equations) && (
-                <div className="equationsContainer">
-                    <div className="equationSub">
-                        <p className="equationDesc">first kinematic equation: </p>
-                        <p className="equation">v=at</p>
+                <div className="eqContainer">
+                    <div className="eqSub">
+                        <p className="eqDesc">first kinematic equation</p>
+                        <p className="eqBorder">|</p>
+                        <p className="eq">
+                            &Delta;v=at
+                        </p>
                         <button className="dashBtn">derivation</button>
                     </div>
-                    <div className="equationSub">
-                        <p className="equationDesc">second kinematic equation: </p>
-                        <p className="equation">x=vt+1/2at^2</p>
+                    <div className="eqSub">
+                        <p className="eqDesc">second kinematic equation</p>
+                        <p className="eqBorder">|</p>
+                        <p className="eq">
+                            &Delta;x=v<span className="sub">0</span><span className="exponent">2</span>+
+                            <span className="fraction">
+                                <span className="numerator">1</span>—<span className="denominator">2</span>
+                            </span>
+                            at<span className="exponent">2</span>
+                        </p>
                         <button className="dashBtn">derivation</button>
                     </div>
-                    <div className="equationSub">
-                        <p className="equationDesc">third kinematic equation: </p>
-                        <p className="equation">v^2=v^2+2ax</p>
+                    <div className="eqSub">
+                        <p className="eqDesc">third kinematic equation</p>
+                        <p className="eqBorder">|</p>
+                        <p className="eq">v^2=v^2+2ax</p>
+                        <button className="dashBtn">derivation</button>
+                    </div>
+                    <div className="eqSub">
+                        <p className="eqDesc">average velocity-displacement</p>
+                        <p className="eqBorder">|</p>
+                        <p className="eq">R=v^2sin(2theta)/g</p>
+                        <button className="dashBtn">derivation</button>
+                    </div>
+                    <div className="eqSub">
+                        <p className="eqDesc">range(no elevation)</p>
+                        <p className="eqBorder">|</p>
+                        <p className="eq">R=v^2sin(2theta)/g</p>
                         <button className="dashBtn">derivation</button>
                     </div>
                 </div>

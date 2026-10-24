@@ -468,7 +468,7 @@ body{
   position: absolute;
   top: 68vh;
 }
-.equationsContainer{
+.eqContainer{
   position: absolute;
   top: -58vh;
   left: 7vw;
@@ -481,9 +481,9 @@ body{
   flex-direction: column;
   gap: 1vh;
 }
-.equationSub{
+.eqSub{
   height: 6vh;
-  width: 25vw;
+  width: 28vw;
   font-size: 1.7vh;
   display: flex;
   justify-content: center;
@@ -493,22 +493,57 @@ body{
   border: var(--button-border-size) solid var(--border-color);
   border-radius: var(--equation-sub-border-radius)
 }
-.equationDesc{
-  width: 100%;
+.eqDesc{
+  width: 35%;
   background: none;
   margin: auto;
   position: relative;
-  left: 1.5vw;
+  left: -0.5vw;
 }
-.equation{
-  display: flex;
-  width: 50%;
+.eq{
+  width: 23%;
   position: relative;
-  right: 1vw;
+  right: 2vw;
+  font-family: math;
+  font-size: 1.8vh;
+  display: flex;
+  align-items: center;
 }
-.equationSub button{
+.eqSub button{
   font-size: 1.7vh;
   height: 5vh;
+  right: -0.5vw;
+}
+.eqBorder{
+  position: relative;
+  left: -3vw;
+  top: -0.1vh;
+  font-size: 6.7vh;
+  color: var(--border-color);
+}
+.fraction{
+  display: flex;
+  flex-direction: column;
+}
+.numerator{
+  position: relative;
+  left: 0.2vw;
+  top: 1vh;
+}
+.denominator{
+  position: relative;
+  left: 0.2vw;
+  bottom: 1vh;
+}
+.sub{
+  position: relative;
+  top: 0.8vh;
+  right: 0.05vw;
+}
+.exponent{
+  position: relative;
+  bottom: 0.8vh;
+  right: 0.05vw;
 }
 :root{
   --primary-color: rgb(237, 222, 238);

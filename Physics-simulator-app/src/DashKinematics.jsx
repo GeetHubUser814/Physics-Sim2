@@ -13,6 +13,15 @@ function DashKinematics() {
     const [isOpenOneDMotion, setIsOpenOneDMotion] = useState(false);
     const [isOpenGraphProjectile, setIsOpenGraphProjectile] = useState(false);
     const[isOpenGraphOneD, setIsOpenGraphOneD] = useState(false);
+    const [isOpenEquations, setIsOpenEquations] = useState(false);
+    const [open, setOpen] = useState({
+        projectile: false,
+        graph: false,
+        oneDMotion: false,
+        graphProjectile: false,
+        graphOneD: false,
+        equations: false,
+    });
 
     const openCanvas = new CustomEvent("openCanvas");
     const closeCanvas = new CustomEvent("closeCanvas");
@@ -26,49 +35,34 @@ function DashKinematics() {
     }
 
     function projectileBtn(){
-        setIsOpenProjectile((prev) => !prev);
-        if(isOpenGraph || isOpenOneDMotion || isOpenGraphProjectile || isOpenGraphOneD){
-            setIsOpenGraph(false);
-            setIsOpenOneDMotion(false);
-            setIsOpenGraphProjectile(false);
-            setIsOpenGraphOneD(false);
-        }
+        setOpen((prev) => ({...false, projectile: !prev.projectile}));
+
         window.dispatchEvent(openCanvas);
         window.dispatchEvent(coverDownCanvas);
     }
 
     function oneDMotionBtn (){
-        setIsOpenOneDMotion((prev) => !prev);
-        if(isOpenProjectile || isOpenGraph || isOpenGraphProjectile || isOpenGraphOneD){
-            setIsOpenGraph(false);
-            setIsOpenProjectile(false);
-            setIsOpenGraphProjectile(false);
-            setIsOpenGraphOneD(false);
-        }
+        setOpen((prev) => ({...false, oneDMotion: !prev.oneDMotion}));
         window.dispatchEvent(openCanvas);
         window.dispatchEvent(coverDownCanvas);
     }
 
     function GraphBtn(){
-        setIsOpenGraph((prev) => !prev);
-        if(isOpenProjectile || isOpenOneDMotion || isOpenGraphProjectile || isOpenGraphOneD){
-            setIsOpenProjectile(false);
-            setIsOpenOneDMotion(false);
-            setIsOpenGraphProjectile(false);
-            setIsOpenGraphOneD(false);
-        }
+        setOpen((prev) => ({...false, graph: !prev.graph}));
         window.dispatchEvent(closeCanvas);
     }
-
+    function equationsBtn(){
+        setOpen((prev) => ({...false, equations: !prev.equations}));
+    }
     function projGraphBtn(){
-        setIsOpenGraphProjectile(true);
-        setIsOpenGraph(false);
+        setOpen((prev) => ({...false, graphProjectile: true}));
+        setOpen((prev) => ({...prev, graph: false}));
         window.dispatchEvent(coverCanvas);
     }
 
     function oneDGraphBtn(){
-        setIsOpenGraphOneD(true);
-        setIsOpenGraph(false);
+        setOpen((prev) => ({...false, graphOneD: true}));
+        setOpen((prev) => ({...prev, graph: false}));
         window.dispatchEvent(coverCanvas);
     }
 
@@ -235,10 +229,10 @@ function DashKinematics() {
     const [isRunning, setIsRunning] = useState(false);
 
     function startSimulation(){
-        if(isOpenProjectile){
+        if(open.projectile){
             const startEndSimProj = new CustomEvent("startEndSimProj");
             window.dispatchEvent(startEndSimProj);    
-        }else if(isOpenOneDMotion){
+        }else if(open.oneDMotion){
             const startEndSimOneD = new CustomEvent("startEndSimOneD");
             window.dispatchEvent(startEndSimOneD);
         }
@@ -326,9 +320,10 @@ function DashKinematics() {
                     <button className="dashBtn" onClick={projectileBtn}>Projectile Motion</button>
                     <button className="dashBtn" onClick={oneDMotionBtn}>1D Motion</button>
                     <button className="dashBtn" onClick={GraphBtn}>Graphs</button>
+                    <button className="dashBtn" onClick={equationsBtn}>Equations</button>
                 </div>
             )}
-            {(isOpen && isOpenProjectile) && (
+            {(isOpen && open.projectile) && (
                 repeatInputDiv([
                     ["elevation", "number", "elevation", projectileSim.elevation, handleInputChangeProj, 0],
                     ["velocity", "number", "velocity", projectileSim.velocity, handleInputChangeProj, 0],
@@ -336,7 +331,7 @@ function DashKinematics() {
                     ["acceleration due to gravity", "number", "gravAcceleration", projectileSim.gravAcceleration, handleInputChangeProj, 0.01]
                 ])
             )}
-            {(isOpen && isOpenOneDMotion) && (
+            {(isOpen && open.oneDMotion) && (
                 repeatInputDiv([
                     ["velocity", "number", "velocity", oneDSim.velocity, handleInputChangeOneD],
                     ["acceleration", "number", "acceleration", oneDSim.acceleration, handleInputChangeOneD],
@@ -344,11 +339,11 @@ function DashKinematics() {
                     ["time", "number", "time", oneDSim.time, handleInputChangeOneD]
                 ])
             )}
-            {(isOpen && (isOpenProjectile || isOpenOneDMotion)) && (
+            {(isOpen && (open.projectile || open.oneDMotion)) && (
                 <button className="startBtn" onClick={startSimulation}>{isRunning ? "Stop Simulation" : "Start Simualtion"}</button>
             )}
 
-            {(isOpen && isOpenProjectile) && (
+            {(isOpen && open.projectile) && (
                 repeatDisplay([
                     ["range", projRange],
                     ["time in air", projTime],
@@ -358,7 +353,7 @@ function DashKinematics() {
                 ], "simResult")
             )}
 
-            {(isOpen && isOpenOneDMotion) && (
+            {(isOpen && open.oneDMotion) && (
                 repeatDisplay([
                     ["displacement", odDisplace],
                     ["distance", odDistance],
@@ -368,21 +363,24 @@ function DashKinematics() {
                 ], "simResult")
             )}
             
-            {(isOpen && isOpenGraph) && (
+            {(isOpen && open.graph) && (
                 <div className="graphBtns">
                     <button className="dashBtn" onClick={projGraphBtn}>Projectile Motion Graphs</button>
                     <button className="dashBtn" onClick={oneDGraphBtn}>1D Motion Graphs</button>
                 </div>
             )}
-            {(isOpen && isOpenGraphProjectile) && (
+            {(isOpen && open.graphProjectile) && (
                 <div className="graphContainer">
                     <ProjectileMotionGraph/>
                 </div>
             )}
-            {(isOpen && isOpenGraphOneD) && (
+            {(isOpen && open.graphOneD) && (
                 <div className="graphContainer">
                     <OneDMotionGraph/>
                 </div>
+            )}
+            {(isOpen && open.equations) && (
+                <div>lksadhlkasdjasf</div>
             )}
         </div>
     );

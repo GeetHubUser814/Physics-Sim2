@@ -8,12 +8,6 @@ import OneDMotionGraph from './OneDMotionGraph';
 function DashKinematics() {
 
     const [isOpen, setIsOpen] = useState(true);
-    const [isOpenProjectile, setIsOpenProjectile] = useState(false);
-    const [isOpenGraph, setIsOpenGraph] = useState(false);
-    const [isOpenOneDMotion, setIsOpenOneDMotion] = useState(false);
-    const [isOpenGraphProjectile, setIsOpenGraphProjectile] = useState(false);
-    const[isOpenGraphOneD, setIsOpenGraphOneD] = useState(false);
-    const [isOpenEquations, setIsOpenEquations] = useState(false);
     const [open, setOpen] = useState({
         projectile: false,
         graph: false,

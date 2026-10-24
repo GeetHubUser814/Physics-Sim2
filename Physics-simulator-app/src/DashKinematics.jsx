@@ -381,7 +381,7 @@ function DashKinematics() {
                         <p className="eqDesc">first kinematic equation</p>
                         <p className="eqBorder">|</p>
                         <p className="eq">
-                            &Delta;v=at
+                            &Delta;v = at
                         </p>
                         <button className="dashBtn">derivation</button>
                     </div>
@@ -389,9 +389,11 @@ function DashKinematics() {
                         <p className="eqDesc">second kinematic equation</p>
                         <p className="eqBorder">|</p>
                         <p className="eq">
-                            &Delta;x=v<span className="sub">0</span><span className="exponent">2</span>+
+                            &Delta;x = v<span className="sub">0</span><span className="exponent">2</span>+
                             <span className="fraction">
-                                <span className="numerator">1</span>—<span className="denominator">2</span>
+                                <span className="numerator">1</span>
+                                <span className="fractionLine">—</span>
+                                <span className="denominator">2</span>
                             </span>
                             at<span className="exponent">2</span>
                         </p>
@@ -400,19 +402,71 @@ function DashKinematics() {
                     <div className="eqSub">
                         <p className="eqDesc">third kinematic equation</p>
                         <p className="eqBorder">|</p>
-                        <p className="eq">v^2=v^2+2ax</p>
+                        <p className="eq">
+                            v<span className="sub">f</span><span className="exponent">2</span>=
+                            v<span className="sub">0</span><span className="exponent">2</span>+
+                            2a&Delta;x
+                        </p>
                         <button className="dashBtn">derivation</button>
                     </div>
                     <div className="eqSub">
                         <p className="eqDesc">average velocity-displacement</p>
                         <p className="eqBorder">|</p>
-                        <p className="eq">R=v^2sin(2theta)/g</p>
+                        <p className="eq">
+                            <span className="fraction">
+                                <span className="numerator numeratorWithSub">v<span className="sub">0</span>+v<span className="sub">f</span></span>
+                                <span className="fractionLine">———</span>
+                                <span className="denominator">2</span>
+                            </span>
+                             = 
+                            <span className="fraction">
+                                <span className="numerator numeratorWithSub">x<span className="sub">0</span>-x<span className="sub">f</span></span>
+                                <span className="fractionLine">———</span>
+                                <span className="denominator">t</span>
+                            </span>
+                        </p>
                         <button className="dashBtn">derivation</button>
                     </div>
                     <div className="eqSub">
                         <p className="eqDesc">range(no elevation)</p>
                         <p className="eqBorder">|</p>
-                        <p className="eq">R=v^2sin(2theta)/g</p>
+                        <p className="eq">
+                            R = 
+                            <span className="fraction">
+                                <span className="numerator numeratorWithSub">v<span className="sub">0</span><span className="exponent">2</span>sin(2&theta;)</span>
+                                <span className="fractionLine">———————</span>
+                                <span className="denominator">g</span>
+                            </span>
+                        </p>
+                        <button className="dashBtn">derivation</button>
+                    </div>
+                    <div className="eqSub">
+                        <p className="eqDesc">max height</p>
+                        <p className="eqBorder">|</p>
+                        <p className="eq">
+                            y<span className="sub">f</span> = y<span className="sub">0</span> + 
+                            <span className="fraction">
+                                <span className="numerator numeratorWithSub">(v<span className="sub">0</span>sin(&theta;))<span className="exponent">2</span></span>
+                                <span className="fractionLine">———————</span>
+                                <span className="denominator">2g</span>
+                            </span>
+                        </p>
+                        <button className="dashBtn">derivation</button>
+                    </div>
+                    <div className="eqSub">
+                        <p className="eqDesc">projectile's impact velocity</p>
+                        <p className="eqBorder">|</p>
+                        <p className="eq">
+
+                        </p>
+                        <button className="dashBtn">derivation</button>
+                    </div>
+                    <div className="eqSub">
+                        <p className="eqDesc">projectile's impact angle with horizontal</p>
+                        <p className="eqBorder">|</p>
+                        <p className="eq">
+
+                        </p>
                         <button className="dashBtn">derivation</button>
                     </div>
                 </div>

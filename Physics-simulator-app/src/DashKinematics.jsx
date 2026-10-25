@@ -309,6 +309,51 @@ function DashKinematics() {
             </div>
         );
     }
+    function equationsList(inputArray){
+        return(
+            <div className="eqContainer">
+                {inputArray.map((_, rowIndex) => (
+                    <div className="eqSub" key={rowIndex}>
+                        <p className="eqDesc">{inputArray[rowIndex][0]}</p>
+                        <p className="eqBorder">|</p>
+
+                        {inputArray[rowIndex][1]}                        
+
+                        <button className="dashBtn" onClick={() => showDerivation(inputArray[rowIndex][2])}>derivation</button>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+    const [derivationShow, setDerivationShow] = useState({
+        k1: false,
+        k2: false,
+        k3: false,
+        avgV: false,
+        range: false,
+        maxHeight: false,
+        impactVel: false,
+        impactAngle: false,
+    });
+    function showDerivation(show){
+        setDerivationShow((prev) => ({
+            ...prev,
+            [show]: true,
+        }))
+    }
+    function derivation(txt){
+        return(
+            <div className="derBigContainer">
+                <div className="derContainer"></div>
+                    <p className="derCloseBtn" onClick={() => setDerivationShow((prev) => ({...false}))}>X</p>
+                    <div className="der">
+                        <div className="derTxt">
+                            <p>{txt}</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
     return(
         <div>
             {isOpen && (
@@ -376,42 +421,31 @@ function DashKinematics() {
                 </div>
             )}
             {(isOpen && open.equations) && (
-                <div className="eqContainer">
-                    <div className="eqSub">
-                        <p className="eqDesc">first kinematic equation</p>
-                        <p className="eqBorder">|</p>
+                equationsList([
+                    ["first kinematics equation", 
                         <p className="eq">
                             &Delta;v = at
                         </p>
-                        <button className="dashBtn">derivation</button>
-                    </div>
-                    <div className="eqSub">
-                        <p className="eqDesc">second kinematic equation</p>
-                        <p className="eqBorder">|</p>
+                    , "k1"],
+                    ["second kinematics equation", 
                         <p className="eq">
-                            &Delta;x = v<span className="sub">0</span><span className="exponent">2</span>+
-                            <span className="fraction">
-                                <span className="numerator">1</span>
-                                <span className="fractionLine">—</span>
-                                <span className="denominator">2</span>
-                            </span>
-                            at<span className="exponent">2</span>
+                                &Delta;x = v<span className="sub">0</span>t+
+                                <span className="fraction">
+                                    <span className="numerator">1</span>
+                                    <span className="fractionLine">—</span>
+                                    <span className="denominator">2</span>
+                                </span>
+                                at<span className="exponent">2</span>
                         </p>
-                        <button className="dashBtn">derivation</button>
-                    </div>
-                    <div className="eqSub">
-                        <p className="eqDesc">third kinematic equation</p>
-                        <p className="eqBorder">|</p>
+                    , "k2"],
+                    ["third kinematics equation",
                         <p className="eq">
                             v<span className="sub">f</span><span className="exponent">2</span>=
                             v<span className="sub">0</span><span className="exponent">2</span>+
                             2a&Delta;x
                         </p>
-                        <button className="dashBtn">derivation</button>
-                    </div>
-                    <div className="eqSub">
-                        <p className="eqDesc">average velocity-displacement</p>
-                        <p className="eqBorder">|</p>
+                    , "k3"],
+                    ["average velocity-displacement",
                         <p className="eq">
                             <span className="fraction">
                                 <span className="numerator numeratorWithSub">v<span className="sub">0</span>+v<span className="sub">f</span></span>
@@ -425,11 +459,8 @@ function DashKinematics() {
                                 <span className="denominator">t</span>
                             </span>
                         </p>
-                        <button className="dashBtn">derivation</button>
-                    </div>
-                    <div className="eqSub">
-                        <p className="eqDesc">range(no elevation)</p>
-                        <p className="eqBorder">|</p>
+                    , "avgV"],
+                    ["range (no elevation)",
                         <p className="eq">
                             R = 
                             <span className="fraction">
@@ -438,11 +469,8 @@ function DashKinematics() {
                                 <span className="denominator">g</span>
                             </span>
                         </p>
-                        <button className="dashBtn">derivation</button>
-                    </div>
-                    <div className="eqSub">
-                        <p className="eqDesc">max height</p>
-                        <p className="eqBorder">|</p>
+                    , "range"],
+                    ["max height",
                         <p className="eq">
                             y<span className="sub">f</span> = y<span className="sub">0</span> + 
                             <span className="fraction">
@@ -451,25 +479,48 @@ function DashKinematics() {
                                 <span className="denominator">2g</span>
                             </span>
                         </p>
-                        <button className="dashBtn">derivation</button>
-                    </div>
-                    <div className="eqSub">
-                        <p className="eqDesc">projectile's impact velocity</p>
-                        <p className="eqBorder">|</p>
+                    , "maxHeight"],
+                    ["projectile's impact velocity",
                         <p className="eq">
-
+                            v<span className="sub">f</span> = {"\u221A"}(v<span className="sub">0</span><span className="exponent">2</span>+2gh)
                         </p>
-                        <button className="dashBtn">derivation</button>
-                    </div>
-                    <div className="eqSub">
-                        <p className="eqDesc">projectile's impact angle with horizontal</p>
-                        <p className="eqBorder">|</p>
+                    , "impactVel"],
+                    ["projectile's impact angle with horizontal",
                         <p className="eq">
-
+                            &theta;<span className="sub">f</span> = tan<span className="exponent">-1</span>(
+                            <span className="fraction">
+                                <span className="numerator numeratorWithSub">v<span className="sub">y</span></span>
+                                <span className="fractionLine">——</span>
+                                <span className="denominator">v<span className="sub">x</span></span>
+                            </span>
+                            )
                         </p>
-                        <button className="dashBtn">derivation</button>
-                    </div>
-                </div>
+                    , "impactAngle"]
+                ])
+            )}
+            {(isOpen && open.equations && derivationShow.k1) && (
+                derivation("a")
+            )}
+            {(isOpen && open.equations && derivationShow.k2) && (
+                derivation("b")
+            )}
+            {(isOpen && open.equations && derivationShow.k3) && (
+                derivation("c")
+            )}
+            {(isOpen && open.equations && derivationShow.avgV) && (
+                derivation("d")
+            )}
+            {(isOpen && open.equations && derivationShow.range) && (
+                derivation("e")
+            )}
+            {(isOpen && open.equations && derivationShow.maxHeight) && (
+                derivation("f")
+            )}
+            {(isOpen && open.equations && derivationShow.impactVel) && (
+                derivation("g")
+            )}
+            {(isOpen && open.equations && derivationShow.impactAngle) && (
+                derivation("h")
             )}
         </div>
     );

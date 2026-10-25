@@ -10,6 +10,7 @@ body{
   top: 1vh;
   color: black;
   font-size: 2vh;
+  display: none;
 }
 .physCanvas{
   display: flex;
@@ -479,13 +480,14 @@ body{
   padding: 2vh;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   gap: 1vh;
   overflow-y: auto;
   overflow-x: hidden;
 }
 .eqSub{
   height: 6vh;
-  width: 28vw;
+  width: 27vw;
   font-size: 1.7vh;
   display: flex;
   justify-content: center;
@@ -508,8 +510,9 @@ body{
   position: relative;
   top: 0.4vh;
   right: 0vw;
-  font-family: math;
+  font-family: "CMU Serif", serif;
   font-size: 1.6vh;
+  font-weight: bold;
   display: flex;
   align-items: center;
   letter-spacing: 0.05vw;
@@ -537,7 +540,7 @@ body{
   justify-content: center;
 }
 .numeratorWithSub{
-  top: 0.4vh;
+  top: 0.3vh;
 }
 .denominator{
   position: relative;
@@ -560,6 +563,45 @@ body{
   position: relative;
   top: -0.8vh;
   right: 0.05vw;
+}
+.derBigContainer{
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0vh;
+  left: 0vh;
+}
+.derContainer{
+  position: fixed;
+  background-color: black;
+  width: 100%;
+  height: 100%;
+  top: 0vh;
+  left: 0vh;
+  opacity: 40%;
+  display: flex;
+  justify-content: center;
+}
+.derCloseBtn{
+  color: white;
+  position: absolute;
+  right: 2vw;
+  top: -7%;
+  font-family: monospace;
+  font-size: 8vh;
+  border: none;
+  cursor: pointer;
+}
+.der{
+  position: absolute;
+  left: 30%;
+  top: 8vh;
+  height: 80vh;
+  width: 40%;
+  background-color: var(--primary-color);
+  border: var(--dash-border-size) solid var(--border-color);
+  border-radius: var(--btn-border-radius);
+  padding: 1vh 2vw;
 }
 :root{
   --primary-color: rgb(237, 222, 238);

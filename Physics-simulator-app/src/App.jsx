@@ -7,6 +7,7 @@ import WEPMatter from './WEPMatter.jsx';
 import LinearMMatter from './LinearMMatter.jsx';
 import DashBoard from './DashBoard.jsx';
 import "mafs/core.css";
+import 'computer-modern/index.css';
 
 function App() {
   return(

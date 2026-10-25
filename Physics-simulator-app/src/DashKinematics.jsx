@@ -498,6 +498,7 @@ function DashKinematics() {
                     , "impactAngle"]
                 ])
             )}
+            {/* MAKE SURE YOU SHOW WHICH ONES TO MEMORIZE */}
             {(isOpen && open.equations && derivationShow.k1) && (
                 derivation("a")
             )}

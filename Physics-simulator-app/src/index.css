@@ -254,7 +254,7 @@ body{
   color: var(--text-color);
   position: absolute;
   top: 21vh;
-  left: 67vw;
+  left: 75vw;
   transition: all, 0.1s ease-in-out;
 }
 .submitBtn:hover{
@@ -264,8 +264,8 @@ body{
   border-color: var(--btn-border-color);
 }
 .simResult{
-  width: 12vw;
-  max-width: 14vw;
+  width: 15vw;
+  max-width: 17vw;
   height: max-content;
   max-height: 38vh;
   position: absolute;
@@ -409,21 +409,23 @@ body{
 }
 .FBD-info{
   position: absolute;
+  left: -2vw;
   top: 70vh;
   height: 17vh;
-  width: 67vw;
+  width: 63vw;
   font-size: 1.8vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 1vh;
-  padding: 1vh;
+  padding: 0vh;
+  background: red;
 }
 .FBD-info-spring{
   position: fixed;
   top: 73vh;
-  left: 13vw;
+  left: 10vw;
 }
 .FBD-info-sub{
   background-color: rgb(255, 64, 207);

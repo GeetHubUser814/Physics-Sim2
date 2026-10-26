@@ -632,6 +632,11 @@ body{
 .sqrt{
   font-size: 2.2vh;
 }
+.hideDotBtn{
+  position: absolute;
+  right: 0vw;
+  top: 50vh;
+}
 :root{
   --primary-color: rgb(237, 222, 238);
   --border-color: rgb(234, 181, 232);

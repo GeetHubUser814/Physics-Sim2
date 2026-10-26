@@ -264,6 +264,19 @@ function ProjectileMotionGraph() {
                 "acceleration(horizontal)"
             )
         )}
+        {
+        ((graphShow.heightGraph) ||
+        (graphShow.velGraph) ||
+        (graphShow.accelGraph) ||
+        (graphShow.posGraphH) ||
+        (graphShow.velGraphH) ||
+        (graphShow.accelGraphH))
+        && (
+            <div className="hideDotBtn">
+                <button className="dashBtn">hide pink dot</button>
+            </div>
+        )
+        }
     </div>
     );
 }

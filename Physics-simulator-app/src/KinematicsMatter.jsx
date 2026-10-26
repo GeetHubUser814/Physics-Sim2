@@ -167,9 +167,9 @@ const KinematicsMatter = () => {
             }
         });
 
-        const ball = Bodies.circle(103, 269 + 140 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0});
+        const ball = Bodies.circle(103, 269 + 131 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0});
         const floor = Bodies.rectangle(550, 430, 1400, 50, {isStatic: true});
-        const elevation = Bodies.rectangle(0, 415 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
+        const elevation = Bodies.rectangle(0, 405 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
         
         ballRef.current = ball;
         elevationRef.current = elevation;
@@ -210,8 +210,8 @@ const KinematicsMatter = () => {
             const {Runner, Composite, Bodies, Body} = Matter;
 
             if(!isRunning.current){
-                const newBall = Bodies.circle(103, 269 + 140 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0});
-                const newElevation = Bodies.rectangle(0, 415 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
+                const newBall = Bodies.circle(103, 269 + 131 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0});
+                const newElevation = Bodies.rectangle(0, 405 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
 
                 engineRef.current.gravity.y = grav.current / (gConst);
                 Body.setVelocity(newBall, {

@@ -354,6 +354,52 @@ function DashKinematics() {
             </div>
         );
     }
+    function fraction(str, split, classes){
+        return(
+            <span className="fraction">
+                {mathNotation(str.substring(0, str.indexOf(split)), classes, ",")}
+                <span className="fractionLine">
+                {
+                                Array.from({length: 
+                                    Math.max(
+                                        str.substring(0, str.indexOf(split)).split(",").length, 
+                                        str.substring(str.indexOf(split) + 1, str.length).split(",").length
+                                    )
+                                }, (_, index) => (
+                            <span>—</span>
+                        ))
+                    }
+                </span>
+                {mathNotation(str.substring(str.indexOf(split) + 1, str.length), "denominator", ",")}
+            </span>
+        );
+    }
+    function mathNotation(txt, spanClass, split){
+        const txtArr = txt.split(split);
+        return(
+            <span className={spanClass}>
+                {txtArr.map((_, index) => (
+                    <span key={index}>
+                        {(txtArr[index].includes("/")) ? (
+                            fraction(txtArr[index], "/", "numerator")
+                        )  : (txtArr[index].includes("|")) ? (
+                            fraction(txtArr[index], "|", "numerator numeratorWithSub")
+                        ) : (txtArr[index].includes("_")) ? (
+                            <span className="sub">{txtArr[index].substring(1, txtArr[index].length)}</span>
+                        ) : (txtArr[index] === "=") ? (
+                            <span>=</span>
+                        ) : (txtArr[index] === "sqrt") ? (
+                            <span className="sqrt">{"\u221A"}</span>
+                        ) : (txtArr[index].includes("^")) ? (
+                            <span className="exponent">{txtArr[index].substring(1, txtArr[index].length)}</span>
+                        ) : (
+                            <span>{txtArr[index]}</span>
+                        )}
+                    </span>
+                ))}
+            </span>
+        );
+    }
     return(
         <div>
             {isOpen && (
@@ -423,88 +469,72 @@ function DashKinematics() {
             {(isOpen && open.equations) && (
                 equationsList([
                     ["first kinematics equation", 
-                        <p className="eq">
-                            &Delta;v = at
-                        </p>
+                        mathNotation(
+                        "Δv—=—at"    
+                        , "eq", "—"
+                        )
                     , "k1"],
                     ["second kinematics equation", 
-                        <p className="eq">
-                                &Delta;x = v<span className="sub">0</span>t+
-                                <span className="fraction">
-                                    <span className="numerator">1</span>
-                                    <span className="fractionLine">—</span>
-                                    <span className="denominator">2</span>
-                                </span>
-                                at<span className="exponent">2</span>
-                        </p>
+                        mathNotation(
+                        "Δx—=—v—_0—t—+—1/2—at—^2"    
+                        , "eq", "—"
+                        )
                     , "k2"],
                     ["third kinematics equation",
-                        <p className="eq">
-                            v<span className="sub">f</span><span className="exponent">2</span>=
-                            v<span className="sub">0</span><span className="exponent">2</span>+
-                            2a&Delta;x
-                        </p>
+                        mathNotation(
+                        "v—_f—^2—=—v—_0—^2—+—2aΔx"    
+                        , "eq", "—"
+                        )
                     , "k3"],
                     ["average velocity-displacement",
-                        <p className="eq">
-                            <span className="fraction">
-                                <span className="numerator numeratorWithSub">v<span className="sub">0</span>+v<span className="sub">f</span></span>
-                                <span className="fractionLine">———</span>
-                                <span className="denominator">2</span>
-                            </span>
-                             = 
-                            <span className="fraction">
-                                <span className="numerator numeratorWithSub">x<span className="sub">0</span>-x<span className="sub">f</span></span>
-                                <span className="fractionLine">———</span>
-                                <span className="denominator">t</span>
-                            </span>
-                        </p>
+                        mathNotation(
+                        "v,_0,+,v,_f|2—=—x,_f,-,x,_0|t"    
+                        , "eq", "—"
+                        )
                     , "avgV"],
                     ["range (no elevation)",
-                        <p className="eq">
-                            R = 
-                            <span className="fraction">
-                                <span className="numerator numeratorWithSub">v<span className="sub">0</span><span className="exponent">2</span>sin(2&theta;)</span>
-                                <span className="fractionLine">———————</span>
-                                <span className="denominator">g</span>
-                            </span>
-                        </p>
+                        mathNotation(
+                        "R—=—v,_0,^2,s,i,n,(2θ)|g"    
+                        , "eq", "—"
+                        )
                     , "range"],
                     ["max height",
-                        <p className="eq">
-                            y<span className="sub">f</span> = y<span className="sub">0</span> + 
-                            <span className="fraction">
-                                <span className="numerator numeratorWithSub">(v<span className="sub">0</span>sin(&theta;))<span className="exponent">2</span></span>
-                                <span className="fractionLine">———————</span>
-                                <span className="denominator">2g</span>
-                            </span>
-                        </p>
+                        mathNotation(
+                        "y—_f—=—y—_0—+—(v,_0,s,i,n,(θ)),^2|2g"
+                        , "eq", "—"
+                        )
                     , "maxHeight"],
                     ["projectile's impact velocity",
-                        <p className="eq">
-                            v<span className="sub">f</span> = {"\u221A"}(v<span className="sub">0</span><span className="exponent">2</span>+2gh)
-                        </p>
+                        mathNotation(
+                        "v—_f—=—sqrt—(v—_0—^2—+—2gh)"
+                        , "eq", "—"
+                        )
                     , "impactVel"],
                     ["projectile's impact angle with horizontal",
-                        <p className="eq">
-                            &theta;<span className="sub">f</span> = tan<span className="exponent">-1</span>(
-                            <span className="fraction">
-                                <span className="numerator numeratorWithSub">v<span className="sub">y</span></span>
-                                <span className="fractionLine">——</span>
-                                <span className="denominator">v<span className="sub">x</span></span>
-                            </span>
-                            )
-                        </p>
+                        mathNotation(
+                        "θ—_f—=—tan—^-1—(—v,_y|v,_x—)"
+                        , "eq", "—"
+                        )
                     , "impactAngle"]
                 ])
             )}
             {/* MAKE SURE YOU SHOW WHICH ONES TO MEMORIZE */}
             {/* ADD NORMAL TEXT (EX: x^2) TO MATH NOTATION CONVERTER FUNCTION */}
             {(isOpen && open.equations && derivationShow.k1) && (
-                derivation("a")
-            )}
+                derivation(
+                    mathNotation(
+                    "Δx—=—v—_0—t—+—1/2—at—^2"    
+                    , "derEq", "—"
+                    )
+                )
+            )} 
             {(isOpen && open.equations && derivationShow.k2) && (
-                derivation("b")
+                derivation(
+                    mathNotation(
+                    "Δx—=—v—_0—t—+—1/2—at—^2"    
+                    , "derEq", "—"
+                    )
+                )
             )}
             {(isOpen && open.equations && derivationShow.k3) && (
                 derivation("c")

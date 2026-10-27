@@ -635,7 +635,7 @@ body{
 .hideDotBtn{
   position: absolute;
   right: -5vw;
-  top: 50vh;
+  top: 52vh;
 }
 :root{
   --primary-color: rgb(252, 219, 252);

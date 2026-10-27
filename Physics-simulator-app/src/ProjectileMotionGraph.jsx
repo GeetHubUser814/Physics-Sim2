@@ -80,6 +80,7 @@ function ProjectileMotionGraph() {
         velGraphH: false,
         accelGraphH: false
     });
+    const [showDot, setShowDot] = useState(true);
     function changeGraph(e){
         if(e === "velGraph"){
             setGraphShow((prev) => ({
@@ -167,13 +168,15 @@ function ProjectileMotionGraph() {
                             domain={inputArray[1]}
                             color={Theme.red}
                         />
-                        <Text
-                            x={inputArray[2].x}
-                            y={inputArray[2].y}
-                        >
-                            ({inputArray[2].x.toFixed(2)}, {inputArray[2].y.toFixed(2)})
-                        </Text>
-                        {inputArray[2].element}
+                        {(showDot) && (
+                            <Text
+                                x={inputArray[2].x}
+                                y={inputArray[2].y}
+                            >
+                                ({inputArray[2].x.toFixed(2)}, {inputArray[2].y.toFixed(2)})
+                            </Text>
+                        )}
+                        {(showDot) && (inputArray[2].element)}
                     </Mafs>
                     <div className="xLabel">x-axis: {xLabel}</div>
                     <div className="yLabel">y-axis: {yLabel}</div>
@@ -273,7 +276,7 @@ function ProjectileMotionGraph() {
         (graphShow.accelGraphH))
         && (
             <div className="hideDotBtn">
-                <button className="dashBtn">hide pink dot</button>
+                <button className="dashBtn" onClick={() => setShowDot((prev) => !prev)}>toggle pink dot</button>
             </div>
         )
         }

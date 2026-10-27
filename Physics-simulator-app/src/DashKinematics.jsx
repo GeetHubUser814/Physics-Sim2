@@ -4,6 +4,8 @@ import { useOneDStore } from './OneDSimStore';
 import ProjectileMotionGraph from './ProjectileMotionGraph';
 import OneDMotionGraph from './OneDMotionGraph';
 //import {Mafs, CartesianCoordinates, Plot, Line} from 'mafs';
+import Latex from 'react-latex-next';
+import 'katex/dist/katex.min.css';
 
 function DashKinematics() {
 
@@ -469,10 +471,9 @@ function DashKinematics() {
             {(isOpen && open.equations) && (
                 equationsList([
                     ["first kinematics equation", 
-                        mathNotation(
-                        "Δv—=—at"    
-                        , "eq", "—"
-                        )
+                        <p className="eq">
+                            LATEX
+                        </p>
                     , "k1"],
                     ["second kinematics equation", 
                         mathNotation(

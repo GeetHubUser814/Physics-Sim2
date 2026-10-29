@@ -463,7 +463,7 @@ function DashKinematics() {
                             <br></br>
                             Change is (new - old) so this becomes <Mather math="a = \frac{v_f - v_0}{t_f - t_0}"/>.
                             <br></br>
-                            Assuming time starts at 0, we get <Mather math="a = \frac{v_f - v_0}{t}"/>. And rearranging this gives <Mather math="v_f = v_0 + a t"/>
+                            Assuming time starts at 0, we get <Mather math="a = \frac{v_f - v_0}{t}"/>, and rearranging this gives <Mather math="v_f = v_0 + a t"/>
                         </p>
                     </p>
                 )

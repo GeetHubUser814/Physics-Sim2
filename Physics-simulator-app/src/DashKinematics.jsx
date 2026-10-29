@@ -4,8 +4,6 @@ import { useOneDStore } from './OneDSimStore';
 import ProjectileMotionGraph from './ProjectileMotionGraph';
 import OneDMotionGraph from './OneDMotionGraph';
 //import {Mafs, CartesianCoordinates, Plot, Line} from 'mafs';
-import 'katex/dist/katex.min.css';
-import { InlineMath, BlockMath } from 'react-katex';
 
 
 function DashKinematics() {

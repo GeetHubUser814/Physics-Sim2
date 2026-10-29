@@ -2,8 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import Matter from 'matter-js';
 import { useProjectileStore } from './ProjectileSimStore';
 import { useOneDStore } from './OneDSimStore';
-import Latex from 'react-latex-next';
-import 'katex/dist/katex.min.css';
 
 const KinematicsMatter = () => {
     const sceneRef = useRef(null);  

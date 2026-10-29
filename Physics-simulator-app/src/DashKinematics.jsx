@@ -4,6 +4,8 @@ import { useOneDStore } from './OneDSimStore';
 import ProjectileMotionGraph from './ProjectileMotionGraph';
 import OneDMotionGraph from './OneDMotionGraph';
 //import {Mafs, CartesianCoordinates, Plot, Line} from 'mafs';
+import Mather from './Mather';
+
 
 
 function DashKinematics() {
@@ -317,8 +319,9 @@ function DashKinematics() {
                     <div className="eqSub" key={rowIndex}>
                         <p className="eqDesc">{inputArray[rowIndex][0]}</p>
                         <p className="eqBorder">|</p>
-
-                        {inputArray[rowIndex][1]}                        
+                        <p className="eq">
+                            {inputArray[rowIndex][1]}    
+                        </p>                    
 
                         <button className="dashBtn" onClick={() => showDerivation(inputArray[rowIndex][2])}>derivation</button>
                     </div>
@@ -346,63 +349,13 @@ function DashKinematics() {
         return(
             <div className="derBigContainer">
                 <div className="derContainer"></div>
-                    <p className="derCloseBtn" onClick={() => setDerivationShow((prev) => ({...false}))}>X</p>
-                    <div className="der">
-                        <div className="derTxt">
-                            <p>{txt}</p>
-                    </div>
+                <p className="derCloseBtn" onClick={() => setDerivationShow((prev) => ({...false}))}>X</p>
+                <div className="der">
+                    {txt}
                 </div>
             </div>
         );
     }
-    function fraction(str, split, classes){
-        return(
-            <span className="fraction">
-                {mathNotation(str.substring(0, str.indexOf(split)), classes, ",")}
-                <span className="fractionLine">
-                {
-                                Array.from({length: 
-                                    Math.max(
-                                        str.substring(0, str.indexOf(split)).split(",").length, 
-                                        str.substring(str.indexOf(split) + 1, str.length).split(",").length
-                                    )
-                                }, (_, index) => (
-                            <span>—</span>
-                        ))
-                    }
-                </span>
-                {mathNotation(str.substring(str.indexOf(split) + 1, str.length), "denominator", ",")}
-            </span>
-        );
-    }
-    function mathNotation(){
-        return(
-            <BlockMath math="\int_a^b f(x)\,dx = F(b) - F(a)" />
-        );
-    }
-    /*
-                <span className={spanClass}>
-                {txtArr.map((_, index) => (
-                    <span key={index}>
-                        {(txtArr[index].includes("/")) ? (
-                            fraction(txtArr[index], "/", "numerator")
-                        )  : (txtArr[index].includes("|")) ? (
-                            fraction(txtArr[index], "|", "numerator numeratorWithSub")
-                        ) : (txtArr[index].includes("_")) ? (
-                            <span className="sub">{txtArr[index].substring(1, txtArr[index].length)}</span>
-                        ) : (txtArr[index] === "=") ? (
-                            <span>=</span>
-                        ) : (txtArr[index] === "sqrt") ? (
-                            <span className="sqrt">{"\u221A"}</span>
-                        ) : (txtArr[index].includes("^")) ? (
-                            <span className="exponent">{txtArr[index].substring(1, txtArr[index].length)}</span>
-                        ) : (
-                            <span>{txtArr[index]}</span>
-                        )}
-                    </span>
-                ))}
-            </span>
-    */
     return(
         <div>
             {isOpen && (
@@ -472,28 +425,28 @@ function DashKinematics() {
             {(isOpen && open.equations) && (
                 equationsList([
                     ["first kinematics equation", 
-
+                        <Mather math="v_f = v_0 + a t"/>
                     , "k1"],
                     ["second kinematics equation", 
-
+                        <Mather math="\Delta x = v_0 t + \frac{1}{2} a t^2"/>
                     , "k2"],
                     ["third kinematics equation",
-
+                        <Mather math="v_f^2 = v_0^2 + 2 a \Delta x"/>
                     , "k3"],
                     ["average velocity-displacement",
-
+                        <Mather math="{\large \frac{v_f + v_0}{2}} = {\large \frac{x_f - x_0}{t}}"/>
                     , "avgV"],
                     ["range (no elevation)",
-
+                        <Mather math="R = \frac{v_0^2 sin(2\theta)}{g}"/>
                     , "range"],
                     ["max height",
-  
+                        <Mather math="y_f = y_0 + \frac{( v_0 sin(\theta) )^2}{2g}"/>
                     , "maxHeight"],
                     ["projectile's impact velocity",
-
+                        <Mather math="v_f = \sqrt{v_0^2 + 2 g h}"/>
                     , "impactVel"],
                     ["projectile's impact angle with horizontal",
-
+                        <Mather math="\theta_f = tan^{-1} (\frac{v_y}{v_x})"/>
                     , "impactAngle"]
                 ])
             )}
@@ -501,7 +454,18 @@ function DashKinematics() {
             {/* ADD NORMAL TEXT (EX: x^2) TO MATH NOTATION CONVERTER FUNCTION */}
             {(isOpen && open.equations && derivationShow.k1) && (
                 derivation(
-
+                    <p className="derTxt">
+                        <p className="derTxtTitle">
+                            first kinematics equation: <Mather math="v_f = v_0 + a t"/>.
+                        </p>
+                        <p className="derTxtREAL">
+                            The definition of uniform acceleration is <Mather math="a = \frac{\Delta v}{\Delta t}"/>.
+                            <br></br>
+                            Change is (new - old) so this becomes <Mather math="a = \frac{v_f - v_0}{t_f - t_0}"/>.
+                            <br></br>
+                            Assuming time starts at 0, we get <Mather math="a = \frac{v_f - v_0}{t}"/>. And rearranging this gives <Mather math="v_f = v_0 + a t"/>
+                        </p>
+                    </p>
                 )
             )} 
             {(isOpen && open.equations && derivationShow.k2) && (

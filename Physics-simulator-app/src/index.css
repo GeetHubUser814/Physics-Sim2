@@ -507,17 +507,12 @@ body{
   left: 0vw;
 }
 .eq{
-  width: 40%;
+  width: 30%;
   height: max-content;
   position: relative;
   top: 0.4vh;
   right: 0vw;
-  font-family: "CMU Serif", serif;
   font-size: 1.6vh;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  letter-spacing: 0.05vw;
 }
 .eqSub button{
   font-size: 1.7vh;
@@ -526,7 +521,7 @@ body{
 }
 .eqBorder{
   position: relative;
-  left: -1vw;
+  left: -5%;
   top: -0.1vh;
   font-size: 7.2vh;
   color: var(--border-color);
@@ -605,32 +600,16 @@ body{
   border-radius: var(--btn-border-radius);
   padding: 1vh 2vw;
 }
-.derEq{
-  position: absolute;
-  height: max-content;
-  width: 90%;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  font-family: "CMU Serif", serif;
-  font-size: 2vh;
+.derTxt{
+  font-size: 2.5vh;
+  text-align: center; 
+}
+.derTxtTitle{
   font-weight: bold;
-  letter-spacing: 0.05vw;
+  font-size: 3vh;
 }
-.derEq .exponent{
-  font-size: 2.2vh;
-}
-.derEq .sub{
-  font-size: 2.2vh;
-}
-.derEq .fraction .numerator .exponent{
-  font-size: 1.5vh;
-}
-.derEq .fraction .numerator .sub{
-  font-size: 1.5vh;
-}
-.sqrt{
-  font-size: 2.2vh;
+.derTxtREAL{
+  line-height: 5vh;
 }
 .hideDotBtn{
   position: absolute;

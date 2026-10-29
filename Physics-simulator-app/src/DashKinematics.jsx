@@ -4,8 +4,9 @@ import { useOneDStore } from './OneDSimStore';
 import ProjectileMotionGraph from './ProjectileMotionGraph';
 import OneDMotionGraph from './OneDMotionGraph';
 //import {Mafs, CartesianCoordinates, Plot, Line} from 'mafs';
-import Latex from 'react-latex-next';
 import 'katex/dist/katex.min.css';
+import { InlineMath, BlockMath } from 'react-katex';
+
 
 function DashKinematics() {
 
@@ -376,10 +377,13 @@ function DashKinematics() {
             </span>
         );
     }
-    function mathNotation(txt, spanClass, split){
-        const txtArr = txt.split(split);
+    function mathNotation(){
         return(
-            <span className={spanClass}>
+            <BlockMath math="\int_a^b f(x)\,dx = F(b) - F(a)" />
+        );
+    }
+    /*
+                <span className={spanClass}>
                 {txtArr.map((_, index) => (
                     <span key={index}>
                         {(txtArr[index].includes("/")) ? (
@@ -400,8 +404,7 @@ function DashKinematics() {
                     </span>
                 ))}
             </span>
-        );
-    }
+    */
     return(
         <div>
             {isOpen && (
@@ -471,51 +474,28 @@ function DashKinematics() {
             {(isOpen && open.equations) && (
                 equationsList([
                     ["first kinematics equation", 
-                        <p className="eq">
-                            LATEX
-                        </p>
+
                     , "k1"],
                     ["second kinematics equation", 
-                        mathNotation(
-                        "Δx—=—v—_0—t—+—1/2—at—^2"    
-                        , "eq", "—"
-                        )
+
                     , "k2"],
                     ["third kinematics equation",
-                        mathNotation(
-                        "v—_f—^2—=—v—_0—^2—+—2aΔx"    
-                        , "eq", "—"
-                        )
+
                     , "k3"],
                     ["average velocity-displacement",
-                        mathNotation(
-                        "v,_0,+,v,_f|2—=—x,_f,-,x,_0|t"    
-                        , "eq", "—"
-                        )
+
                     , "avgV"],
                     ["range (no elevation)",
-                        mathNotation(
-                        "R—=—v,_0,^2,s,i,n,(2θ)|g"    
-                        , "eq", "—"
-                        )
+
                     , "range"],
                     ["max height",
-                        mathNotation(
-                        "y—_f—=—y—_0—+—(v,_0,s,i,n,(θ)),^2|2g"
-                        , "eq", "—"
-                        )
+  
                     , "maxHeight"],
                     ["projectile's impact velocity",
-                        mathNotation(
-                        "v—_f—=—sqrt—(v—_0—^2—+—2gh)"
-                        , "eq", "—"
-                        )
+
                     , "impactVel"],
                     ["projectile's impact angle with horizontal",
-                        mathNotation(
-                        "θ—_f—=—tan—^-1—(—v,_y|v,_x—)"
-                        , "eq", "—"
-                        )
+
                     , "impactAngle"]
                 ])
             )}
@@ -523,18 +503,12 @@ function DashKinematics() {
             {/* ADD NORMAL TEXT (EX: x^2) TO MATH NOTATION CONVERTER FUNCTION */}
             {(isOpen && open.equations && derivationShow.k1) && (
                 derivation(
-                    mathNotation(
-                    "Δx—=—v—_0—t—+—1/2—at—^2"    
-                    , "derEq", "—"
-                    )
+
                 )
             )} 
             {(isOpen && open.equations && derivationShow.k2) && (
                 derivation(
-                    mathNotation(
-                    "Δx—=—v—_0—t—+—1/2—at—^2"    
-                    , "derEq", "—"
-                    )
+
                 )
             )}
             {(isOpen && open.equations && derivationShow.k3) && (

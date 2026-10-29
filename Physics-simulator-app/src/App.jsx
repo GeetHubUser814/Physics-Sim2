@@ -8,7 +8,9 @@ import LinearMMatter from './LinearMMatter.jsx';
 import DashBoard from './DashBoard.jsx';
 import "mafs/core.css";
 import 'computer-modern/index.css';
+import React from 'react';
 import 'katex/dist/katex.min.css';
+import { InlineMath, BlockMath } from 'react-katex';
 
 function App() {
   return(

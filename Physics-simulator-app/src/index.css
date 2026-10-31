@@ -591,25 +591,48 @@ body{
 }
 .der{
   position: absolute;
-  left: 30%;
+  left: 20%;
   top: 8vh;
   height: 80vh;
-  width: 40%;
-  background-color: var(--primary-color);
-  border: var(--dash-border-size) solid var(--border-color);
+  width: 50%;
+  background-color: var(--btn-primary-color);
+  border: var(--dash-border-size) solid var(--softer-dark-purple);
   border-radius: var(--btn-border-radius);
   padding: 1vh 2vw;
 }
 .derTxt{
-  font-size: 2.5vh;
-  text-align: center; 
+  height: 80vh;
+  width: 51.5vw;
+  overflow-y: auto;
+  
+  display: flex;
+  justify-self: center;
+  flex-direction: column;
+  padding: 0vh 3vh;
 }
 .derTxtTitle{
   font-weight: bold;
+  font-size: 4vh;
+  text-align: center;
+}
+.derTxtSubHeading{
   font-size: 3vh;
+  font-weight: bold;
+  text-align: center;
 }
 .derTxtREAL{
-  line-height: 5vh;
+  font-size: 2.5vh;
+  text-align: center;
+}
+/* contains both subheading and txt */
+.derTxtChunk{
+  background: var(--primary-color);
+  padding: 1vh 4vh;
+  border: var(--button-border-size) solid;
+  border-radius: var(--btn-border-radius);
+  border-color: var(--softer-dark-purple);
+  margin-top: 2vh;
+  line-height: 3.5vh;
 }
 .hideDotBtn{
   position: absolute;
@@ -621,6 +644,7 @@ body{
   --border-color: rgb(234, 181, 232);
   --hover-color: rgb(210, 199, 211);
   --text-color: rgb(83, 49, 78);
+  --softer-dark-purple: rgb(177, 103, 167);
   --button-border-size: 0.75vh;
   --dash-border-size: 1vh;
   --btn-border-radius: 3vh;

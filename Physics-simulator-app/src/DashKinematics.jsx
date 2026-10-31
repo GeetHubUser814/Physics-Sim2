@@ -346,6 +346,15 @@ function DashKinematics() {
             [show]: true,
         }))
     }
+    function getDerivation(){
+        for(let i = 0; i < Object.keys(derivationShow).length; i++){
+            const key = Object.keys(derivationShow)[i];
+            if(derivationShow[key]){
+                return key;
+            }
+            return null;
+        }
+    }
     function derivation(der){
         return(
             <div className="derBigContainer">
@@ -453,12 +462,12 @@ function DashKinematics() {
             {/* ADD NORMAL TEXT (EX: x^2) TO MATH NOTATION CONVERTER FUNCTION */}
             {(isOpen && open.equations && derivationShow.k1) && (
                 derivation(
-                    <KinematicsDer eq="k1"/>
+                    <KinematicsDer eq={getDerivation()}/>
                 )
             )} 
             {(isOpen && open.equations && derivationShow.k2) && (
                 derivation(
-                    <KinematicsDer eq="k2"/>
+                    <KinematicsDer eq={getDerivation()}/>
                 )
             )}
             {(isOpen && open.equations && derivationShow.k3) && (

@@ -1,11 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
 import Mather from './Mather';
+import { Icon } from './KinematicsK2';
 
 function KinematicsDer({eq}){
 
     const [show, setShow] = useState({
         k1: eq === "k1" ? true : false,
         k2: eq === "k2" ? true : false,
+        k3: eq === "k3" ? true : false
     });
 
     function writeDerivation(title, subAndTxt){
@@ -55,7 +57,9 @@ function KinematicsDer({eq}){
                                 , we see that the area under the graph is a trapezoid, which we can split into a
                                 rectangle and a triangle. Thus, we can find the area under the graph (the displacement), by
                                 adding the areas of this triangle and this rectangle. 
-                                <br></br><br></br>
+                                <br></br>
+                                <Icon size={300}/>
+                                <br></br>
                                 The rectangle has a base 
                                 of <Mather math="\Delta t"/> and a height of <Mather math="v_0"/>, but we will call
                                 the base just <Mather math="t"/>, thus the area of the rectangle is <Mather math="v_0t"/>.
@@ -69,17 +73,44 @@ function KinematicsDer({eq}){
                                 Thus, adding the area of the 
                                 rectangle and the area of the triangle to find the displacement gives us the 
                                 equation <Mather math="\Delta x = v_0 t + \frac{1}{2} a t^2"/>.
+                                <br></br>
                             </span>,
                         ],
-                        [<span>Using the Average Velocity-Displacement Equation</span>,
+                        [<span>Using the Average Velocity-Displacement Equation and the First Kinematics Equation</span>,
                             <span>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum suscipit porro eligendi ad dicta iusto a necessitatibus atque fugit dolore, aliquam unde, voluptates delectus totam accusantium quae minus error quam?
+                                The average velocity-displacement equation, derived in another section, can be written as <Mather math="\Delta x = \frac{v_0 + v_f}{2} t"/>. 
+                                <br></br><br></br>
+                                Substituting in the first kinematics equation <Mather math="v_f = v_0 + a t"/> into the average velocity-displacement equation gives us <Mather math="\Delta x = \frac{v_0 + (v_0 + a t)}{2} t"/>.
+                                <br></br><br></br>
+                                Simplifying this, we get <Mather math="\Delta x = v_0 t + \frac{1}{2} a t^2"/>.
                             </span>
                         
                         ]
                     ],
                 )
             )}
+            {(show.k3) && (
+                writeDerivation(
+                    <span>Third Kinematics Equation: <br></br><Mather math="v_f^2 = v_0^2 + 2 a \Delta x"/></span>,
+                    [
+                        [<span>Using the Average Velocity-Displacement Equation and the First Kinematics Equation</span>,
+                            <span>
+                                The average velocity-displacement equation, derived in another section, can be written as <Mather math="\Delta x = \frac{v_0 + v_f}{2} t"/>. 
+                                <br></br><br></br>
+                                Rearranging the first kinematics equation gives us <Mather math="t = \frac{v_f-v_0}{a}"/>
+                                <br></br><br></br>
+                                Substituting this into the average velocity-displacement equation gives us <Mather math="\Delta x = \frac{(v_0 + v_f)(v_f - v_0)}{2 a}"/>.
+                                <br></br><br></br>
+                                The numerator simplifies to a difference of squares, which gives us <Mather math="\Delta x = \frac{v_f^2 - v_0^2}{2 a}"/>.
+                                <br></br><br></br>
+                                This simplifies to <Mather math="v_f^2 = v_0^2 + 2 a \Delta x"/>.
+                            </span>
+                        
+                        ]
+                    ],
+                )
+            )}
+            
         </div>
     );
 }

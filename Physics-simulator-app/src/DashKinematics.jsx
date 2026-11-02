@@ -7,8 +7,6 @@ import OneDMotionGraph from './OneDMotionGraph';
 import Mather from './Mather';
 import KinematicsDer from './KinematicsDer';
 
-
-
 function DashKinematics() {
 
     const [isOpen, setIsOpen] = useState(true);
@@ -352,8 +350,8 @@ function DashKinematics() {
             if(derivationShow[key]){
                 return key;
             }
-            return null;
         }
+        return null;
     }
     function derivation(der){
         return(
@@ -471,7 +469,9 @@ function DashKinematics() {
                 )
             )}
             {(isOpen && open.equations && derivationShow.k3) && (
-                derivation("c")
+                derivation(
+                    <KinematicsDer eq={getDerivation()}/>
+                )
             )}
             {(isOpen && open.equations && derivationShow.avgV) && (
                 derivation("d")

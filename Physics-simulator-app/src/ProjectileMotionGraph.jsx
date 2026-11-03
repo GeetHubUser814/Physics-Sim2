@@ -152,7 +152,7 @@ function ProjectileMotionGraph() {
                     <div className="graphTitle">
                         <p>{yLabel} vs. {xLabel} graph</p>
                     </div>
-                    <Mafs viewBox={{x: viewX, y: viewY}} width={dimensions.width} height={dimensions.height}>
+                    <Mafs viewBox={{x: viewX, y: viewY}} width={dimensions.width} height={dimensions.height} zoom={true} pan={true}>
                         <Coordinates.Cartesian 
                           xAxis={{
                                 lines: Math.max(5, Math.round(maxRange / 50) * 10),
@@ -206,8 +206,8 @@ function ProjectileMotionGraph() {
                 [mafFunc,
                 [0, maxRange],
                 coord],
-                [0, Math.max(4, maxRange)],
-                [-2, Math.max(2, peakHeight + 2)],
+                [0, 10],
+                [-3, 20],
                 "time",
                 "position(vertical)"
             )
@@ -217,8 +217,8 @@ function ProjectileMotionGraph() {
                 [mafFuncVel,
                 [0, maxRange],
                 coordVel],
-                [0, maxRange + 20],
-                [mafFuncVel(maxRange) - 3, Math.max(vI + 3, 10)],
+                [0, 10],
+                [-15, 15],
                 "time",
                 "velocity(vertical)"
             )
@@ -228,8 +228,8 @@ function ProjectileMotionGraph() {
                 [mafFuncAccel,
                 [0, maxRange],
                 coordAccel],
-                [-1, Math.max(9, maxRange + 2)],
-                [-g - 2, 2],
+                [0, 10],
+                [-12, 2],
                 "time",
                 "acceleration(vertical)"
             )
@@ -239,8 +239,8 @@ function ProjectileMotionGraph() {
                 [(mafFuncPosH),
                 [0, maxRange],
                 coordPos],
-                [-2, maxRange],
-                [-2, Math.max(maxRange * vIX + 4, 11)],
+                [0, 10],
+                [-3, 5],
                 "time",
                 "position(horizontal)"
             )
@@ -250,8 +250,8 @@ function ProjectileMotionGraph() {
                 [mafFuncVelH,
                 [0, maxRange],
                 coordVelH],
-                [0, Math.max(maxRange, 10)],
-                [0, Math.max(10, vIX * 3/2)],
+                [0, 10],
+                [-3, 10],
                 "time",
                 "velocity(horizontal)"
             )
@@ -261,7 +261,7 @@ function ProjectileMotionGraph() {
                 [(x) => 0,
                 [0, maxRange],
                 coordAccelH],
-                [-1, Math.max(9, maxRange + 2)],
+                [0, 10],
                 [-2, 2],
                 "time",
                 "acceleration(horizontal)"

@@ -240,14 +240,6 @@ function DashKinematics() {
             setIsRunning(false);
         }
     }
-    /*ANSWER SKILLS USED ETC*/
-
-
-
-
-
-
-
 
     /*
     function switchSimulationBtn(){
@@ -262,23 +254,7 @@ function DashKinematics() {
         *
         * 
     */
-    function repeatSolveInput(inputArray, condition){
-        return(
-            <div className={subProj === condition ? "b" : "a"}>
-                {inputArray.map((_, rowIndex) => (
-                            <div key={rowIndex} className="inputDiv">
-                                <label>{inputArray[rowIndex][0]}: </label>
-                                <input
-                                type="number"
-                                name={inputArray[rowIndex][1]}
-                                //onChange={/*handleInputChangeSolve*/}
-                                value={inputArray[rowIndex][2]}
-                                />
-                            </div>
-                ))}
-            </div>
-        );
-    }
+
 
     function repeatInputDiv(inputArray){
         return(
@@ -314,8 +290,18 @@ function DashKinematics() {
     function equationsList(inputArray){
         return(
             <div className="eqContainer">
+                <div className="eqMemorizeContainer">
+                    <p><span className="eqMemorizeKey">*</span>: memorize</p>
+                    <p><span className="eqMemorizeKey eqGoodToKnowKey">*</span>: good to know</p>
+                </div>
                 {inputArray.map((_, rowIndex) => (
                     <div className="eqSub" key={rowIndex}>
+                        {(inputArray[rowIndex][3] === 1) && (
+                            <p className="eqMemorize">*</p>
+                        )}
+                        {(inputArray[rowIndex][3] === 2) && (
+                            <p className="eqMemorize eqGoodToKnow">*</p>
+                        )}
                         <p className="eqDesc">{inputArray[rowIndex][0]}</p>
                         <p className="eqBorder">|</p>
                         <p className="eq">
@@ -432,27 +418,27 @@ function DashKinematics() {
                 equationsList([
                     ["first kinematics equation", 
                         <Mather math="v_f = v_0 + a t"/>
-                    , "k1"],
+                    , "k1", 1],
                     ["second kinematics equation", 
                         <Mather math="\Delta x = v_0 t + \frac{1}{2} a t^2"/>
-                    , "k2"],
+                    , "k2", 1],
                     ["third kinematics equation",
                         <Mather math="v_f^2 = v_0^2 + 2 a \Delta x"/>
-                    , "k3"],
+                    , "k3", 1],
                     ["average velocity-displacement",
-                        <Mather math="{\large \frac{v_f + v_0}{2}} = {\large \frac{x_f - x_0}{t}}"/>
-                    , "avgV"],
+                        <Mather math="{\large \frac{v_0 + v_f}{2} = \frac{x_f - x_0}{t}}"/>
+                    , "avgV", 2],
                     ["range (no elevation)",
                         <Mather math="R = \frac{v_0^2 sin(2\theta)}{g}"/>
                     , "range"],
                     ["max height",
                         <Mather math="y_f = y_0 + \frac{( v_0 sin(\theta) )^2}{2g}"/>
                     , "maxHeight"],
-                    ["projectile's impact velocity",
-                        <Mather math="v_f = \sqrt{v_0^2 + 2 g h}"/>
+                    ["projectile's impact speed",
+                        <Mather math="v_f = \sqrt{v_0^2 + 2 g y_0}"/>
                     , "impactVel"],
-                    ["projectile's impact angle with horizontal",
-                        <Mather math="\theta_f = tan^{-1} (\frac{v_y}{v_x})"/>
+                    ["projectile's impact angle",
+                        <Mather math="\theta_f = tan^{-1} \left(\frac{\sqrt{(v_0 sin(\theta))^2 + 2 g y_0}}{v_0 cos(\theta)}\right)"/>
                     , "impactAngle"]
                 ])
             )}
@@ -474,19 +460,29 @@ function DashKinematics() {
                 )
             )}
             {(isOpen && open.equations && derivationShow.avgV) && (
-                derivation("d")
+                derivation(
+                    <KinematicsDer eq={getDerivation()}/>
+                )
             )}
             {(isOpen && open.equations && derivationShow.range) && (
-                derivation("e")
+                derivation(
+                    <KinematicsDer eq={getDerivation()}/>
+                )
             )}
             {(isOpen && open.equations && derivationShow.maxHeight) && (
-                derivation("f")
+                derivation(
+                    <KinematicsDer eq={getDerivation()}/>
+                )
             )}
             {(isOpen && open.equations && derivationShow.impactVel) && (
-                derivation("g")
+                derivation(
+                    <KinematicsDer eq={getDerivation()}/>
+                )
             )}
             {(isOpen && open.equations && derivationShow.impactAngle) && (
-                derivation("h")
+                derivation(
+                    <KinematicsDer eq={getDerivation()}/>
+                )
             )}
         </div>
     );

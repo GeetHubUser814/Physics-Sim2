@@ -494,7 +494,6 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.3vw;
   padding: 0.2vh 0.5vw;
   border: var(--button-border-size) solid var(--border-color);
   border-radius: var(--equation-sub-border-radius)
@@ -507,7 +506,7 @@ body{
   left: 0vw;
 }
 .eq{
-  width: 30%;
+  width: 100%;
   height: max-content;
   position: relative;
   top: 0.4vh;
@@ -521,45 +520,10 @@ body{
 }
 .eqBorder{
   position: relative;
-  left: -5%;
+  left: 0%;
   top: -0.1vh;
   font-size: 7.2vh;
   color: var(--border-color);
-}
-.fraction{
-  display: flex;
-  flex-direction: column;
-}
-.numerator{
-  position: relative;
-  top: 1vh;
-  display: flex;
-  justify-content: center;
-}
-.numeratorWithSub{
-  top: 0.3vh;
-}
-.denominator{
-  position: relative;
-  bottom: 1vh;
-  display: flex;
-  justify-content: center;
-}
-.fractionLine{
-  font-family: 'Times New Roman', Times, serif;
-  letter-spacing: 0vw;
-  position: relative;
-  bottom: 0.2vh;
-}
-.sub{
-  position: relative;
-  top: 0.8vh;
-  right: 0.05vw;
-}
-.exponent{
-  position: relative;
-  top: -0.8vh;
-  right: 0.05vw;
 }
 .derBigContainer{
   position: fixed;
@@ -602,7 +566,7 @@ body{
 }
 .derTxt{
   height: 80vh;
-  width: 51.5vw;
+  width: 51vw;
   overflow-y: auto;
   
   display: flex;
@@ -639,12 +603,45 @@ body{
   right: -5vw;
   top: 52vh;
 }
+.eqMemorize{
+  position: absolute;
+  left: 0vw;
+  margin-top: 3vh;
+  font-size: 7vh;
+  font-weight: bolder;
+  color: var(--pinkish-red);
+}
+.eqGoodToKnow{
+  color: var(--softer-dark-purple);
+}
+.eqMemorizeContainer{
+  position: absolute;
+  font-size: 2vh;
+  left: 47vw;
+  top: 35vh;
+  line-height: 1vh;
+  width: max-content;
+  height: max-content;
+  border-radius: var(--btn-border-radius);
+  padding: 0vh 1vw;
+}
+.eqMemorizeKey{
+  font-weight: bolder;
+  color: var(--pinkish-red);
+  font-size: 7vh;
+  position: relative;
+  top: 3vh;
+}
+.eqGoodToKnowKey{
+  color: var(--softer-dark-purple);
+}
 :root{
   --primary-color: rgb(252, 219, 252);
   --border-color: rgb(234, 181, 232);
   --hover-color: rgb(210, 199, 211);
   --text-color: rgb(83, 49, 78);
   --softer-dark-purple: rgb(177, 103, 167);
+  --pinkish-red: rgb(251, 84, 168);
   --button-border-size: 0.75vh;
   --dash-border-size: 1vh;
   --btn-border-radius: 3vh;

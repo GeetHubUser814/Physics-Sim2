@@ -638,7 +638,7 @@ body{
 :root{
   --primary-color: rgb(252, 219, 252);
   --border-color: rgb(234, 181, 232);
-  --hover-color: rgb(210, 199, 211);
+  --hover-color: rgb(238, 203, 235);
   --text-color: rgb(83, 49, 78);
   --softer-dark-purple: rgb(177, 103, 167);
   --pinkish-red: rgb(251, 84, 168);

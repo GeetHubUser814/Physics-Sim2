@@ -1,4 +1,4 @@
-import { Mafs, Coordinates, Plot, Theme, useMovablePoint, Line, Text } from "mafs";
+import { Mafs, Coordinates, Plot, Theme, useMovablePoint, Line, Text, Point } from "mafs";
 import React, {useEffect, useRef, useState} from 'react';
 
 function ProjectileMotionGraph() {
@@ -69,8 +69,6 @@ function ProjectileMotionGraph() {
             [name]: finalValue,
         }));
     };
-
-
 
     const [graphShow, setGraphShow] = useState({
         heightGraph: true,
@@ -147,19 +145,26 @@ function ProjectileMotionGraph() {
     }, [])
 
     function repeatGraph(inputArray, viewX, viewY, xLabel, yLabel){
+        const [clickedPoint, setClickedPoint] = useState(null);
+        const clickError = 5;
+        function clicked(point, event){
+            if(Math.max(0, Math.min(point[0], maxRange)) === point[0] && (point[1] <= inputArray[0](point[0]) + clickError && point[1] >= inputArray[0](point[0]) - clickError)){
+                setClickedPoint([point[0], inputArray[0](point[0])]);
+            }
+        }
         return(
             <div>
                     <div className="graphTitle">
                         <p>{yLabel} vs. {xLabel} graph</p>
                     </div>
-                    <Mafs viewBox={{x: viewX, y: viewY}} width={dimensions.width} height={dimensions.height} zoom={true} pan={true}>
+                    <Mafs viewBox={{x: viewX, y: viewY}} width={dimensions.width} height={dimensions.height} zoom={{min: 0.01, max: 2}} pan={true} preserveAspectRatio={false} onClick={(point, event) => clicked(point, event)}>
                         <Coordinates.Cartesian 
                           xAxis={{
-                                lines: Math.max(5, Math.round(maxRange / 50) * 10),
-                                labels: (n) => (n % 5 == 0 ? n : ""),
+                                lines: 1,
+                                labels: (n) => (n % 1 == 0 ? n : ""),
                             }}
                             yAxis={{
-                                lines: Math.max(5, Math.round(maxRange / 50) * 10),
+                                lines: 5,
                                 labels: (n) => (n % 5 == 0 ? n : ""),
                             }}
                         />
@@ -168,15 +173,21 @@ function ProjectileMotionGraph() {
                             domain={inputArray[1]}
                             color={Theme.red}
                         />
-                        {(showDot) && (
+                        {(clickedPoint) && (
                             <Text
-                                x={inputArray[2].x}
-                                y={inputArray[2].y}
+                                x={clickedPoint[0]}
+                                y={clickedPoint[1]}
                             >
-                                ({inputArray[2].x.toFixed(2)}, {inputArray[2].y.toFixed(2)})
+                                ({clickedPoint[0].toFixed(2)}, {clickedPoint[1].toFixed(2)})
                             </Text>
                         )}
-                        {(showDot) && (inputArray[2].element)}
+                        {(clickedPoint) && (
+                            <Point
+                                x={clickedPoint[0]}
+                                y={clickedPoint[1]}
+                                color={Theme.pink}
+                            />
+                        )}
                     </Mafs>
                     <div className="xLabel">x-axis: {xLabel}</div>
                     <div className="yLabel">y-axis: {yLabel}</div>
@@ -267,19 +278,7 @@ function ProjectileMotionGraph() {
                 "acceleration(horizontal)"
             )
         )}
-        {
-        ((graphShow.heightGraph) ||
-        (graphShow.velGraph) ||
-        (graphShow.accelGraph) ||
-        (graphShow.posGraphH) ||
-        (graphShow.velGraphH) ||
-        (graphShow.accelGraphH))
-        && (
-            <div className="hideDotBtn">
-                <button className="dashBtn" onClick={() => setShowDot((prev) => !prev)}>toggle pink dot</button>
-            </div>
-        )
-        }
+
     </div>
     );
 }

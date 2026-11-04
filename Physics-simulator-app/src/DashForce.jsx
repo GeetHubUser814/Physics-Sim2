@@ -199,8 +199,6 @@ function DashForce() {
         <div>
             {isOpen && (
                 <div className="kinematicsBtns">
-                    <button className="dashBtn" onClick={rampBtn}>Ramp Sim</button>
-                    <button className="dashBtn" onClick={atwoodBtn}>Atwood Sim</button>
                     <button className="dashBtn" onClick={FBDBtn}>Free Body Diagrams</button>
                     <button className="dashBtn" onClick={graphBtn}>Graphs</button>
                     <button className="dashBtn">Equations</button>{/*page with equations used, given equations on exam and niche equations*/}

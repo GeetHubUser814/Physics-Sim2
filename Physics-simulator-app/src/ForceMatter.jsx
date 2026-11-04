@@ -49,7 +49,8 @@ const ForceMatter = () => {
 
     const rampSim = () => startEndSim("ramp");
     const atwoodSim = () => startEndSim("atwood");
-    useEffect(() => {//communication
+    /*
+    useEffect(() => {//communication 
         window.addEventListener("forceCanvas", forceCanvasHS);
 
         window.addEventListener("fromKinBtn", otherHide);
@@ -93,7 +94,7 @@ const ForceMatter = () => {
             });
         }
     }, [])
-
+    */
 
     useEffect(() => {
         const {Engine, Render, Runner, Bodies, Composite, Constraint} = Matter;

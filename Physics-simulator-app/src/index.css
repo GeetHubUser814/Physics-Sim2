@@ -420,7 +420,6 @@ body{
   flex-wrap: wrap;
   gap: 1vh;
   padding: 0vh;
-  background: red;
 }
 .FBD-info-spring{
   position: fixed;

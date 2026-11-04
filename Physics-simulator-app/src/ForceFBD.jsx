@@ -1,5 +1,6 @@
 import { Mafs, Coordinates, Plot, Theme, useMovablePoint, Line, Text, Point, Circle, Polygon, Vector, vec } from "mafs";
 import React, {useEffect, useRef, useState} from 'react';
+import Mather from './Mather';
 
 function ForceFBD({show}) {
 
@@ -206,22 +207,45 @@ function ForceFBD({show}) {
                             points={[rampTop.point, ramp.b, ramp.c]}
                             color="gray"
                         />
+                        {/* gravity */}
                         <Vector
                             tail={[ramp.centerX, ramp.centerY]}
                             tip={gravEnd.point}
                         />
+                        <Text
+                            x={gravEnd.point[0]}
+                            y={gravEnd.point[1] - 0.6 - gravMagnitude * 0.1}
+                        >
+                            W
+                        </Text>
                         <Vector
                             tail={pointOfContact}
                             tip={gravNormal}
+                            color="gray"
+                            style="dashed"
                         />
                         <Vector
                             tail={[ramp.centerX, ramp.centerY]}
                             tip={gravTangent}
+                            color="gray"
+                            style="dashed"
                         />
                         <Vector
                             tail={pointOfContact}
                             tip={gravNormalReal}
                         />
+                        <Text
+                            x={gravNormalReal[0] + 0.3 + distance(pointOfContact, gravNormalReal) * 0.1}
+                            y={gravNormalReal[1] + 0.3 + distance(pointOfContact, gravNormalReal) * 0.1}
+                        >
+                            N
+                        </Text>
+                        <Text
+                            x={frictionTip[0] - 0.3 - distance(pointOfContact, frictionTip) * 0.1}
+                            y={frictionTip[1] + 0.3 + distance(pointOfContact, frictionTip) * 0.1}
+                        >
+                            f
+                        </Text>
                         {(coeffOfFriction > 0) && (
                             <Vector
                                 tail={pointOfContact}

@@ -243,8 +243,14 @@ body{
 .inputDiv input[type = "number"]{
   width: 10vh;
 }
+.inputDiv input{
+  font-size: 2vh;
+  height: 3vh;
+  font-family: monospace;
+}
 .submitBtn{
   font-family: monospace;
+  width: 20vw; 
   font-size: 2vh;
   border: var(--button-border-size) solid;
   border-radius: var(--btn-border-radius);
@@ -254,7 +260,7 @@ body{
   color: var(--text-color);
   position: absolute;
   top: 21vh;
-  left: 75vw;
+  left: 25.5vw;
   transition: all, 0.1s ease-in-out;
 }
 .submitBtn:hover{

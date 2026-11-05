@@ -7,6 +7,7 @@ const KinematicsMatter = () => {
     const sceneRef = useRef(null);  
     const engineRef = useRef(null);
     const runnerRef = useRef(null);
+    const renderRef = useRef(null);
     const ballRef = useRef(null);
     const elevationRef = useRef(null);
 
@@ -98,6 +99,7 @@ const KinematicsMatter = () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
     useEffect(() => {
         const {Engine, Render, Runner, Bodies, Composite, Body} = Matter;
         const engine = Engine.create();
@@ -113,7 +115,7 @@ const KinematicsMatter = () => {
                 background: 'rgb(209, 165, 208)',
             },
         });
-
+        renderRef.current = render;
         window.addEventListener('resize', () => {
             const newCanvasWidth = window.innerWidth * 0.6;
             const newCanvasHeight = window.innerHeight * 0.5;
@@ -167,7 +169,7 @@ const KinematicsMatter = () => {
             }
         });
 
-        const ball = Bodies.circle(103, 269 + 131 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0});
+        const ball = Bodies.circle(103, 269 + 131 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0, render: {fillStyle: 'purple'}});
         const floor = Bodies.rectangle(550, 430, 1400, 50, {isStatic: true});
         const elevation = Bodies.rectangle(0, 405 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
         
@@ -202,6 +204,9 @@ const KinematicsMatter = () => {
         odTimeValue.current = storeOneDSim.time;
     }, [storeOneDSim.velocity, storeOneDSim.acceleration, storeOneDSim.accelDirection, storeOneDSim.time]);
 
+    const trail = [];
+    const trailX = useRef(1);
+    const trailY = useRef(1);
     function startEndSim(sim){
         if(sim === "proj"){
             isProj.current = true;
@@ -210,7 +215,8 @@ const KinematicsMatter = () => {
             const {Runner, Composite, Bodies, Body} = Matter;
 
             if(!isRunning.current){
-                const newBall = Bodies.circle(103, 269 + 131 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0});
+                trail.length = 0;
+                const newBall = Bodies.circle(103, 269 + 131 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0, render: {fillStyle: 'purple'}});
                 const newElevation = Bodies.rectangle(0, 405 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
 
                 engineRef.current.gravity.y = grav.current / (gConst);
@@ -226,11 +232,50 @@ const KinematicsMatter = () => {
 
                 Runner.run(runnerRef.current, engineRef.current);
 
+                /*
+                Matter.Events.on(engineRef.current, 'afterUpdate', () => {
+                    if(isProj.current && !ballRef.current.isStatic){
+                        trail.push({ x: ballRef.current.position.x, y: ballRef.current.position.y});
+                    }
+                });
+                Matter.Events.on(renderRef.current, 'afterRender', () => {
+                    const context = renderRef.current.context;
+                    context.strokeStyle = 'blue';
+                    context.beginPath();
+                    for (let i = 0; i < trail.length; i++) {
+                        context.lineTo(trail[i].x, trail[i].y);
+                    }
+                    context.stroke();
+                });
+                */
+
+                window.addEventListener('resize', () => {
+                    trail.length = 0;
+                    trailX.current = 0.1 * window.innerWidth;
+                    trailY.current = 0.1 * window.innerHeight;
+                });
+                trailX.current = 0.1 * window.innerWidth;
+                trailY.current = 0.1 * window.innerHeight;
+                for(let i = 0; i < 100; i++){
+                    trail.push({ x: trailX.current, y: trailY.current});
+                    trailX.current = i * window.innerWidth;
+                    trailY.current = i * window.innerHeight;
+                }
+                Matter.Events.on(renderRef.current, 'afterRender', () => {
+                    const context = renderRef.current.context;
+                    context.strokeStyle = 'blue';
+                    context.beginPath();
+                    for (let i = 0; i < trail.length; i++) {
+                        context.lineTo(trail[i].x, trail[i].y);
+                    }
+                    context.stroke();
+                });
 
             }else if(isRunning.current){
                 Matter.Runner.stop(runnerRef.current);
                 //Matter.Engine.clear(engineRef.current);
             }
+
             isRunning.current = !isRunning.current;
         }else if(sim === "oneD"){
             isProj.current = false;
@@ -239,7 +284,7 @@ const KinematicsMatter = () => {
 
             const {Runner, Composite, Bodies, Body, Render, Engine} = Matter;
             if(!isRunning.current){
-                const newBall = Bodies.circle(570, 421, 5, {friction: 0, frictionAir: 0, restitution: 0});
+                const newBall = Bodies.circle(570, 421, 5, {friction: 0, frictionAir: 0, restitution: 0, render: {fillStyle: 'purple'}});
                 const newElevation = Bodies.rectangle(0, 0, 0, 0, {isStatic: true});
 
                 Body.setVelocity(newBall, {

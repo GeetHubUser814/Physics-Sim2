@@ -37,6 +37,11 @@ const KinematicsMatter = () => {
 
     const projSim = () => startEndSim("proj");
     const oneDSim = () => startEndSim("oneD");
+    
+    //FOR TRAIL
+    function refConverter(pos){
+        return -8.5 / 1000 * pos + 0.48;
+    }
 
     const [canvasOpen, setCanvasOpen] = useState(true);
 
@@ -219,10 +224,13 @@ const KinematicsMatter = () => {
                 const newBall = Bodies.circle(103, 269 + 131 - elevationValue.current * hConst, 5, { frictionAir: 0, restitution: 0, render: { fillStyle: 'purple' } });
                 const newElevation = Bodies.rectangle(0, 405 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, { isStatic: true });
 
-                engineRef.current.gravity.y = grav.current / (gConst);
+                const projVelXInitial = velocityValue.current * Math.cos(launchAngle.current) / vConst;
+                const projVelYInitial = velocityValue.current * Math.sin(launchAngle.current) * -1 / vConst;
+                const projGrav = grav.current / gConst;
+                engineRef.current.gravity.y = 0;
                 Body.setVelocity(newBall, {
-                    x: velocityValue.current * Math.cos(launchAngle.current) / vConst,
-                    y: velocityValue.current * Math.sin(launchAngle.current) * -1 / vConst
+                    x: projVelXInitial,
+                    y: projVelYInitial
                 });
 
                 Composite.remove(engineRef.current.world, [ballRef.current, elevationRef.current]);
@@ -249,19 +257,19 @@ const KinematicsMatter = () => {
                 });
                 */
 
-
+                
                 const projStartX = 0.05;
-                const projStartY = -8 * elevationValue.current / 1000 + 0.46;
+                const projStartY = refConverter(elevationValue.current);
                 trail.length = 0;
                 trailX.current = projStartX * window.innerWidth;
                 trailY.current = projStartY * window.innerHeight;
                 const context = renderRef.current.context;
                 context.strokeStyle = 'blue';
                 context.beginPath();
-                for (let i = 0; i < 100; i++) {
+                for (let i = 0; i <= 100; i++) {
                     trail.push({ x: trailX.current, y: trailY.current });
-                    trailX.current += projStartX * window.innerWidth;
-                    trailY.current = projStartY * window.innerHeight;
+                    trailX.current = 0.05 * window.innerWidth + 0.0055 * i * window.innerWidth;
+                    trailY.current = refConverter(elevationValue.current + i * -1.25 * projVelYInitial) * window.innerHeight;
                 }
                 Matter.Events.on(renderRef.current, 'afterRender', () => {
                     const context = renderRef.current.context;

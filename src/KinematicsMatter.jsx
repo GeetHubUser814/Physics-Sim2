@@ -1,10 +1,10 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 import { useProjectileStore } from './ProjectileSimStore';
 import { useOneDStore } from './OneDSimStore';
 
 const KinematicsMatter = () => {
-    const sceneRef = useRef(null);  
+    const sceneRef = useRef(null);
     const engineRef = useRef(null);
     const runnerRef = useRef(null);
     const renderRef = useRef(null);
@@ -24,7 +24,7 @@ const KinematicsMatter = () => {
     const odAccelDirection = useRef(false);
     const odTimeValue = useRef(5);
     const odPrevTime = useRef(0);
-    
+
     const storeProjectileSim = useProjectileStore((state) => state.projectileSim);
     const storeOneDSim = useOneDStore((state) => state.oneDSim);
 
@@ -90,7 +90,7 @@ const KinematicsMatter = () => {
     const [cw, setCw] = useState(typeof window !== 'undefined' ? window.innerWidth * 0.6 : 0);
     const [ch, setCh] = useState(typeof window !== 'undefined' ? window.innerHeight * 0.5 : 0);
     useEffect(() => {
-        function handleResize(){
+        function handleResize() {
             setCw(window.innerWidth * 0.6);
             setCh(window.innerHeight * 0.5);
         }
@@ -101,7 +101,7 @@ const KinematicsMatter = () => {
     }, []);
 
     useEffect(() => {
-        const {Engine, Render, Runner, Bodies, Composite, Body} = Matter;
+        const { Engine, Render, Runner, Bodies, Composite, Body } = Matter;
         const engine = Engine.create();
         engineRef.current = engine;
 
@@ -127,26 +127,26 @@ const KinematicsMatter = () => {
             render.canvas.height = newCanvasHeight;
             Matter.Render.setSize(render, newCanvasWidth, newCanvasHeight);
             Matter.Render.lookAt(render, {
-                min: {x: 0, y: 0},
-                max: {x: 1250, y: 400}
+                min: { x: 0, y: 0 },
+                max: { x: 1250, y: 400 }
             });
         });
         Matter.Render.setSize(render, canvasWidth, canvasHeight);
         Matter.Render.lookAt(render, {
-            min: {x: 0, y: 0},
-            max: {x: 1250, y: 400}
+            min: { x: 0, y: 0 },
+            max: { x: 1250, y: 400 }
         });
         const runner = Runner.create();
         runnerRef.current = runner;
 
         const handleBounce = (event) => {
-            if(isProj.current){
+            if (isProj.current) {
                 Body.setStatic(ballRef.current, true);
             }
         }
 
         const oneDAccel = (event) => {
-            if(!isProj.current){
+            if (!isProj.current) {
                 Body.applyForce(ballRef.current, ballRef.current.position, {
                     x: odAccelDirection.current ? odAccelValue.current / (Math.pow(10, accelPower)) : -odAccelValue.current / (Math.pow(10, accelPower)),
                     y: 0,
@@ -157,22 +157,22 @@ const KinematicsMatter = () => {
         Matter.Events.on(engine, 'collisionStart', handleBounce);
         Matter.Events.on(engine, 'beforeUpdate', oneDAccel);
         Matter.Events.on(engine, 'afterUpdate', () => {
-            if(!isProj.current){
-                
-                if(engine.timing.timestamp >= odTimeValue.current * 1000){
+            if (!isProj.current) {
+
+                if (engine.timing.timestamp >= odTimeValue.current * 1000) {
                     Body.setStatic(ballRef.current, true);
                 }
-                if(ballRef.current.isStatic){
+                if (ballRef.current.isStatic) {
                     engine.timing.timestamp = 0;
                     Runner.stop(runner);
                 }
             }
         });
 
-        const ball = Bodies.circle(103, 269 + 131 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0, render: {fillStyle: 'purple'}});
-        const floor = Bodies.rectangle(550, 430, 1400, 50, {isStatic: true});
-        const elevation = Bodies.rectangle(0, 405 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
-        
+        const ball = Bodies.circle(103, 269 + 131 - elevationValue.current * hConst, 5, { frictionAir: 0, restitution: 0, render: { fillStyle: 'purple' } });
+        const floor = Bodies.rectangle(550, 430, 1400, 50, { isStatic: true });
+        const elevation = Bodies.rectangle(0, 405 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, { isStatic: true });
+
         ballRef.current = ball;
         elevationRef.current = elevation;
 
@@ -207,17 +207,17 @@ const KinematicsMatter = () => {
     const trail = [];
     const trailX = useRef(1);
     const trailY = useRef(1);
-    function startEndSim(sim){
-        if(sim === "proj"){
+    function startEndSim(sim) {
+        if (sim === "proj") {
             isProj.current = true;
-            if(!runnerRef.current) return;
+            if (!runnerRef.current) return;
 
-            const {Runner, Composite, Bodies, Body} = Matter;
+            const { Runner, Composite, Bodies, Body } = Matter;
 
-            if(!isRunning.current){
+            if (!isRunning.current) {
                 trail.length = 0;
-                const newBall = Bodies.circle(103, 269 + 131 - elevationValue.current * hConst, 5, {frictionAir: 0, restitution: 0, render: {fillStyle: 'purple'}});
-                const newElevation = Bodies.rectangle(0, 405 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, {isStatic: true});
+                const newBall = Bodies.circle(103, 269 + 131 - elevationValue.current * hConst, 5, { frictionAir: 0, restitution: 0, render: { fillStyle: 'purple' } });
+                const newElevation = Bodies.rectangle(0, 405 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, { isStatic: true });
 
                 engineRef.current.gravity.y = grav.current / (gConst);
                 Body.setVelocity(newBall, {
@@ -249,11 +249,56 @@ const KinematicsMatter = () => {
                 });
                 */
 
+
+                const projStartX = 0.05;
+                const projStartY = -8 * elevationValue.current / 1000 + 0.46;
+                trail.length = 0;
+                trailX.current = projStartX * window.innerWidth;
+                trailY.current = projStartY * window.innerHeight;
+                const context = renderRef.current.context;
+                context.strokeStyle = 'blue';
+                context.beginPath();
+                for (let i = 0; i < 100; i++) {
+                    trail.push({ x: trailX.current, y: trailY.current });
+                    trailX.current += projStartX * window.innerWidth;
+                    trailY.current = projStartY * window.innerHeight;
+                }
+                Matter.Events.on(renderRef.current, 'afterRender', () => {
+                    const context = renderRef.current.context;
+                    context.strokeStyle = 'blue';
+                    context.beginPath();
+                    for (let i = 0; i < trail.length; i++) {
+                        context.lineTo(trail[i].x, trail[i].y);
+                    }
+                    context.stroke();
+                    //5464
+                });
+                //resize
                 window.addEventListener('resize', () => {
                     trail.length = 0;
-                    trailX.current = 0.1 * window.innerWidth;
-                    trailY.current = 0.1 * window.innerHeight;
+                    trailX.current = projStartX * window.innerWidth;
+                    trailY.current = projStartY * window.innerHeight;
+                    const context = renderRef.current.context;
+                    context.strokeStyle = 'blue';
+                    context.beginPath();
+                    for (let i = 0; i < 100; i++) {
+                        trail.push({ x: trailX.current, y: trailY.current });
+                        trailX.current += projStartX * window.innerWidth;
+                        trailY.current = projStartY * window.innerHeight;
+                    }
+                    Matter.Events.on(renderRef.current, 'afterRender', () => {
+                        const context = renderRef.current.context;
+                        context.strokeStyle = 'blue';
+                        context.beginPath();
+                        for (let i = 0; i < trail.length; i++) {
+                            context.lineTo(trail[i].x, trail[i].y);
+                        }
+                        context.stroke();
+                        //5464
+                    });
+                    console.log(elevationValue.current);
                 });
+                /*
                 trailX.current = 0.1 * window.innerWidth;
                 trailY.current = 0.1 * window.innerHeight;
                 for(let i = 0; i < 100; i++){
@@ -270,22 +315,23 @@ const KinematicsMatter = () => {
                     }
                     context.stroke();
                 });
+                */
 
-            }else if(isRunning.current){
+            } else if (isRunning.current) {
                 Matter.Runner.stop(runnerRef.current);
                 //Matter.Engine.clear(engineRef.current);
             }
 
             isRunning.current = !isRunning.current;
-        }else if(sim === "oneD"){
+        } else if (sim === "oneD") {
             isProj.current = false;
             engineRef.current.timing.timestamp = 0;
-            if(!runnerRef.current) return;
+            if (!runnerRef.current) return;
 
-            const {Runner, Composite, Bodies, Body, Render, Engine} = Matter;
-            if(!isRunning.current){
-                const newBall = Bodies.circle(570, 421, 5, {friction: 0, frictionAir: 0, restitution: 0, render: {fillStyle: 'purple'}});
-                const newElevation = Bodies.rectangle(0, 0, 0, 0, {isStatic: true});
+            const { Runner, Composite, Bodies, Body, Render, Engine } = Matter;
+            if (!isRunning.current) {
+                const newBall = Bodies.circle(570, 421, 5, { friction: 0, frictionAir: 0, restitution: 0, render: { fillStyle: 'purple' } });
+                const newElevation = Bodies.rectangle(0, 0, 0, 0, { isStatic: true });
 
                 Body.setVelocity(newBall, {
                     x: odVelocityValue.current / oneDVConst,
@@ -299,7 +345,7 @@ const KinematicsMatter = () => {
 
                 Runner.run(runnerRef.current, engineRef.current);
 
-            }else if(isRunning.current){
+            } else if (isRunning.current) {
                 Matter.Runner.stop(runnerRef.current);
                 //Matter.Engine.clear(engineRef.current);
             }
@@ -311,14 +357,14 @@ const KinematicsMatter = () => {
     const canvasHidden = useRef(false);
     const canvasCover = useRef(false);
     const kinCanvasHS = () => {
-        if(canvasHidden.current && !canvasCover.current){
+        if (canvasHidden.current && !canvasCover.current) {
             canvasHidden.current = false;
         }
         setCanvasDisplay(canvasHidden.current);
     };
 
     const otherHide = () => {
-        if(!canvasHidden.current){
+        if (!canvasHidden.current) {
             canvasHidden.current = true;
         }
         setCanvasDisplay(canvasHidden.current);
@@ -333,12 +379,17 @@ const KinematicsMatter = () => {
         top: "4vh",
         left: "18vw",
     }
-    
 
 
-    return(
+
+    return (
         <div className="physCanvas" style={canvasStyle}>
-            <div ref={sceneRef}/>
+            <div ref={sceneRef} />
+            {window.innerWidth}
+            <br></br>
+            {window.innerHeight}
+            <br></br>
+            {elevationValue.current}
         </div>
     );
 }

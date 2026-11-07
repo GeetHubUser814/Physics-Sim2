@@ -227,7 +227,7 @@ const KinematicsMatter = () => {
                 const projVelXInitial = velocityValue.current * Math.cos(launchAngle.current) / vConst;
                 const projVelYInitial = velocityValue.current * Math.sin(launchAngle.current) * -1 / vConst;
                 const projGrav = grav.current / gConst;
-                engineRef.current.gravity.y = 0;
+                engineRef.current.gravity.y = projGrav;
                 Body.setVelocity(newBall, {
                     x: projVelXInitial,
                     y: projVelYInitial
@@ -258,7 +258,7 @@ const KinematicsMatter = () => {
                 */
 
                 
-                const projStartX = 0.05;
+                const projStartX = 0.045;
                 const projStartY = refConverter(elevationValue.current);
                 trail.length = 0;
                 trailX.current = projStartX * window.innerWidth;
@@ -268,8 +268,8 @@ const KinematicsMatter = () => {
                 context.beginPath();
                 for (let i = 0; i <= 100; i++) {
                     trail.push({ x: trailX.current, y: trailY.current });
-                    trailX.current = 0.05 * window.innerWidth + 0.0055 * i * window.innerWidth;
-                    trailY.current = refConverter(elevationValue.current + i * -1.25 * projVelYInitial) * window.innerHeight;
+                    trailX.current = 0.045 * window.innerWidth + 0.00367 * projVelXInitial * i * window.innerWidth;
+                    trailY.current = refConverter(elevationValue.current + i * -1 * projVelYInitial + -0.95 * projGrav * Math.pow(i, 2)) * window.innerHeight;
                 }
                 Matter.Events.on(renderRef.current, 'afterRender', () => {
                     const context = renderRef.current.context;
@@ -398,6 +398,7 @@ const KinematicsMatter = () => {
             {window.innerHeight}
             <br></br>
             {elevationValue.current}
+            <br></br>
         </div>
     );
 }

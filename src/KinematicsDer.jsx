@@ -29,6 +29,17 @@ function KinematicsDer({eq}){
             </div>
         );
     }
+    function eqSelector(inputArray){
+        return(
+            <div className="kinematicsEqList">
+                {inputArray.map((_, rowIndex) => (
+                    <div className="kinematicsEqSelector" key={rowIndex}>
+                        <button className="dashBtn" onClick={() => setShow(prevState => ({...false, [inputArray[rowIndex][1]]: true}))}>{inputArray[rowIndex][0]}</button>
+                    </div>
+                ))}
+            </div>
+        );
+    }
     return(
         <div className="der">
             {(show.k1) && (
@@ -335,6 +346,16 @@ function KinematicsDer({eq}){
                     ],
                 )
             )}
+            {eqSelector([
+                ["first kinematics equation", "k1"],
+                ["second kinematics equation", "k2"],
+                ["third kinematics equation", "k3"],
+                ["average velocity-displacement equation", "avgV"],
+                ["range equation", "range"],
+                ["max height equation", "maxHeight"],
+                ["impact speed equation", "impactVel"],
+                ["impact angle equation", "impactAngle"],
+            ])}
         </div>
     );
 }

@@ -281,8 +281,9 @@ function DashKinematics() {
     function repeatDisplay(inputArray, containerDiv){
         return(
             <div className={containerDiv}>
+                <div className="simResultLabel">Simulation Results</div>
                 {inputArray.map((_, rowIndex) => (
-                    <p key={rowIndex}>{inputArray[rowIndex][0]}: {inputArray[rowIndex][1]}</p>
+                    <p key={rowIndex}><span className="simResultBold">{inputArray[rowIndex][0]}</span>: {inputArray[rowIndex][1]}</p>
                 ))}
             </div>
         );

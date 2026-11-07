@@ -263,7 +263,7 @@ const KinematicsMatter = () => {
                     context.stroke();
                 });
                 */
-
+                /*
                 const canvasWidth2 = window.innerWidth * 0.6;
                 const canvasHeight2 = window.innerHeight * 0.5;
                 const floorHeight = 100;
@@ -323,6 +323,8 @@ const KinematicsMatter = () => {
                         //5464
                     });
                 });
+                */
+
                 /*
                 trailX.current = 0.1 * window.innerWidth;
                 trailY.current = 0.1 * window.innerHeight;
@@ -410,12 +412,6 @@ const KinematicsMatter = () => {
     return (
         <div className="physCanvas" style={canvasStyle}>
             <div ref={sceneRef} />
-            {window.innerWidth}
-            <br></br>
-            {window.innerHeight}
-            <br></br>
-            {elevationValue.current}
-            <br></br>
         </div>
     );
 }

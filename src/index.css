@@ -99,7 +99,7 @@ body{
   position: absolute;
   top: 95vh;
   left: 9vw;
-  width: 150vh;
+  width: 74vw;
   height: 0.01vh;
   background-color: var(--primary-color);
   color: var(--text-color);
@@ -120,7 +120,7 @@ body{
   position: absolute;
   top: 61vh;
   left: 9vw;
-  width: 150vh;
+  width: 74vw;
   height: 34vh;
   background-color: var(--primary-color);
   color: var(--text-color);
@@ -277,7 +277,7 @@ body{
   position: absolute;
   top: -50vh;
   left: 70vw;
-  font-size: 1.9vh;
+  font-size: 2vh;
   padding: 1vh;
   font-family: monospace;
   border: var(--button-border-size) solid;
@@ -285,8 +285,21 @@ body{
   background-color: var(--primary-color);
   border-color: var(--border-color);
   color: var(--text-color);
-  resize: both;
-  overflow: auto;
+}
+.simResultLabel{
+  font-weight: bold;
+  position: absolute;
+  display: flex;
+  justify-self: center;
+  top: -3.67vh;
+  background-color: var(--primary-color);
+  padding: 1vh;
+  border: var(--button-border-size) solid;
+  border-radius: var(--btn-border-radius);
+  border-color: var(--border-color);
+}
+.simResultBold{
+  font-weight: bold;
 }
 .graphBtns{
   position: relative;
@@ -560,7 +573,7 @@ body{
 }
 .der{
   position: absolute;
-  left: 20%;
+  left: 25%;
   top: 8vh;
   height: 80vh;
   width: 50%;
@@ -640,11 +653,36 @@ body{
 .eqGoodToKnowKey{
   color: var(--softer-dark-purple);
 }
+.kinematicsEqList{
+  position: absolute;
+  left: -35%;
+  top: 5%;
+  width: 30%;
+  height: 80%;
+  background: var(--primary-color);
+  border: var(--dash-border-size) solid var(--softer-softer-dark-purple);
+  border-radius: var(--btn-border-radius);
+  display: flex;
+  flex-direction: column;
+  padding: 1vh 0vh;
+  overflow-y: auto;
+}
+.kinematicsEqSelector{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.kinematicsEqSelector button{
+  font-size: 2vh;
+  width: 80%;
+}
 :root{
   --primary-color: rgb(252, 219, 252);
   --border-color: rgb(234, 181, 232);
   --hover-color: rgb(238, 203, 235);
   --text-color: rgb(83, 49, 78);
+  --softer-softer-dark-purple: rgb(219, 128, 207);
   --softer-dark-purple: rgb(177, 103, 167);
   --pinkish-red: rgb(251, 84, 168);
   --button-border-size: 0.75vh;

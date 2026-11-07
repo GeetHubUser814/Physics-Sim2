@@ -39,8 +39,15 @@ const KinematicsMatter = () => {
     const oneDSim = () => startEndSim("oneD");
     
     //FOR TRAIL
-    function refConverter(pos){
-        return -8.5 / 1000 * pos + 0.48;
+    //CB: -8.5 / 1000 * pos + 0.48;
+    //CB width: 1300 height: 561
+    //PC
+    //PC width: 1875 height: 925
+    function refConverter(dec){
+        return 1 - dec;
+    }
+    function simToPercentY(simVal, scale){
+        return simVal / scale;
     }
 
     const [canvasOpen, setCanvasOpen] = useState(true);
@@ -257,23 +264,27 @@ const KinematicsMatter = () => {
                 });
                 */
 
-                
-                const projStartX = 0.045;
-                const projStartY = refConverter(elevationValue.current);
+                const canvasWidth2 = window.innerWidth * 0.6;
+                const canvasHeight2 = window.innerHeight * 0.5;
+                const floorHeight = 100;
+                const realElevation = elevationValue.current * hConst * 0.9;
+                const projStartX = 0.08;
+                const projStartY = 0.1;
                 trail.length = 0;
-                trailX.current = projStartX * window.innerWidth;
-                trailY.current = projStartY * window.innerHeight;
+                trailX.current = projStartX * canvasWidth2;
+                trailY.current = refConverter(simToPercentY(46.25, 462.5)) * canvasHeight2;
                 const context = renderRef.current.context;
-                context.strokeStyle = 'blue';
+                context.strokeStyle = 'red';
                 context.beginPath();
                 for (let i = 0; i <= 100; i++) {
                     trail.push({ x: trailX.current, y: trailY.current });
-                    trailX.current = 0.045 * window.innerWidth + 0.00367 * projVelXInitial * i * window.innerWidth;
-                    trailY.current = refConverter(elevationValue.current + i * -1 * projVelYInitial + -0.95 * projGrav * Math.pow(i, 2)) * window.innerHeight;
+                    trailX.current = projStartX * canvasWidth2 + 0.00367 * projVelXInitial * i * canvasWidth2;
+                    trailY.current = refConverter(simToPercentY(realElevation + 46.25, 462.5)) * canvasHeight2;
                 }
+                //trailY.current = refConverter(elevationValue.current + i * -1 * projVelYInitial + -0.95 * projGrav * Math.pow(i, 2)) * canvasHeight2;
                 Matter.Events.on(renderRef.current, 'afterRender', () => {
                     const context = renderRef.current.context;
-                    context.strokeStyle = 'blue';
+                    context.strokeStyle = 'red';
                     context.beginPath();
                     for (let i = 0; i < trail.length; i++) {
                         context.lineTo(trail[i].x, trail[i].y);
@@ -283,20 +294,27 @@ const KinematicsMatter = () => {
                 });
                 //resize
                 window.addEventListener('resize', () => {
+                    const canvasWidth2 = window.innerWidth * 0.6;
+                    const canvasHeight2 = window.innerHeight * 0.5;
+                    const floorHeight = 100;
+                    const realElevation = elevationValue.current * hConst;
+                    const projStartX = 0.08;
+                    const projStartY = 0.1;
                     trail.length = 0;
-                    trailX.current = projStartX * window.innerWidth;
-                    trailY.current = projStartY * window.innerHeight;
+                    trailX.current = projStartX * canvasWidth2;
+                    trailY.current = refConverter(simToPercentY(15, canvasHeight2)) * canvasHeight2;
                     const context = renderRef.current.context;
-                    context.strokeStyle = 'blue';
+                    context.strokeStyle = 'red';
                     context.beginPath();
-                    for (let i = 0; i < 100; i++) {
+                    for (let i = 0; i <= 100; i++) {
                         trail.push({ x: trailX.current, y: trailY.current });
-                        trailX.current += projStartX * window.innerWidth;
-                        trailY.current = projStartY * window.innerHeight;
+                        trailX.current = projStartX * canvasWidth2 + 0.00367 * projVelXInitial * i * canvasWidth2;
+                        trailY.current = refConverter(0.1) * canvasHeight2;
                     }
+                    //trailY.current = refConverter(elevationValue.current + i * -1 * projVelYInitial + -0.95 * projGrav * Math.pow(i, 2)) * canvasHeight2;
                     Matter.Events.on(renderRef.current, 'afterRender', () => {
                         const context = renderRef.current.context;
-                        context.strokeStyle = 'blue';
+                        context.strokeStyle = 'red';
                         context.beginPath();
                         for (let i = 0; i < trail.length; i++) {
                             context.lineTo(trail[i].x, trail[i].y);
@@ -304,7 +322,6 @@ const KinematicsMatter = () => {
                         context.stroke();
                         //5464
                     });
-                    console.log(elevationValue.current);
                 });
                 /*
                 trailX.current = 0.1 * window.innerWidth;

@@ -443,8 +443,6 @@ function DashKinematics() {
                     , "impactAngle"]
                 ])
             )}
-            {/* MAKE SURE YOU SHOW WHICH ONES TO MEMORIZE */}
-            {/* ADD NORMAL TEXT (EX: x^2) TO MATH NOTATION CONVERTER FUNCTION */}
             {(isOpen && open.equations && derivationShow.k1) && (
                 derivation(
                     <KinematicsDer eq={getDerivation()}/>

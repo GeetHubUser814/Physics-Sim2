@@ -124,7 +124,7 @@ const KinematicsMatter = () => {
                 width: canvasWidth,
                 height: canvasHeight,
                 wireframes: false,
-                background: 'rgb(209, 165, 208)',
+                background: 'rgb(255, 203, 248)',
             },
         });
         renderRef.current = render;

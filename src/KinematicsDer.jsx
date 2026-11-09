@@ -327,7 +327,7 @@ function KinematicsDer({eq}){
             )}
             {(show.impactAngle) && (
                 writeDerivation(
-                    <span>Projectile's Impact Angle: <br></br><Mather math="\theta_f = tan^{-1} (\frac{\sqrt{(v_0 sin(\theta))^2 + 2 g y_0}}{v_0 cos(\theta)})"/></span>,
+                    <span>Projectile's Impact Angle: <br></br><Mather math="\theta_f = tan^{-1} \left(\frac{\sqrt{(v_0 sin(\theta))^2 + 2 g y_0}}{v_0 cos(\theta)}\right)"/></span>,
                     [
                         [<span></span>,
                             <span>
@@ -340,7 +340,7 @@ function KinematicsDer({eq}){
                                 <br></br><br></br>
                                 The horizontal component of final velocity remains constant throughout the projectile's motion, so <Mather math="(v_f)_x = v_0 cos(\theta)"/>.
                                 <br></br><br></br>
-                                Substituting these values into the equation for the impact angle gives <Mather math="\theta_f = tan^{-1} (\frac{\sqrt{(v_0 sin(\theta))^2 + 2 g y_0}}{v_0 cos(\theta)})"/>.
+                                Substituting these values into the equation for the impact angle gives <Mather math="\theta_f = tan^{-1} \left(\frac{\sqrt{(v_0 sin(\theta))^2 + 2 g y_0}}{v_0 cos(\theta)}\right)"/>.
                             </span>
                         ]
                     ],

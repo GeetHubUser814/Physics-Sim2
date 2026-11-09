@@ -492,36 +492,37 @@ body{
 .eqContainer{
   position: absolute;
   top: -58vh;
-  left: 7vw;
+  left: 2.8vw;
   background-color: var(--primary-color);
   border: var(--dash-border-size) solid var(--border-color);
   height: 48vh;
-  width: 58vw;
+  width: 63vw;
   padding: 2vh;
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 1vh;
   overflow-y: auto;
-  overflow-x: hidden;
 }
 .eqSub{
-  height: 6vh;
-  width: 27vw;
-  font-size: 1.7vh;
+  height: 9vh;
+  width: 40vw;
+  font-size: 2vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.2vh 0.5vw;
-  border: var(--button-border-size) solid var(--border-color);
-  border-radius: var(--equation-sub-border-radius)
+  padding: 0.2vh 1vw;
+  border: var(--button-border-size) solid var(--softer-softer-dark-purple);
+  border-radius: var(--equation-sub-border-radius);
+  background-color: var(--btn-primary-color)
 }
 .eqDesc{
-  width: 32%;
+  width: 30%;
   background: none;
   margin: auto;
   position: relative;
   left: 0vw;
+  text-align: center;
 }
 .eq{
   width: 100%;
@@ -529,19 +530,24 @@ body{
   position: relative;
   top: 0.4vh;
   right: 0vw;
-  font-size: 1.6vh;
+  font-size: 2.5vh;
 }
 .eqSub button{
-  font-size: 1.7vh;
-  height: 5vh;
+  font-size: 1.8vh;
+  height: 6vh;
   right: -0.5vw;
+  padding: 0vh 1.2vw;
+  background: var(--softer-softer-dark-purple);
+}
+.eqSub button:hover{
+  background: var(--softer-softer-dark-purple-hover);
 }
 .eqBorder{
   position: relative;
   left: 0%;
   top: -0.1vh;
-  font-size: 7.2vh;
-  color: var(--border-color);
+  font-size: 10vh;
+  color: var(--softer-softer-dark-purple);
 }
 .derBigContainer{
   position: fixed;
@@ -623,9 +629,9 @@ body{
 }
 .eqMemorize{
   position: absolute;
-  left: 0vw;
+  left: 10vw;
   margin-top: 3vh;
-  font-size: 7vh;
+  font-size: 8vh;
   font-weight: bolder;
   color: var(--pinkish-red);
 }
@@ -634,9 +640,9 @@ body{
 }
 .eqMemorizeContainer{
   position: absolute;
-  font-size: 2vh;
-  left: 47vw;
-  top: 35vh;
+  font-size: 1.5vh;
+  left: 0vw;
+  top: 0vh;
   line-height: 1vh;
   width: max-content;
   height: max-content;
@@ -681,8 +687,9 @@ body{
   --primary-color: rgb(252, 219, 252);
   --border-color: rgb(234, 181, 232);
   --hover-color: rgb(238, 203, 235);
-  --text-color: rgb(83, 49, 78);
+  --text-color: rgb(122, 51, 110);
   --softer-softer-dark-purple: rgb(219, 128, 207);
+  --softer-softer-dark-purple-hover: rgb(234, 136, 221);
   --softer-dark-purple: rgb(177, 103, 167);
   --pinkish-red: rgb(251, 84, 168);
   --button-border-size: 0.75vh;

@@ -133,8 +133,8 @@ body{
 }
 .startBtn{
   position: absolute;
-  left: 75vw;
-  top: 5vh;
+  left: 70vw;
+  top: 11.5vh;
   font-size: 3vh;
   padding: 1vh;
   font-family: monospace;
@@ -221,11 +221,12 @@ body{
   position: absolute;
   top: 6vh;
   height: 25vh;
-  width: 145vh;
+  width: 70vw;
   display: flex;
   flex-wrap: wrap;  
   align-content: center;
   justify-content: center;
+  justify-self: center;
   gap: 3vh;
 }
 .inputDiv{
@@ -276,7 +277,7 @@ body{
   max-height: 38vh;
   position: absolute;
   top: -50vh;
-  left: 70vw;
+  left: 65vw;
   font-size: 2vh;
   padding: 1vh;
   font-family: monospace;
@@ -428,11 +429,11 @@ body{
 }
 .FBD-info{
   position: absolute;
-  left: -2vw;
+  left: -6.5vw;
   top: 70vh;
   height: 17vh;
-  width: 63vw;
-  font-size: 1.8vh;
+  width: 72.5vw;
+  font-size: 2vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -444,6 +445,7 @@ body{
   position: fixed;
   top: 73vh;
   left: 10vw;
+  width: 72.5vw;
 }
 .FBD-info-sub{
   background-color: rgb(255, 64, 207);

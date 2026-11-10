@@ -133,7 +133,7 @@ body{
 }
 .startBtn{
   position: absolute;
-  left: 70vw;
+  left: 105%;
   top: 11.5vh;
   font-size: 3vh;
   padding: 1vh;
@@ -221,13 +221,13 @@ body{
   position: absolute;
   top: 6vh;
   height: 25vh;
-  width: 70vw;
+  width: 74vw;
   display: flex;
   flex-wrap: wrap;  
   align-content: center;
   justify-content: center;
   justify-self: center;
-  gap: 3vh;
+  gap: 2vh;
 }
 .inputDiv{
   border: 0.1vh solid;
@@ -277,7 +277,7 @@ body{
   max-height: 38vh;
   position: absolute;
   top: -50vh;
-  left: 65vw;
+  left: 98%;
   font-size: 2vh;
   padding: 1vh;
   font-family: monospace;
@@ -322,8 +322,8 @@ body{
 .graphModContainer{
   position: absolute;
   top: 70vh;
-  width: 145vh;
-  left: -14vw;
+  width: 74vw;
+  left: -15.8vw;
   height: 20vh;
   display: flex;
   justify-content: space-evenly;

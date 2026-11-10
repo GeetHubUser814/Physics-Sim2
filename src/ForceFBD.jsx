@@ -1,11 +1,11 @@
 import { Mafs, Coordinates, Plot, Theme, useMovablePoint, Line, Text, Point, Circle, Polygon, Vector, vec } from "mafs";
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Mather from './Mather';
 
-function ForceFBD({show}) {
+function ForceFBD({ show }) {
 
     //canvas
-    const [dimensions, setDimensions] = useState({ width: window.innerWidth * 0.7, height: window.innerHeight * 0.5})
+    const [dimensions, setDimensions] = useState({ width: window.innerWidth * 0.7, height: window.innerHeight * 0.5 })
     useEffect(() => {
         window.addEventListener('resize', () => {
             setDimensions({
@@ -15,7 +15,7 @@ function ForceFBD({show}) {
         });
     }, [])
 
-    function distance(p1, p2){
+    function distance(p1, p2) {
         return Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
     }
     //ramp start
@@ -38,16 +38,16 @@ function ForceFBD({show}) {
     };
     const pointOfContact = [ramp.centerX - ramp.rad * Math.sin(ramp.thetaRads), ramp.centerY - ramp.rad * Math.cos(ramp.thetaRads)];
     const gravMagnitude = distance([ramp.centerX, ramp.centerY], gravEnd.point);
-    const gravNormal = [ramp.centerX - gravMagnitude * Math.sin(2 * ramp.thetaRads) / 2, 
-                        ramp.centerY - gravMagnitude * Math.pow(Math.cos(ramp.thetaRads), 2)];
-    const gravNormalReal = [pointOfContact[0] + gravMagnitude * Math.sin(2 * ramp.thetaRads) / 2, 
-                            pointOfContact[1] + gravMagnitude * Math.pow(Math.cos(ramp.thetaRads), 2)];
-    const gravTangent = [ramp.centerX + gravMagnitude * Math.sin(2 * ramp.thetaRads) / 2, 
-                         ramp.centerY - gravMagnitude * Math.pow(Math.sin(ramp.thetaRads), 2)];
+    const gravNormal = [ramp.centerX - gravMagnitude * Math.sin(2 * ramp.thetaRads) / 2,
+    ramp.centerY - gravMagnitude * Math.pow(Math.cos(ramp.thetaRads), 2)];
+    const gravNormalReal = [pointOfContact[0] + gravMagnitude * Math.sin(2 * ramp.thetaRads) / 2,
+    pointOfContact[1] + gravMagnitude * Math.pow(Math.cos(ramp.thetaRads), 2)];
+    const gravTangent = [ramp.centerX + gravMagnitude * Math.sin(2 * ramp.thetaRads) / 2,
+    ramp.centerY - gravMagnitude * Math.pow(Math.sin(ramp.thetaRads), 2)];
     const normalMagnitude = distance([ramp.centerX, ramp.centerY], gravNormal);
     const tangentMagnitude = distance(gravEnd.point, gravTangent);
     const [coeffOfFriction, setCoeffOfFriction] = useState(0.5);
-    const [coeffOfFrictionTemp,setCoeffOfFrictionTemp] = useState(0.5);
+    const [coeffOfFrictionTemp, setCoeffOfFrictionTemp] = useState(0.5);
     const frictionMagnitude = normalMagnitude * coeffOfFriction;
     const frictionTip = [pointOfContact[0] - frictionMagnitude * Math.cos(ramp.thetaRads), pointOfContact[1] + frictionMagnitude * Math.sin(ramp.thetaRads)];
     //ramp end
@@ -107,7 +107,7 @@ function ForceFBD({show}) {
     //actual spring
     const wallMassDist = distance([springMassCenter.point[0] - spring.massSize / 2, 0], [-10, 0]);
     const springHAxis = springMassCenter.point[1];
-    const springRad= 0.6;
+    const springRad = 0.6;
     const coilDenominator = 14;
     const increment = wallMassDist / (coilDenominator);
 
@@ -130,7 +130,7 @@ function ForceFBD({show}) {
     const springForceTip = vsMassCenterY + (vsIsMassPosAboveRest ? -1 : 1) * spring.vsMassSize / 2 + vsDisplayedSpringForce;
     //actual spring
     const vsCeilingMassDist = distance([0, vsMassCenterY + spring.vsMassSize / 2], [0, 3]);
-    const vsRad= 0.6;
+    const vsRad = 0.6;
     const vsCoilDenominator = 16;
     const vsIncrement = vsCeilingMassDist / (vsCoilDenominator);
     //spring end
@@ -163,7 +163,25 @@ function ForceFBD({show}) {
     const eNetForce = eNormalForce - eWeight;
     const isNotPastFreeFall = eDisplayedAcceleration >= -eGrav;
     //elevator end
-    function createRectangle(center, width, height){
+
+    //circ start
+    const [circCar, setCircCar] = useState(null);
+    const carCenter = useMovablePoint([0, 8.25], {
+        constrain: ([x, y]) => {
+            const dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+            const rad = 8.25;
+            const distFromCirc = dist - rad;
+            const cos = x / dist;
+            const sin = y / dist;
+            return [
+                x - distFromCirc * cos,
+                y - distFromCirc * sin
+            ]
+        }
+    });
+
+    //circ end
+    function createRectangle(center, width, height) {
         const points = [
             [center[0] - width / 2, center[1] + height / 2],
             [center[0] + width / 2, center[1] + height / 2],
@@ -172,10 +190,10 @@ function ForceFBD({show}) {
         ];
         return points;
     }
-    function createForm(submit, text, val, change, min, max, stepNum){
-        return(
+    function createForm(submit, text, val, change, min, max, stepNum) {
+        return (
             <div className="FBD-info-sub">
-                <form onSubmit = {submit}>
+                <form onSubmit={submit}>
                     <label>
                         {text}
                         <input
@@ -196,8 +214,8 @@ function ForceFBD({show}) {
         <div className="bigForceFBDContainer">
             {show === "isRamp" && (
                 <div className="FBD-container">
-                    <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{x: [-5, 5], y: [gravEnd.point[1] - 2, Math.max(rampTop.point[1] + 2, gravNormalReal[1] + 2)]}}>
-  
+                    <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{ x: [-5, 5], y: [gravEnd.point[1] - 2, Math.max(rampTop.point[1] + 2, gravNormalReal[1] + 2)] }}>
+
                         <Circle
                             center={[ramp.centerX, ramp.centerY]}
                             radius={ramp.rad}
@@ -271,11 +289,11 @@ function ForceFBD({show}) {
                         <p className="FBD-info-sub FBD-info-normal">parallel component of gravity: {tangentMagnitude.toFixed(3)}</p>
                         <p className="FBD-info-sub FBD-info-normal">friction: {frictionMagnitude.toFixed(3)}</p>
                     </div>
-                </div>  
+                </div>
             )}
             {show === "isAtwood" && (
                 <div className="FBD-container">
-                    <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{x: [-5, 5], y: [Math.min(mass1GravEnd.point[1] - 1, mass2GravEnd.point[1]) - 1, Math.max(masses.mass1Pos[1] + tensionMagnitude + 2, atwood.pulleyCenterY + atwood.pulleyRad)]}}>
+                    <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{ x: [-5, 5], y: [Math.min(mass1GravEnd.point[1] - 1, mass2GravEnd.point[1]) - 1, Math.max(masses.mass1Pos[1] + tensionMagnitude + 2, atwood.pulleyCenterY + atwood.pulleyRad)] }}>
                         {/*pulley*/}
                         <Circle
                             center={[atwood.pulleyCenterX, atwood.pulleyCenterY]}
@@ -402,7 +420,7 @@ function ForceFBD({show}) {
                                     <Line.Segment
                                         point1={[0, -2]}
                                         point2={[0, 1000]}
-                                        style="dashed" 
+                                        style="dashed"
                                     />
                                     <Line.Segment
                                         point1={[-7.5, -2]}
@@ -416,7 +434,7 @@ function ForceFBD({show}) {
                                     />
                                     <Polygon
                                         points={springMassPoints}
-                                        
+
                                     />
                                     <Vector
                                         tail={[0, -2.75]}
@@ -534,15 +552,15 @@ function ForceFBD({show}) {
                                         (e) => {
                                             e.preventDefault();
                                             setMaxDisplacement(maxDisplacementTemp);
-                                        }, 
-                                        "maximum displacement from equilibrium (0.1-5): ", maxDisplacementTemp, (e) => setMaxDisplacementTemp(parseFloat(e.target.value)), "0.1" , "5", "0.1")
+                                        },
+                                        "maximum displacement from equilibrium (0.1-5): ", maxDisplacementTemp, (e) => setMaxDisplacementTemp(parseFloat(e.target.value)), "0.1", "5", "0.1")
                                     }
                                     <p className="FBD-info-sub">displacement from equilibrium: {displacement.toFixed(2)}</p>
                                     {createForm(
                                         (e) => {
                                             e.preventDefault();
                                             setSpringConst(springConstTemp);
-                                        }, 
+                                        },
                                         "spring constant (50-500):", springConstTemp, (e) => setSpringConstTemp(parseFloat(e.target.value)), 50, 500, 1)
                                     }
                                     <p className="FBD-info-sub FBD-info-normal">spring force: {springForce.toFixed(2)}</p>
@@ -707,22 +725,22 @@ function ForceFBD({show}) {
                                         (e) => {
                                             e.preventDefault();
                                             setVsWeight(vsWeightTemp);
-                                        }, 
+                                        },
                                         "weight (1-100):", vsWeightTemp, (e) => setVsWeightTemp(parseFloat(e.target.value)), 1, 100, 1)
                                     }
                                     {createForm(
                                         (e) => {
                                             e.preventDefault();
                                             setSpringConst(springConstTemp);
-                                        }, 
+                                        },
                                         "spring constant (50-500):", springConstTemp, (e) => setSpringConstTemp(parseFloat(e.target.value)), 50, 500, 1)
                                     }
                                     {createForm(
                                         (e) => {
                                             e.preventDefault();
                                             setMaxDisplacement(maxDisplacementTemp);
-                                        }, 
-                                        "maximum displacement from equilibrium (0.1-5): ", maxDisplacementTemp, (e) => setMaxDisplacementTemp(parseFloat(e.target.value)), "0.1" , "5", "0.1")
+                                        },
+                                        "maximum displacement from equilibrium (0.1-5): ", maxDisplacementTemp, (e) => setMaxDisplacementTemp(parseFloat(e.target.value)), "0.1", "5", "0.1")
                                     }
                                     <p className="FBD-info-sub">distance of equilibrium from resting position: {vsEquillibriumDistFromRest.toFixed(2)}</p>
                                     <p className="FBD-info-sub">displacement from resting position: {vsDispFromRest.toFixed(2)}</p>
@@ -737,7 +755,7 @@ function ForceFBD({show}) {
             )}
             {(show === "isElevator") && (
                 <div className="FBD-container">
-                    <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{x:[-2, 2], y: [Math.min(-5, eWeightVectorEnd - 1.5, eAccelerationEnd.point[1]), Math.max(5, eAccelerationEnd.point[1])]}}>
+                    <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{ x: [-2, 2], y: [Math.min(-5, eWeightVectorEnd - 1.5, eAccelerationEnd.point[1]), Math.max(5, eAccelerationEnd.point[1])] }}>
                         <Polygon
                             points={elevatorPoints}
                         />
@@ -791,21 +809,75 @@ function ForceFBD({show}) {
                             (e) => {
                                 e.preventDefault();
                                 setEGrav(eGravTemp);
-                            }, 
-                            "acceleration due to gravity(1-20): ", eGravTemp, (e) => setEGravTemp(parseFloat(e.target.value)), "1" , "20", "0.1")
+                            },
+                            "acceleration due to gravity(1-20): ", eGravTemp, (e) => setEGravTemp(parseFloat(e.target.value)), "1", "20", "0.1")
                         }
                         {createForm(
                             (e) => {
                                 e.preventDefault();
                                 setEMass(eMassTemp);
-                            }, 
-                            "mass of the object(1-20): ", eMassTemp, (e) => setEMassTemp(parseFloat(e.target.value)), "1" , "20", "0.1")
+                            },
+                            "mass of the object(1-20): ", eMassTemp, (e) => setEMassTemp(parseFloat(e.target.value)), "1", "20", "0.1")
                         }
                         <p className="FBD-info-sub">weight: {eWeight.toFixed(2)}</p>
                         <p className="FBD-info-sub">acceleration of the elevator: {eDisplayedAcceleration.toFixed(2)}</p>
                         <p className="FBD-info-sub FBD-info-normal">normal force({isNotPastFreeFall ? "apparent weight" : "force from ceiling"}): {eNormalForce.toFixed(2)}</p>
-                        <p className="FBD-info-sub FBD-info-normal">net force on the object: {eNetForce.toFixed(2)}</p>                    
+                        <p className="FBD-info-sub FBD-info-normal">net force on the object: {eNetForce.toFixed(2)}</p>
                         <p className="FBD-info-sub FBD-info-normal">acceleration of the object: {eDisplayedAcceleration.toFixed(2)}</p>
+                    </div>
+                </div>
+            )}
+            {(show === "isCircular") && (
+                <div className="I-DO-NOTHING">
+                    <div className="I-DO-NOTHING">
+                        <div className="containerForm">
+                            {(circCar === null) && (
+                                <div className="spring-options">
+                                    <button className="dashBtn" onClick={() => setCircCar(true)}>
+                                        car on a flat curve
+                                    </button>
+                                    <button className="dashBtn" onClick={() => setCircCar(false)}>
+                                        vertical loop
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                        {(circCar) && (
+                            <div className="FBD-container">
+                                <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{ x: [-10, 10],y: [-10, 10] }}>
+                                    <Circle
+                                        center = {[0, 0]}
+                                        radius = {7.5}
+                                        color="white"
+                                        />
+                                    <Circle
+                                        center = {[0, 0]}
+                                        radius = {9}
+                                        color="white"
+                                    />
+                                    {carCenter.element}
+                                </Mafs>
+                                <div className="FBD-info FBD-info-spring">
+                                    <p className="FBD-info-sub FBD-info-normal">spring force: {springForce.toFixed(2)}</p>
+                                </div>
+                            </div>
+                        )}
+                        {circCar === false && (
+                            <div className="FBD-container">
+                                <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{ x: [-2, 2], y: [-6, 4] }}>
+                                    <Text>TEST</Text>
+                                </Mafs>
+                                <div className="FBD-info FBD-info-spring">
+                                    {createForm(
+                                        (e) => {
+                                            e.preventDefault();
+                                            setVsWeight(vsWeightTemp);
+                                        },
+                                        "weight (1-100):", vsWeightTemp, (e) => setVsWeightTemp(parseFloat(e.target.value)), 1, 100, 1)
+                                    }
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

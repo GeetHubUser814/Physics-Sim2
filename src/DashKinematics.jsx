@@ -376,7 +376,7 @@ function DashKinematics() {
                 ])
             )}
             {(isOpen && (open.projectile || open.oneDMotion)) && (
-                <button className="startBtn" onClick={startSimulation}>{isRunning ? "Stop Simulation" : "Start Simualtion"}</button>
+                <button className="startBtn" onClick={startSimulation}>{isRunning ? "Stop Simulation" : "Start Simulation"}</button>
             )}
 
             {(isOpen && open.projectile) && (

@@ -320,10 +320,10 @@ body{
   border-color: var(--border-color);
 }
 .graphModContainer{
-  position: absolute;
-  top: 70vh;
+  position: fixed;
+  top: 72vh;
   width: 74vw;
-  left: -15.8vw;
+  left: 9.5%;
   height: 20vh;
   display: flex;
   justify-content: space-evenly;

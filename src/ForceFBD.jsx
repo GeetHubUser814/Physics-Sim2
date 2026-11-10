@@ -423,10 +423,6 @@ function ForceFBD({show}) {
                                         tip={[springMassCenter.point[0], -2.75]}
                                     />
                                     <Vector
-                                        tail={[springMassCenter.point[0] + (isMassPosRight ? -1 : 1) * spring.massSize / 2, springMassCenter.point[1]]}
-                                        tip={[springMassCenter.point[0] + springForce / 100 + (isMassPosRight ? -1 : 1) * spring.massSize / 2, springMassCenter.point[1]]}
-                                    />
-                                    <Vector
                                         tail={[springMassCenter.point[0], springMassCenter.point[1]]}
                                         tip={[springMassCenter.point[0], springMassCenter.point[1] - 3]}
                                     />
@@ -448,13 +444,6 @@ function ForceFBD({show}) {
                                         size={20}
                                     >
                                         N
-                                    </Text>
-                                    <Text
-                                        x={springMassCenter.point[0] + springForce / 100 + (isMassPosRight ? -1 : 1) * (spring.massSize / 2 + 0.7)}
-                                        y={springMassCenter.point[1]}
-                                        size={20}
-                                    >
-                                        s
                                     </Text>
                                     {(springMassCenter.point[0] < -0.3 || springMassCenter.point[0] > 0.3) && (
                                         <Text
@@ -507,6 +496,38 @@ function ForceFBD({show}) {
                                         color="gray"
                                     />
                                     {/* actual spring */}
+                                    <Text
+                                        x={springMassCenter.point[0] + springForce / 100 + (isMassPosRight ? -1 : 1) * (spring.massSize / 2 + 0.7)}
+                                        y={springMassCenter.point[1]}
+                                        size={20}
+                                    >
+                                        s
+                                    </Text>
+                                    <Vector
+                                        tail={[springMassCenter.point[0] + (isMassPosRight ? -1 : 1) * spring.massSize / 2, springMassCenter.point[1]]}
+                                        tip={[springMassCenter.point[0] + springForce / 100 + (isMassPosRight ? -1 : 1) * spring.massSize / 2, springMassCenter.point[1]]}
+                                    />
+                                    <Text
+                                        x={2}
+                                        y={4}
+                                        size={12}
+                                    >
+                                        equilibrium
+                                    </Text>
+                                    <Text
+                                        x={-5}
+                                        y={4}
+                                        size={12}
+                                    >
+                                        max distance
+                                    </Text>
+                                    <Text
+                                        x={10}
+                                        y={4}
+                                        size={12}
+                                    >
+                                        max distance
+                                    </Text>
                                 </Mafs>
                                 <div className="FBD-info FBD-info-spring">
                                     {createForm(
@@ -543,47 +564,73 @@ function ForceFBD({show}) {
                                         point2={[100, 2]}
                                         style="dashed"
                                     />
+                                    <Text
+                                        x={12}
+                                        y={1.5}
+                                        size={12}
+                                    >
+                                        maximum distance
+                                    </Text>
                                     <Line.Segment
                                         point1={[-100, -4]}
                                         point2={[100, -4]}
                                         style="dashed"
                                     />
+                                    <Text
+                                        x={12}
+                                        y={-4.5}
+                                        size={12}
+                                    >
+                                        maximum distance
+                                    </Text>
                                     {/* EQUILIBRIUM */}
                                     <Line.Segment
                                         point1={[-100, -1]}
                                         point2={[100, -1]}
                                         style="dashed"
                                     />
+                                    <Text
+                                        x={12}
+                                        y={-1.5}
+                                        size={12}
+                                    >
+                                        natural equilibrium
+                                    </Text>
                                     {((-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)) < 2) && (
-                                        <Line.Segment
-                                            point1={[-100, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
-                                            point2={[100, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
-                                            style="dashed"
-                                        />
+                                        <>
+                                            <Line.Segment
+                                                point1={[-100, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
+                                                point2={[100, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
+                                                style="dashed"
+                                            />
+                                            <Text
+                                                x={vsMassCenterX + 5}
+                                                y={(-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement) + vsMassCenterY) / 2}
+                                            >Δy</Text>
+                                            <Vector
+                                                tail={[vsMassCenterX + 4, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
+                                                tip={[vsMassCenterX + 4, vsMassCenterY]}
+                                            />
+                                            <Text
+                                                x={-12}
+                                                y={-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement) + 0.5}
+                                                size={12}
+                                            >
+                                                unstretched length(spring force = 0)
+                                            </Text>
+                                        </>
                                     )}
-                                    {((-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)) < 2) && (
-                                        <Text
-                                            x={vsMassCenterX + 5}
-                                            y={(-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement) + vsMassCenterY) / 2}
-                                        >Δy</Text>
-                                    )}
-                                    {((-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)) < 2) && (
-                                        <Vector
-                                            tail={[vsMassCenterX + 4, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
-                                            tip={[vsMassCenterX + 4, vsMassCenterY]}
-                                        />
-                                    )}
-                                    {((-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)) > 2) && (
-                                        <Text
-                                            x={vsMassCenterX + 5}
-                                            y={(2.5 + vsMassCenterY) / 2}
-                                        >Δy</Text>
-                                    )}
-                                    {((-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)) > 2) && (
-                                        <Vector
-                                            tail={[vsMassCenterX + 4, 2.5]}
-                                            tip={[vsMassCenterX + 4, vsMassCenterY]}
-                                        />
+                                    {((-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)) >= 2) && (
+                                        <>
+                                            <Text
+                                                x={vsMassCenterX + 5}
+                                                y={(2.5 + vsMassCenterY) / 2}
+                                            >Δy</Text>
+                                            <Vector
+                                                tail={[vsMassCenterX + 4, 2.5]}
+                                                tip={[vsMassCenterX + 4, vsMassCenterY]}
+                                            />
+                                        </>
                                     )}
                                     <Vector
                                         tail={vsMassCenter.point}
@@ -690,7 +737,7 @@ function ForceFBD({show}) {
             )}
             {(show === "isElevator") && (
                 <div className="FBD-container">
-                    <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{x:[-2, 2], y: [Math.min(-5, eWeightVectorEnd, eAccelerationEnd.point[1]), Math.max(5, eAccelerationEnd.point[1])]}}>
+                    <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{x:[-2, 2], y: [Math.min(-5, eWeightVectorEnd - 1.5, eAccelerationEnd.point[1]), Math.max(5, eAccelerationEnd.point[1])]}}>
                         <Polygon
                             points={elevatorPoints}
                         />
@@ -720,7 +767,24 @@ function ForceFBD({show}) {
                             tail={[elevator.massCenterX, elevator.massCenterY + (isNotPastFreeFall ? -0.5 : 4.5)]}
                             tip={[elevator.massCenterX, elevator.massCenterY + (isNotPastFreeFall ? -0.5 + eDisplayedNormalForce : 4.5 + eDisplayedNormalForce)]}
                         />
-
+                        <Text
+                            x={eAccelerationEnd.point[0] + 1}
+                            y={eAccelerationEnd.point[1] / 2}
+                        >
+                            a
+                        </Text>
+                        <Text
+                            x={elevator.massCenterX}
+                            y={eWeightVectorEnd + (isNotPastFreeFall ? 0 : 4) - 1}
+                        >
+                            G
+                        </Text>
+                        <Text
+                            x={elevator.massCenterX}
+                            y={elevator.massCenterY + (isNotPastFreeFall ? 0.5 + eDisplayedNormalForce : 3.5 + eDisplayedNormalForce)}
+                        >
+                            N
+                        </Text>
                     </Mafs>
                     <div className="FBD-info">
                         {createForm(

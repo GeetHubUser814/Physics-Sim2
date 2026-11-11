@@ -167,13 +167,35 @@ function ForceFBD({ show }) {
     //elevator end
 
     //circ start
-    const [circCar, setCircCar] = useState(null);
-    const carCenter = useMovablePoint([0, 8.25], {
+    const csCar = {
+        x: 35,
+        y: -2 + 1.25,
+        w: 5,
+        h: 2.5
+    };
+    const csCarPoints = createRectangle([csCar.x, csCar.y], csCar.w, csCar.h)
+    const csCarGravEnd = useMovablePoint([csCar.x, csCar.y - 5], {
         constrain: ([x, y]) => {
-            const dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+            return [csCar.x, Math.min(csCar.y - 2, Math.max(y, csCar.y - 9))]
+        }
+    });
+    const csCarGravDist = csCarGravEnd.point[1] - csCar.y;
+    const csCarFriction = 0.5 * csCarGravDist;
+
+    //Start of top down
+    const [circCar, setCircCar] = useState(null);
+    const car = {
+        x: 0,
+        y: 0,
+        rad: 8.25
+    };
+    
+    const carCenter = useMovablePoint([car.x, 8.25], {
+        constrain: ([x, y]) => {
+            const dist = Math.sqrt(Math.pow(x + car.x, 2) + Math.pow(y, 2));
             const rad = 8.25;
             const distFromCirc = dist - rad;
-            const cos = x / dist;
+            const cos = (x + car.x) / dist;
             const sin = y / dist;
             return [
                 x - distFromCirc * cos,
@@ -182,10 +204,17 @@ function ForceFBD({ show }) {
         }
     });
     const cc = carCenter.point;
+    const cDist = Math.sqrt(Math.pow(cc[0] + car.x, 2) + Math.pow(cc[1], 2));
+    const cDistFromCirc = -csCarFriction;
+    const cCos = (cc[0] + car.x) / cDist;
+    const cSin = cc[1] / cDist;
+
     const cTheta = Math.atan2(cc[1], cc[0]);
-    const carPoints = createRectangle(carCenter.point, 1, 3);
-    const cSizeCoeff = 1.5;
+    const cSizeCoeff = 1.5
     const cAngleConst = pi / 3;
+
+    //real
+    const cGravReal = -csCarGravDist * 10;
     //circ end
     function createRectangle(center, width, height) {
         const points = [
@@ -215,8 +244,8 @@ function ForceFBD({ show }) {
             </div>
         );
     }
-    function latex(at, tex, color){
-        return(
+    function latex(at, tex, color) {
+        return (
             <LaTeX
                 at={at}
                 tex={tex}
@@ -270,23 +299,23 @@ function ForceFBD({ show }) {
                             />
                         )}
                         {latex(
-                            [gravEnd.point[0], 
-                            gravEnd.point[1] - 0.6 - gravMagnitude * 0.1], 
+                            [gravEnd.point[0],
+                            gravEnd.point[1] - 0.6 - gravMagnitude * 0.1],
                             String.raw`F_g`
                         )}
                         {latex(
-                            [gravNormalReal[0] + 0.3 + distance(pointOfContact, gravNormalReal) * 0.1, 
-                            gravNormalReal[1] + 0.3 + distance(pointOfContact, gravNormalReal) * 0.1], 
+                            [gravNormalReal[0] + 0.3 + distance(pointOfContact, gravNormalReal) * 0.1,
+                            gravNormalReal[1] + 0.3 + distance(pointOfContact, gravNormalReal) * 0.1],
                             String.raw`F_N`
                         )}
                         {latex(
-                            [frictionTip[0] - 0.3 - distance(pointOfContact, frictionTip) * 0.1, 
-                            frictionTip[1] + 0.3 + distance(pointOfContact, frictionTip) * 0.1], 
+                            [frictionTip[0] - 0.3 - distance(pointOfContact, frictionTip) * 0.1,
+                            frictionTip[1] + 0.3 + distance(pointOfContact, frictionTip) * 0.1],
                             String.raw`F_f`
                         )}
                         {latex(
-                            [frictionTip[0] - 0.3 - distance(pointOfContact, frictionTip) * 0.1, 
-                            frictionTip[1] + 0.3 + distance(pointOfContact, frictionTip) * 0.1], 
+                            [frictionTip[0] - 0.3 - distance(pointOfContact, frictionTip) * 0.1,
+                            frictionTip[1] + 0.3 + distance(pointOfContact, frictionTip) * 0.1],
                             String.raw`F_f`
                         )}
 
@@ -306,18 +335,18 @@ function ForceFBD({ show }) {
                     </Mafs>
                     {/* (0-1.5) */}
                     <div className="FBD-info">
-                        <p className="FBD-info-sub">angle of ramp(<Mather math="\theta"/>): {ramp.theta.toFixed(3)}</p>
-                        <p className="FBD-info-sub">weight(<Mather math="F_g"/>): {gravMagnitude.toFixed(3)}</p>
+                        <p className="FBD-info-sub">angle of ramp(<Mather math="\theta" />): {ramp.theta.toFixed(3)}</p>
+                        <p className="FBD-info-sub">weight(<Mather math="F_g" />): {gravMagnitude.toFixed(3)}</p>
                         {createForm(
                             (e) => {
                                 e.preventDefault();
                                 setCoeffOfFriction(coeffOfFrictionTemp);
                             }
-                            , <span>coefficient of friction(0-1.5) (<Mather math="\mu"/>): </span>, coeffOfFrictionTemp, (e) => setCoeffOfFrictionTemp(parseFloat(e.target.value)), 0, 1.5, 0.1
+                            , <span>coefficient of friction(0-1.5) (<Mather math="\mu" />): </span>, coeffOfFrictionTemp, (e) => setCoeffOfFrictionTemp(parseFloat(e.target.value)), 0, 1.5, 0.1
                         )}
-                        <p className="FBD-info-sub FBD-info-normal">normal force(<Mather math="F_N"/>): {normalMagnitude.toFixed(3)}</p>
-                        <p className="FBD-info-sub FBD-info-normal">parallel component of gravity(<Mather math="F_\parallel"/>): {tangentMagnitude.toFixed(3)}</p>
-                        <p className="FBD-info-sub FBD-info-normal">friction(<Mather math="F_f"/>): {frictionMagnitude.toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">normal force(<Mather math="F_N" />): {normalMagnitude.toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">parallel component of gravity(<Mather math="F_\parallel" />): {tangentMagnitude.toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">friction(<Mather math="F_f" />): {frictionMagnitude.toFixed(3)}</p>
                     </div>
                 </div>
             )}
@@ -365,32 +394,32 @@ function ForceFBD({ show }) {
                             tip={[masses.mass2Pos[0], masses.mass2Pos[1] + squareSize / 2 + tensionMagnitude]}
                         />
                         {latex(
-                            [masses.mass1Pos[0] - 1, 
-                            masses.mass1Pos[1]], 
+                            [masses.mass1Pos[0] - 1,
+                            masses.mass1Pos[1]],
                             String.raw`m_1`
                         )}
                         {latex(
-                            [masses.mass2Pos[0] + 1, 
-                            masses.mass2Pos[1]], 
+                            [masses.mass2Pos[0] + 1,
+                            masses.mass2Pos[1]],
                             String.raw`m_2`
                         )}
                         {latex(
-                            [masses.mass1Pos[0] - 0.7, 
-                            masses.mass2Pos[1] + squareSize / 2 + tensionMagnitude], 
+                            [masses.mass1Pos[0] - 0.7,
+                            masses.mass2Pos[1] + squareSize / 2 + tensionMagnitude],
                             String.raw`F_T`
                         )}
                         {latex(
-                            [masses.mass2Pos[0] + 0.7, 
-                            masses.mass2Pos[1] + squareSize / 2 + tensionMagnitude], 
+                            [masses.mass2Pos[0] + 0.7,
+                            masses.mass2Pos[1] + squareSize / 2 + tensionMagnitude],
                             String.raw`F_T`
                         )}
                         {latex(
-                            [masses.mass1Pos[0] - 0.7, 
+                            [masses.mass1Pos[0] - 0.7,
                             mass1GravEnd.point[1]],
                             String.raw`F_{g1}`
                         )}
                         {latex(
-                            [masses.mass2Pos[0] + 0.7, 
+                            [masses.mass2Pos[0] + 0.7,
                             mass2GravEnd.point[1]],
                             String.raw`F_{g2}`
                         )}
@@ -398,11 +427,11 @@ function ForceFBD({ show }) {
                         {mass2GravEnd.element}
                     </Mafs>
                     <div className="FBD-info">
-                        <p className="FBD-info-sub ">weight of mass 1(<Mather math={"F_{g1}"}/>): {mass1Weight.toFixed(3)}</p>
-                        <p className="FBD-info-sub">weight of mass 2(<Mather math={"F_{g2}"}/>): {mass2Weight.toFixed(3)}</p>
-                        <p className="FBD-info-sub FBD-info-normal">tension in the rope(<Mather math={"F_T"}/>): {(tensionMagnitude * 10).toFixed(3)}</p>
-                        <p className="FBD-info-sub FBD-info-normal">magnitude of net force on mass 1(<Mather math={"F_{net1}"}/>): {mass1NetForce.toFixed(3)}</p>
-                        <p className="FBD-info-sub FBD-info-normal">magnitude of net force on mass 2(<Mather math={"F_{net2}"}/>): {mass2NetForce.toFixed(3)}</p>
+                        <p className="FBD-info-sub ">weight of mass 1(<Mather math={"F_{g1}"} />): {mass1Weight.toFixed(3)}</p>
+                        <p className="FBD-info-sub">weight of mass 2(<Mather math={"F_{g2}"} />): {mass2Weight.toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">tension in the rope(<Mather math={"F_T"} />): {(tensionMagnitude * 10).toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">magnitude of net force on mass 1(<Mather math={"F_{net1}"} />): {mass1NetForce.toFixed(3)}</p>
+                        <p className="FBD-info-sub FBD-info-normal">magnitude of net force on mass 2(<Mather math={"F_{net2}"} />): {mass2NetForce.toFixed(3)}</p>
                     </div>
                 </div>
             )}
@@ -467,23 +496,23 @@ function ForceFBD({ show }) {
                                         tip={[springMassCenter.point[0], springMassCenter.point[1] - 3]}
                                     />
                                     <Vector
-                                        tail={[springMassCenter.point[0], springMassCenter.point[1] - spring.massSize / 2]}
-                                        tip={[springMassCenter.point[0], springMassCenter.point[1] + 3 - spring.massSize / 2]}
+                                        tail={[springMassCenter.point[0] + 0.3, springMassCenter.point[1] - spring.massSize / 2]}
+                                        tip={[springMassCenter.point[0] + 0.3, springMassCenter.point[1] + 3 - spring.massSize / 2]}
                                     />
                                     {springMassCenter.element}
                                     {latex(
-                                        [springMassCenter.point[0], 
+                                        [springMassCenter.point[0],
                                         springMassCenter.point[1] - 3 - 0.7],
                                         String.raw`F_g`
                                     )}
                                     {latex(
-                                        [springMassCenter.point[0], 
-                                        springMassCenter.point[1] + 3 - spring.massSize / 2 + 0.7],
+                                        [springMassCenter.point[0] + 0.3,
+                                        springMassCenter.point[1] + 3.3 - spring.massSize / 2 + 0.6],
                                         String.raw`F_N`
                                     )}
                                     {(springMassCenter.point[0] < -0.3 || springMassCenter.point[0] > 0.3) && (
                                         latex(
-                                            [springMassCenter.point[0] / 2, 
+                                            [springMassCenter.point[0] / 2,
                                             springMassCenter.point[1] - 3],
                                             String.raw`\Delta x`
                                         )
@@ -531,7 +560,7 @@ function ForceFBD({ show }) {
                                     />
                                     {/* actual spring */}
                                     {latex(
-                                        [springMassCenter.point[0] + springForce / 100 + (isMassPosRight ? -1 : 1) * (spring.massSize / 2 + 0.7), 
+                                        [springMassCenter.point[0] + springForce / 100 + (isMassPosRight ? -1 : 1) * (spring.massSize / 2 + 0.7),
                                         springMassCenter.point[1]],
                                         String.raw`F_s`
                                     )}
@@ -567,17 +596,17 @@ function ForceFBD({ show }) {
                                             e.preventDefault();
                                             setMaxDisplacement(maxDisplacementTemp);
                                         },
-                                        <span>maximum displacement from equilibrium(0.1-5) (<Mather math="|\Delta x|_{max}"/>): </span>, maxDisplacementTemp, (e) => setMaxDisplacementTemp(parseFloat(e.target.value)), "0.1", "5", "0.1")
+                                        <span>maximum displacement from equilibrium(0.1-5) (<Mather math="|\Delta x|_{max}" />): </span>, maxDisplacementTemp, (e) => setMaxDisplacementTemp(parseFloat(e.target.value)), "0.1", "5", "0.1")
                                     }
-                                    <p className="FBD-info-sub">displacement from equilibrium(<Mather math="\Delta x"/>): {displacement.toFixed(2)}</p>
+                                    <p className="FBD-info-sub">displacement from equilibrium(<Mather math="\Delta x" />): {displacement.toFixed(2)}</p>
                                     {createForm(
                                         (e) => {
                                             e.preventDefault();
                                             setSpringConst(springConstTemp);
                                         },
-                                        <span>spring constant (50-500) (<Mather math="k"/>): </span>, springConstTemp, (e) => setSpringConstTemp(parseFloat(e.target.value)), 50, 500, 1)
+                                        <span>spring constant (50-500) (<Mather math="k" />): </span>, springConstTemp, (e) => setSpringConstTemp(parseFloat(e.target.value)), 50, 500, 1)
                                     }
-                                    <p className="FBD-info-sub FBD-info-normal">spring force(<Mather math="F_s"/>): {springForce.toFixed(2)}</p>
+                                    <p className="FBD-info-sub FBD-info-normal">spring force(<Mather math="F_s" />): {springForce.toFixed(2)}</p>
                                 </div>
                             </div>
                         )}
@@ -792,6 +821,7 @@ function ForceFBD({ show }) {
                         <Vector
                             tail={[5, 0]}
                             tip={eAccelerationEnd.point}
+                            color="gray"
                         />
                         {eAccelerationEnd.element}
                         {/* normal force vector */}
@@ -799,24 +829,22 @@ function ForceFBD({ show }) {
                             tail={[elevator.massCenterX, elevator.massCenterY + (isNotPastFreeFall ? -0.5 : 4.5)]}
                             tip={[elevator.massCenterX, elevator.massCenterY + (isNotPastFreeFall ? -0.5 + eDisplayedNormalForce : 4.5 + eDisplayedNormalForce)]}
                         />
-                        <Text
-                            x={eAccelerationEnd.point[0] + 1}
-                            y={eAccelerationEnd.point[1] / 2}
-                        >
-                            a
-                        </Text>
-                        <Text
-                            x={elevator.massCenterX}
-                            y={eWeightVectorEnd + (isNotPastFreeFall ? 0 : 4) - 1}
-                        >
-                            G
-                        </Text>
-                        <Text
-                            x={elevator.massCenterX}
-                            y={elevator.massCenterY + (isNotPastFreeFall ? 0.5 + eDisplayedNormalForce : 3.5 + eDisplayedNormalForce)}
-                        >
-                            N
-                        </Text>
+                        {latex(
+                            [eAccelerationEnd.point[0] + 1,
+                            eAccelerationEnd.point[1] / 2],
+                            String.raw`a`,
+                            "gray"
+                        )}
+                        {latex(
+                            [elevator.massCenterX,
+                            eWeightVectorEnd + (isNotPastFreeFall ? 0 : 4) - 1],
+                            String.raw`F_g`
+                        )}
+                        {latex(
+                            [elevator.massCenterX,
+                            elevator.massCenterY + (isNotPastFreeFall ? 0.5 + eDisplayedNormalForce : 3.5 + eDisplayedNormalForce)],
+                            String.raw`F_N`
+                        )}
                     </Mafs>
                     <div className="FBD-info">
                         {createForm(
@@ -859,29 +887,94 @@ function ForceFBD({ show }) {
                         {(circCar) && (
                             <div className="FBD-container">
                                 {/* SPLIT VIEW - ONE VIEW IS ON LEVEL WITH CAR - OTHER VIEW IS TOP DOWN */}
-                                <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{ x: [-10, 10],y: [-10, 10] }}>
+                                <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{ x: [10, 20], y: [-10, 10] }}>
                                     <Circle
-                                        center = {[0, 0]}
-                                        radius = {7.5}
-                                        color="white"
-                                        />
-                                    <Circle
-                                        center = {[0, 0]}
-                                        radius = {9}
+                                        center={[car.x, car.y]}
+                                        radius={car.rad - 0.75}
                                         color="white"
                                     />
-                                    <Polygon 
+                                    <Circle
+                                        center={[car.x, car.y]}
+                                        radius={car.rad + 0.75}
+                                        color="white"
+                                    />
+                                    <Polygon
                                         points={[
-                                            [cc[0] - cSizeCoeff * Math.cos(cAngleConst + cTheta), cc[1] - cSizeCoeff * Math.sin(cAngleConst + cTheta)], 
+                                            [cc[0] - cSizeCoeff * Math.cos(cAngleConst + cTheta), cc[1] - cSizeCoeff * Math.sin(cAngleConst + cTheta)],
                                             [cc[0] - cSizeCoeff * Math.cos(cAngleConst - cTheta), cc[1] + cSizeCoeff * Math.sin(cAngleConst - cTheta)],
-                                            [cc[0] + cSizeCoeff * Math.cos(cAngleConst + cTheta), cc[1] + cSizeCoeff * Math.sin(cAngleConst + cTheta)], 
+                                            [cc[0] + cSizeCoeff * Math.cos(cAngleConst + cTheta), cc[1] + cSizeCoeff * Math.sin(cAngleConst + cTheta)],
                                             [cc[0] + cSizeCoeff * Math.cos(cAngleConst - cTheta), cc[1] - cSizeCoeff * Math.sin(cAngleConst - cTheta)]
-                                            ]}
+                                        ]}
                                     />
+                                    <Line.Segment
+                                        point1={[15, -100]}
+                                        point2={[15, 100]}
+                                        color="gray"
+                                        style="dashed"
+                                    />
+                                    <Vector
+                                        tail={[cc[0] - 0.8 * cCos, cc[1] - 0.8 * cSin]}
+                                        tip={[(car.rad - cDistFromCirc - 0.8) * cCos, (car.rad - cDistFromCirc - 0.8) * cSin]}
+                                    />
+                                    {latex(
+                                        [(car.rad - cDistFromCirc - 1.8) * cCos, (car.rad - cDistFromCirc - 1.8) * cSin],
+                                        String.raw`F_{fs}`
+                                    )}
+                                    <Line.Segment
+                                        point1={[0, 0]}
+                                        point2={[8.25, 0]}
+                                        color="gray"
+                                        style="dashed"
+                                    />
+                                    {latex(
+                                        [8.25 / 2, -1],
+                                        String.raw`r`
+                                    )}
                                     {carCenter.element}
+                                    {/* RIGHT SIDE */}
+                                    <Line.Segment
+                                        point1={[15, -2]}
+                                        point2={[100, -2]}
+                                    />
+                                    <Polygon
+                                        points={csCarPoints}
+                                    />
+                                    <Vector
+                                        tail={[csCar.x, csCar.y]}
+                                        tip={[csCar.x, csCar.y + csCarGravDist]}
+                                    />
+                                    {latex(
+                                        [csCar.x, csCar.y + csCarGravDist - 1.5],
+                                        String.raw`F_g`
+                                    )}                                  
+                                    <Vector
+                                        tail={[csCar.x + 0.5, csCar.y - csCar.h / 2]}
+                                        tip={[csCar.x + 0.5, csCar.y - csCar.h / 2 - csCarGravDist]}
+                                    />
+                                    {latex(
+                                        [csCar.x + 0.5, csCar.y - csCar.h / 2 - csCarGravDist + 1.5],
+                                        String.raw`F_N`
+                                    )}  
+                                    <Vector
+                                        tail={[csCar.x - csCar.w / 2, csCar.y - csCar.h / 2]}
+                                        tip={[csCar.x - csCar.w / 2 + csCarFriction, csCar.y - csCar.h / 2]}
+                                    />
+                                    {latex(
+                                        [csCar.x - csCar.w / 2 + csCarFriction - 1.5, csCar.y - csCar.h / 2 + 1],
+                                        String.raw`F_{fs}`
+                                    )}  
+                                    {csCarGravEnd.element}
                                 </Mafs>
                                 <div className="FBD-info FBD-info-spring">
-                                    <p className="FBD-info-sub FBD-info-normal">spring force: {springForce.toFixed(2)}</p>
+                                    <p className="FBD-info-sub">Weight (<Mather math="F_g"/>): {cGravReal.toFixed(2)}</p>
+                                    <p className="FBD-info-sub">Normal Force (<Mather math="F_N"/>): {cGravReal.toFixed(2)}</p>
+                                    {createForm(
+                                        (e) => {
+                                            e.preventDefault();
+                                            setSpringConst(springConstTemp);
+                                        },
+                                        <span>coefficient of static friction(0.2-1.5) (<Mather math="f_{s,max}" />): </span>, springConstTemp, (e) => setSpringConstTemp(parseFloat(e.target.value)), 0.2, 1.5, 0.01)
+                                    }
                                 </div>
                             </div>
                         )}

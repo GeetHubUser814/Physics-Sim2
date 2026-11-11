@@ -429,17 +429,15 @@ body{
 }
 
 .FBD-info{
-  position: absolute;
-  top: 67vh;
-  height: 25vh;
+  position: fixed;
+  top: 74vh;
+  left: 9.5vw;
   width: 74vw;
-  left: -3.05vw;
+  height: 22vh;
   display: flex;
-  flex-wrap: wrap;  
-  align-content: center;
   justify-content: center;
-  justify-self: center;
-  gap: 2vh;
+  flex-wrap: wrap;
+  align-items: center;
 }
 .FBD-info-spring{
   position: fixed;

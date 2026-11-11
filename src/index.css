@@ -427,19 +427,19 @@ body{
   border-color: var(--border-color);
   width: max-content;
 }
+
 .FBD-info{
   position: absolute;
-  left: -6.5vw;
-  top: 70vh;
-  height: 17vh;
-  width: 72.5vw;
-  font-size: 2vh;
+  top: 67vh;
+  height: 25vh;
+  width: 74vw;
+  left: -3.05vw;
   display: flex;
+  flex-wrap: wrap;  
+  align-content: center;
   justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1vh;
-  padding: 0vh;
+  justify-self: center;
+  gap: 2vh;
 }
 .FBD-info-spring{
   position: fixed;

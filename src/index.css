@@ -430,9 +430,9 @@ body{
 
 .FBD-info{
   position: fixed;
-  top: 74vh;
-  left: 9.5vw;
-  width: 74vw;
+  top: 72vh;
+  left: 10.5vw;
+  width: 72vw;
   height: 22vh;
   display: flex;
   justify-content: center;
@@ -453,20 +453,22 @@ body{
   height: max-content;
   width: max-content;
   padding: 0.8vh;
-  margin: 0vh 2vh;
+  margin: 0vh 1vw;
   display: flex;
   justify-content: center;  
   align-items: center;
+  font-size: 2vh;
+  font-weight: bold;
 }
 .FBD-info-normal{
   background-color: var(--btn-primary-color);
   border: var(--button-border-size) solid;
-  border-color: var(--border-color);
+  border-color: var(--light-pink-purple);
 }
 .FBD-form-container{
-  background-color: rgb(255, 64, 207);
+  background-color: var(--pinkish-red);
   border: var(--button-border-size) solid;
-  border-color: rgb(215, 57, 176);
+  border-color: var(--pinkish-red-other);
   border-radius: var(--display-border-radius);
   height: max-content;
   padding: 0.5vh;
@@ -692,6 +694,8 @@ body{
   --softer-softer-dark-purple-hover: rgb(234, 136, 221);
   --softer-dark-purple: rgb(177, 103, 167);
   --pinkish-red: rgb(251, 84, 168);
+  --light-pink-purple: rgb(231, 159, 237);
+  --pinkish-red-other: rgb(215, 57, 176);
   --button-border-size: 0.75vh;
   --dash-border-size: 1vh;
   --btn-border-radius: 3vh;

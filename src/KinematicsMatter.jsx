@@ -10,8 +10,10 @@ const KinematicsMatter = () => {
     const renderRef = useRef(null);
     const ballRef = useRef(null);
     const elevationRef = useRef(null);
+    const [zoom, setZoom] = useState(1);
 
     const isRunning = useRef(false);
+    const [simStopped, setSimStopped] = useState(true);
     const isProj = useRef(true);
 
     const velocityValue = useRef(10);
@@ -140,13 +142,13 @@ const KinematicsMatter = () => {
             Matter.Render.setSize(render, newCanvasWidth, newCanvasHeight);
             Matter.Render.lookAt(render, {
                 min: { x: 0, y: 0 },
-                max: { x: 1250, y: 400 }
+                max: { x: 1250 * zoom, y: 400 / Math.pow(zoom, 2) }
             });
         });
         Matter.Render.setSize(render, canvasWidth, canvasHeight);
         Matter.Render.lookAt(render, {
             min: { x: 0, y: 0 },
-            max: { x: 1250, y: 400 }
+            max: { x: 1250 * zoom, y: 400 / Math.pow(zoom, 2) }
         });
         const runner = Runner.create();
         runnerRef.current = runner;
@@ -182,7 +184,7 @@ const KinematicsMatter = () => {
         });
 
         const ball = Bodies.circle(103, 269 + 131 - elevationValue.current * hConst, 5, { frictionAir: 0, restitution: 0, render: { fillStyle: 'purple' } });
-        const floor = Bodies.rectangle(550, 430, 1400, 50, { isStatic: true });
+        const floor = Bodies.rectangle(550, 430 + 1000 / 2, 140000, 50 + 1000, { isStatic: true });
         const elevation = Bodies.rectangle(0, 405 - elevationValue.current * hConst / 2, 200, elevationValue.current * hConst, { isStatic: true });
 
         ballRef.current = ball;
@@ -200,8 +202,7 @@ const KinematicsMatter = () => {
             render.canvas.remove();
             render.textures = {};
         }
-    }, []);
-
+    }, [zoom]);
     useEffect(() => {
         elevationValue.current = storeProjectileSim.elevation;
         velocityValue.current = storeProjectileSim.velocity;
@@ -222,6 +223,7 @@ const KinematicsMatter = () => {
     function startEndSim(sim) {
         if (sim === "proj") {
             isProj.current = true;
+            setSimStopped(false);
             if (!runnerRef.current) return;
 
             const { Runner, Composite, Bodies, Body } = Matter;
@@ -247,104 +249,10 @@ const KinematicsMatter = () => {
 
                 Runner.run(runnerRef.current, engineRef.current);
 
-                /*
-                Matter.Events.on(engineRef.current, 'afterUpdate', () => {
-                    if(isProj.current && !ballRef.current.isStatic){
-                        trail.push({ x: ballRef.current.position.x, y: ballRef.current.position.y});
-                    }
-                });
-                Matter.Events.on(renderRef.current, 'afterRender', () => {
-                    const context = renderRef.current.context;
-                    context.strokeStyle = 'blue';
-                    context.beginPath();
-                    for (let i = 0; i < trail.length; i++) {
-                        context.lineTo(trail[i].x, trail[i].y);
-                    }
-                    context.stroke();
-                });
-                */
-                /*
-                const canvasWidth2 = window.innerWidth * 0.6;
-                const canvasHeight2 = window.innerHeight * 0.5;
-                const floorHeight = 100;
-                const realElevation = elevationValue.current * hConst * 0.9;
-                const projStartX = 0.08;
-                const projStartY = 0.1;
-                trail.length = 0;
-                trailX.current = projStartX * canvasWidth2;
-                trailY.current = refConverter(simToPercentY(46.25, 462.5)) * canvasHeight2;
-                const context = renderRef.current.context;
-                context.strokeStyle = 'red';
-                context.beginPath();
-                for (let i = 0; i <= 100; i++) {
-                    trail.push({ x: trailX.current, y: trailY.current });
-                    trailX.current = projStartX * canvasWidth2 + 0.00367 * projVelXInitial * i * canvasWidth2;
-                    trailY.current = refConverter(simToPercentY(realElevation + 46.25, 462.5)) * canvasHeight2;
-                }
-                //trailY.current = refConverter(elevationValue.current + i * -1 * projVelYInitial + -0.95 * projGrav * Math.pow(i, 2)) * canvasHeight2;
-                Matter.Events.on(renderRef.current, 'afterRender', () => {
-                    const context = renderRef.current.context;
-                    context.strokeStyle = 'red';
-                    context.beginPath();
-                    for (let i = 0; i < trail.length; i++) {
-                        context.lineTo(trail[i].x, trail[i].y);
-                    }
-                    context.stroke();
-                    //5464
-                });
-                //resize
-                window.addEventListener('resize', () => {
-                    const canvasWidth2 = window.innerWidth * 0.6;
-                    const canvasHeight2 = window.innerHeight * 0.5;
-                    const floorHeight = 100;
-                    const realElevation = elevationValue.current * hConst;
-                    const projStartX = 0.08;
-                    const projStartY = 0.1;
-                    trail.length = 0;
-                    trailX.current = projStartX * canvasWidth2;
-                    trailY.current = refConverter(simToPercentY(15, canvasHeight2)) * canvasHeight2;
-                    const context = renderRef.current.context;
-                    context.strokeStyle = 'red';
-                    context.beginPath();
-                    for (let i = 0; i <= 100; i++) {
-                        trail.push({ x: trailX.current, y: trailY.current });
-                        trailX.current = projStartX * canvasWidth2 + 0.00367 * projVelXInitial * i * canvasWidth2;
-                        trailY.current = refConverter(0.1) * canvasHeight2;
-                    }
-                    //trailY.current = refConverter(elevationValue.current + i * -1 * projVelYInitial + -0.95 * projGrav * Math.pow(i, 2)) * canvasHeight2;
-                    Matter.Events.on(renderRef.current, 'afterRender', () => {
-                        const context = renderRef.current.context;
-                        context.strokeStyle = 'red';
-                        context.beginPath();
-                        for (let i = 0; i < trail.length; i++) {
-                            context.lineTo(trail[i].x, trail[i].y);
-                        }
-                        context.stroke();
-                        //5464
-                    });
-                });
-                */
 
-                /*
-                trailX.current = 0.1 * window.innerWidth;
-                trailY.current = 0.1 * window.innerHeight;
-                for(let i = 0; i < 100; i++){
-                    trail.push({ x: trailX.current, y: trailY.current});
-                    trailX.current = i * window.innerWidth;
-                    trailY.current = i * window.innerHeight;
-                }
-                Matter.Events.on(renderRef.current, 'afterRender', () => {
-                    const context = renderRef.current.context;
-                    context.strokeStyle = 'blue';
-                    context.beginPath();
-                    for (let i = 0; i < trail.length; i++) {
-                        context.lineTo(trail[i].x, trail[i].y);
-                    }
-                    context.stroke();
-                });
-                */
 
             } else if (isRunning.current) {
+                setSimStopped(true);
                 Matter.Runner.stop(runnerRef.current);
                 //Matter.Engine.clear(engineRef.current);
             }
@@ -352,6 +260,7 @@ const KinematicsMatter = () => {
             isRunning.current = !isRunning.current;
         } else if (sim === "oneD") {
             isProj.current = false;
+            setSimStopped(false);
             engineRef.current.timing.timestamp = 0;
             if (!runnerRef.current) return;
 
@@ -373,6 +282,7 @@ const KinematicsMatter = () => {
                 Runner.run(runnerRef.current, engineRef.current);
 
             } else if (isRunning.current) {
+                setSimStopped(true);
                 Matter.Runner.stop(runnerRef.current);
                 //Matter.Engine.clear(engineRef.current);
             }
@@ -411,7 +321,25 @@ const KinematicsMatter = () => {
 
     return (
         <div className="physCanvas" style={canvasStyle}>
-            <div ref={sceneRef} />
+            <div className="physCanvasBorder"></div>
+            {(simStopped) && (
+                <div className="simStopped">Simulation Stopped</div>
+            )}
+            <div ref={sceneRef}/>
+            
+            <div className="canvasZoom">
+                <label className="canvasZoomLabel czlPlus">+</label>
+                <label className="canvasZoomLabel czlMinus">-</label>
+                <input
+                    className="canvasZoomInput" 
+                    type="range"
+                    value={zoom}
+                    onChange={(e) => {setZoom(e.target.value), setSimStopped(true)}}
+                    min={1}
+                    max={5}
+                    step={0.1}
+                />
+            </div>
         </div>
     );
 }

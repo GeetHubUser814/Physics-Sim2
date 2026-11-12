@@ -19,6 +19,16 @@ body{
   position: absolute;
   top: 4vh;
 }
+.physCanvasBorder{
+  position: absolute;
+  top: -1vh;
+  height: 52vh;
+  width: 124vh;
+  background: var(--softer-softer-dark-purple);
+  z-index: -1;
+  border-radius: 1vh;
+  
+}
 body{
   background-color: var(--primary-color);
 }
@@ -351,6 +361,15 @@ body{
   background: var(--btn-primary-color);
   border-radius: var(--btn-border-radius);
   outline: none;
+}
+.graphMod input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 2.5vh;
+  height: 2vh;
+  background: var(--text-color);
+  border-radius: 10vh;
+  cursor: pointer;
 }
 .graphSelecter{
   position: fixed;
@@ -685,11 +704,67 @@ body{
   font-size: 2vh;
   width: 80%;
 }
+.canvasZoom{
+  position: fixed;
+  top: 20vh;
+  left: 10vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.canvasZoomInput{
+  -webkit-appearance: none;
+  position: relative;
+  top: 0vh;
+  appearance: none;
+  width: 2vw;
+  direction: rtl;
+  writing-mode: vertical-lr;
+  height: 25vh;
+  background: var(--border-color);
+  border-radius: var(--btn-border-radius);
+  outline: none;
+}
+.canvasZoomInput::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  appearance: none;
+  width: 6vh;
+  height: 6vh;
+  border-radius: 1.5vh;
+  border: 0.7vh solid var(--pinkish-red-other);
+  background: var(--pinkish-red);
+  transition: all 0.1s ease;
+}
+.canvasZoomInput::-webkit-slider-thumb:hover{
+  transform: scale(110%);
+}
+.canvasZoomLabel{
+  font-size: 5vh;
+  font-weight: bolder;
+  font-family: monospace;
+  position: absolute;
+  color: var(--pinkish-red);
+}
+.czlPlus{
+  top: 24vh;
+}
+.czlMinus{
+  top: -6vh;
+}
+.simStopped{
+  position: absolute;
+  display: flex;
+  justify-self: center;
+  align-self: center;
+  font-size: 10vh;
+  font-family: monospace;
+  color: var(--pinkish-red);
+}
 :root{
   --primary-color: rgb(252, 219, 252);
   --border-color: rgb(234, 181, 232);
   --hover-color: rgb(238, 203, 235);
-  --text-color: rgb(122, 51, 110);
+  --text-color: rgb(94, 40, 85);
   --softer-softer-dark-purple: rgb(219, 128, 207);
   --softer-softer-dark-purple-hover: rgb(234, 136, 221);
   --softer-dark-purple: rgb(177, 103, 167);

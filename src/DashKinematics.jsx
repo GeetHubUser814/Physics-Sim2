@@ -10,6 +10,7 @@ import KinematicsDer from './KinematicsDer';
 function DashKinematics() {
 
     const [isOpen, setIsOpen] = useState(true);
+    const [isRunning, setIsRunning] = useState(false);
     const [open, setOpen] = useState({
         projectile: false,
         graph: false,
@@ -67,9 +68,11 @@ function DashKinematics() {
 
     useEffect(() => {
         window.addEventListener("dashOpenClose", dashOpenClose);
+        window.addEventListener("zoomChanged", () => setIsRunning(false));
 
         return () => {
             window.removeEventListener("dashOpenClose", dashOpenClose);
+            window.removeEventListener("zoomChanged", () => setIsRunning(false));
         }
     }, []);
 
@@ -224,7 +227,6 @@ function DashKinematics() {
     
 
 
-    const [isRunning, setIsRunning] = useState(false);
 
     function startSimulation(){
         if(open.projectile){

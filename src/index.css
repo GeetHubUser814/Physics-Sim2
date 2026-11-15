@@ -166,12 +166,12 @@ body{
   position: relative;
   margin: 1vh;
   font-size: 2.5vh;
-  padding: 1vh;
+  padding: 1vh 1vw;
   font-family: monospace;
   border: var(--button-border-size) solid;
   border-radius: var(--btn-border-radius);
   background-color: var(--btn-primary-color);
-  border-color: var(--btn-border-color);
+  border-color: var(--ssdp2);
   color: var(--text-color);
   transition: all, 0.1s ease-in-out;
 }
@@ -179,7 +179,7 @@ body{
   cursor: pointer;
   transform: scale(105%);
   background-color: var(--btn-hover-color);
-  border-color: var(--btn-border-color);
+  border-color: var(--softer-softer-dark-purple-hover);
 }
 .dashArrowOpen{
   position: absolute;
@@ -267,7 +267,7 @@ body{
   border: var(--button-border-size) solid;
   border-radius: var(--btn-border-radius);
   background-color: var(--btn-primary-color);
-  border-color: var(--btn-border-color);
+  border-color: var(--ssdp2);
   padding: 1vh;
   color: var(--text-color);
   position: absolute;
@@ -279,7 +279,7 @@ body{
   cursor: pointer;
   transform: scale(105%);
   background-color: var(--btn-hover-color);
-  border-color: var(--btn-border-color);
+  border-color: var(--softer-softer-dark-purple-hover);
 }
 .simResult{
   width: 15vw;
@@ -324,7 +324,7 @@ body{
 .graphContainer{
   position: absolute;
   top: -59vh;
-  left: 14vw;
+  left: 10vw;
   font-size: 1.5vh;
   border: 1.25vh solid;
   border-radius: 0.5vh;
@@ -376,23 +376,24 @@ body{
   position: fixed;
   display: flex;
   flex-direction: column;
-  gap: 1vh;
+  gap: 0vh;
   justify-content: start;
-  left: 9vw;
-  top: 3vh;
+  left: 6vw;
+  top: 2vh;
   height: 50%;
   width: 14vw;
 }
 .graphSelecterBtn{
   position: relative;
   margin: 1vh;
-  font-size: 1.5vh;
+  font-size: 1.8vh;
+  font-weight: bold;
   padding: 0.6vh;
   font-family: monospace;
   border: var(--button-border-size) solid;
   border-radius: var(--btn-border-radius);
   background-color: var(--btn-primary-color);
-  border-color: var(--btn-border-color);
+  border-color: var(--softer-softer-dark-purple);
   color: var(--text-color);
   transition: all, 0.1s ease-in-out;
 }
@@ -400,29 +401,31 @@ body{
   cursor: pointer;
   transform: scale(105%);
   background-color: var(--btn-hover-color);
-  border-color: var(--btn-border-color);
+  border-color: var(--softer-softer-dark-purple-hover);
 }
-.xLabel{
+.graphLabels{
   position: absolute;
+  top: 0vh;
+  width: 100%;
+  height: 5vh;
+  top: 49vh;
+  display: flex;
+  justify-content: flex-end;
+  gap: 2vw;
+}
+.graphLabels div{
+  position: relative;
   width: max-content;
   top: 0vh;
-  left: 61vw;
-  font-size: 1.5vh;
-  background-color: var(--btn-primary-color);
-  padding: 1vh;
-}
-.yLabel{
-  position: absolute;
-  max-width: 20vh;
-  top: 5vh;
-  left: 61vw;
-  font-size: 1.5vh;
-  background-color: var(--btn-primary-color);
+  font-size: 2.2vh;
+  font-weight: bold;
+  background-color: var(--light-pink-purple);
+  border: 0.5vh solid var(--softer-dark-purple);
   padding: 1vh;
 }
 .graphTitle{
   position: absolute;
-  top: -2.6vh;
+  top: -3.5vh;
   left: 0vh;
   width: 100%;
   display: flex;
@@ -431,8 +434,10 @@ body{
 .graphTitle p{
   position: relative;
   top: -1vh;
+  font-size: 2vh;
+  font-weight: bold;
   border: var(--button-border-size) solid;
-  padding: 0vh 2vh;
+  padding: 0vh 4vw;
   border-radius: var(--btn-border-radius);
   background-color: var(--primary-color);
   border-color: var(--border-color);
@@ -466,9 +471,9 @@ body{
   width: 72.5vw;
 }
 .FBD-info-sub{
-  background-color: rgb(255, 64, 207);
+  background-color: var(--pinkish-red);
   border: var(--button-border-size) solid;
-  border-color: rgb(215, 57, 176);
+  border-color: var(--pinkish-red-other);
   border-radius: var(--display-border-radius);
   height: max-content;
   width: max-content;
@@ -484,6 +489,21 @@ body{
   background-color: var(--btn-primary-color);
   border: var(--button-border-size) solid;
   border-color: var(--light-pink-purple);
+}
+.FBD-info-given{
+  position: absolute;
+  top: -9vh;
+  right: 0vw;
+  background-color: var(--light-pink-purple);
+  border: var(--button-border-size) solid;
+  border-color: var(--softer-dark-purple);
+  border-radius: var(--display-border-radius);
+  height: max-content;
+  width: max-content;
+  padding: 0.8vh;
+  margin: 0vh 1vw;
+  font-size: 2vh;
+  font-weight: bold;
 }
 .FBD-form-container{
   background-color: var(--pinkish-red);
@@ -766,20 +786,21 @@ body{
   --border-color: rgb(234, 181, 232);
   --hover-color: rgb(238, 203, 235);
   --text-color: rgb(94, 40, 85);
-  --softer-softer-dark-purple: rgb(219, 128, 207);
+  --softer-softer-dark-purple: rgb(231, 136, 218);
   --softer-softer-dark-purple-hover: rgb(234, 136, 221);
   --softer-dark-purple: rgb(177, 103, 167);
+  --ssdp2: rgb(250, 165, 239);
   --pinkish-red: rgb(251, 84, 168);
   --light-pink-purple: rgb(231, 159, 237);
   --pinkish-red-other: rgb(215, 57, 176);
-  --button-border-size: 0.75vh;
+  --button-border-size: 0.7vh;
   --dash-border-size: 1vh;
   --btn-border-radius: 3vh;
   --display-border-radius: 0.8vh;
 
-  --btn-primary-color: rgb(241, 185, 246);
+  --btn-primary-color: rgb(249, 185, 255);
   --btn-border-color: var(--btn-primary-color);
-  --btn-hover-color: rgb(238, 166, 245);
+  --btn-hover-color: rgb(248, 172, 255);
 
   --equation-sub-border-radius: 2vh;
 }

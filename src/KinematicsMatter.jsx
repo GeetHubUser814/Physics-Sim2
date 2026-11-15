@@ -334,7 +334,12 @@ const KinematicsMatter = () => {
                     className="canvasZoomInput" 
                     type="range"
                     value={zoom}
-                    onChange={(e) => {setZoom(e.target.value), setSimStopped(true)}}
+                    onChange={(e) => {
+                        setZoom(e.target.value), 
+                        setSimStopped(true),
+                        window.dispatchEvent(new CustomEvent("zoomChanged")),
+                        isRunning.current = false;
+                    }}
                     min={1}
                     max={5}
                     step={0.1}

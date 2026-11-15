@@ -189,8 +189,10 @@ function ProjectileMotionGraph() {
                             />
                         )}
                     </Mafs>
-                    <div className="xLabel">x-axis: {xLabel}</div>
-                    <div className="yLabel">y-axis: {yLabel}</div>
+                    <div className="graphLabels">
+                        <div>x-axis: {xLabel}</div>
+                        <div>y-axis: {yLabel}</div>
+                    </div>
             </div>
         );
     }

@@ -173,6 +173,10 @@ function ForceFBD({ show }) {
         w: 5,
         h: 2.5
     };
+    const [cFriction, setCFriction] = useState(0.5);
+    const [cFrictionTemp, setCFrictionTemp] = useState(0.5);
+    const [cRadius, setCRadius] = useState(5);
+    const [cRadiusTemp, setCRadiusTemp] = useState(5);
     const csCarPoints = createRectangle([csCar.x, csCar.y], csCar.w, csCar.h)
     const csCarGravEnd = useMovablePoint([csCar.x, csCar.y - 5], {
         constrain: ([x, y]) => {
@@ -192,10 +196,9 @@ function ForceFBD({ show }) {
     
     const carCenter = useMovablePoint([car.x, 8.25], {
         constrain: ([x, y]) => {
-            const dist = Math.sqrt(Math.pow(x + car.x, 2) + Math.pow(y, 2));
-            const rad = 8.25;
-            const distFromCirc = dist - rad;
-            const cos = (x + car.x) / dist;
+            const dist = Math.sqrt(Math.pow(x - car.x, 2) + Math.pow(y, 2));
+            const distFromCirc = dist - car.rad;
+            const cos = (x - car.x) / dist;
             const sin = y / dist;
             return [
                 x - distFromCirc * cos,
@@ -204,9 +207,9 @@ function ForceFBD({ show }) {
         }
     });
     const cc = carCenter.point;
-    const cDist = Math.sqrt(Math.pow(cc[0] + car.x, 2) + Math.pow(cc[1], 2));
+    const cDist = Math.sqrt(Math.pow(cc[0] - car.x, 2) + Math.pow(cc[1], 2));
     const cDistFromCirc = -csCarFriction;
-    const cCos = (cc[0] + car.x) / cDist;
+    const cCos = (cc[0] - car.x) / cDist;
     const cSin = cc[1] / cDist;
 
     const cTheta = Math.atan2(cc[1], cc[0]);
@@ -215,6 +218,46 @@ function ForceFBD({ show }) {
 
     //real
     const cGravReal = -csCarGravDist * 10;
+    const cStaticFrictionMax = cGravReal * cFriction;
+    const cMaxVelocity = Math.sqrt(10 * cFriction * cRadius);
+
+    //start of VERTICAL LOOP
+    const [vlWeight, setVLWeight] = useState(50);
+    const [vlWeightTemp, setVLWeightTemp] = useState(50);
+    const [vlRad, setVlRad] = useState(10);
+    const [vlRadTemp, setVlRadTemp] = useState(10);
+    const [vlTopVel, setVlTopVel] = useState(15);
+    const [vlTopVelTemp, setVlTopVelTemp] = useState(15);
+    const viewBoxSize = 10;
+    const vl = {
+        x: 0,
+        y: 0,
+        rad: 8,
+        massRad: 0.8,
+    }
+    const vlMass = useMovablePoint([vl.x, vl.y + vl.rad], {
+        constrain: ([x, y]) => {
+            const dist = Math.sqrt(Math.pow(x - vl.x, 2) + Math.pow(y, 2));
+            const rad = vl.rad;
+            const distFromCirc = dist - rad;
+            const cos = (x - vl.x) / dist;
+            const sin = y / dist;
+            return [
+                x - distFromCirc * cos,
+                y - distFromCirc * sin
+            ]
+        }
+    });
+    const vlm = vlMass.point;
+    const vlmCos = (vlm[0] - vl.x) / Math.sqrt(Math.pow(vlm[0] - vl.x, 2) + Math.pow(vlm[1], 2));
+    const vlmSin = vlm[1] / Math.sqrt(Math.pow(vlm[0] - vl.x, 2) + Math.pow(vlm[1], 2));
+    const vlGrav = 3;
+    const vlMassNumber = vlWeight / 10;
+    const vlHeightFromTop = vlRad - vlRad * vlmSin;
+    const vlVelocity = Math.sqrt(Math.pow(vlTopVel, 2) + 4 * 10 * vlHeightFromTop);
+    const vlTension = (vlMassNumber * Math.pow(vlVelocity, 2) / vlRad) - vlWeight * vlmSin;
+    const vldisplayedTension = Math.pow(vlVelocity, 2) * 0.004;
+    const vlCentripetalForce = vlMassNumber * Math.pow(vlVelocity, 2) / vlRad;
     //circ end
     function createRectangle(center, width, height) {
         const points = [
@@ -664,10 +707,10 @@ function ForceFBD({ show }) {
                                                 point2={[100, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
                                                 style="dashed"
                                             />
-                                            <Text
-                                                x={vsMassCenterX + 5}
-                                                y={(-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement) + vsMassCenterY) / 2}
-                                            >Δy</Text>
+                                            {latex(
+                                                [vsMassCenterX + 5, (-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement) + vsMassCenterY) / 2],
+                                                String.raw`\Delta y`
+                                            )}
                                             <Vector
                                                 tail={[vsMassCenterX + 4, -1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)]}
                                                 tip={[vsMassCenterX + 4, vsMassCenterY]}
@@ -683,10 +726,10 @@ function ForceFBD({ show }) {
                                     )}
                                     {((-1 + 6 * (vsEquillibriumDistFromRest) / (2 * maxDisplacement)) >= 2) && (
                                         <>
-                                            <Text
-                                                x={vsMassCenterX + 5}
-                                                y={(2.5 + vsMassCenterY) / 2}
-                                            >Δy</Text>
+                                            {latex(
+                                                [vsMassCenterX + 5, (2.5 + vsMassCenterY) / 2],
+                                                String.raw`\Delta y`
+                                            )}
                                             <Vector
                                                 tail={[vsMassCenterX + 4, 2.5]}
                                                 tip={[vsMassCenterX + 4, vsMassCenterY]}
@@ -698,10 +741,10 @@ function ForceFBD({ show }) {
                                         tip={[vsMassCenterX, vsMassCenterY - 2]}
                                     />
                                     {vsMassCenter.element}
-                                    <Text
-                                        x={vsMassCenterX + 0.7}
-                                        y={vsMassCenterY - 2}
-                                    >G</Text>
+                                    {latex(
+                                        [vsMassCenterX + 0.7, vsMassCenterY - 2],
+                                        String.raw`F_g`
+                                    )}
                                     {/* actual spring */}
                                     <Line.Segment
                                         point1={[0, 3]}
@@ -758,10 +801,10 @@ function ForceFBD({ show }) {
                                         tail={[vsMassCenterX, vsMassCenterY + (vsIsMassPosAboveRest ? -1 : 1) * spring.vsMassSize / 2]}
                                         tip={[vsMassCenterX, springForceTip]}
                                     />
-                                    <Text
-                                        x={vsMassCenterX + 0.7}
-                                        y={springForceTip}
-                                    >s</Text>
+                                    {latex(
+                                        [vsMassCenterX + 0.7, springForceTip],
+                                        String.raw`F_s`
+                                    )}
                                 </Mafs>
                                 <div className="FBD-info FBD-info-spring">
                                     {createForm(
@@ -966,31 +1009,109 @@ function ForceFBD({ show }) {
                                     {csCarGravEnd.element}
                                 </Mafs>
                                 <div className="FBD-info FBD-info-spring">
-                                    <p className="FBD-info-sub">Weight (<Mather math="F_g"/>): {cGravReal.toFixed(2)}</p>
-                                    <p className="FBD-info-sub">Normal Force (<Mather math="F_N"/>): {cGravReal.toFixed(2)}</p>
+                                    <div className="FBD-info-given"> given: <Mather math="g = 10 m / s^2"/></div>
+                                    <p className="FBD-info-sub">weight (<Mather math="F_g"/>): {cGravReal.toFixed(2)}</p>
+                                    <p className="FBD-info-sub">normal force (<Mather math="F_N"/>): {cGravReal.toFixed(2)}</p>
                                     {createForm(
                                         (e) => {
                                             e.preventDefault();
-                                            setSpringConst(springConstTemp);
+                                            setCFriction(cFrictionTemp);
                                         },
-                                        <span>coefficient of static friction(0.2-1.5) (<Mather math="f_{s,max}" />): </span>, springConstTemp, (e) => setSpringConstTemp(parseFloat(e.target.value)), 0.2, 1.5, 0.01)
+                                        <span>coefficient of static friction(0.2-1.5) (<Mather math="\mu_s" />): </span>, cFrictionTemp, (e) => setCFrictionTemp(parseFloat(e.target.value)), 0.2, 1.5, 0.01)
                                     }
+                                    {createForm(
+                                        (e) => {
+                                            e.preventDefault();
+                                            setCRadius(cRadiusTemp);
+                                        },
+                                        <span>radius(0.1-50) (<Mather math="r" />): </span>, cRadiusTemp, (e) => setCRadiusTemp(parseFloat(e.target.value)), 0.1, 50, 0.1)
+                                    }
+                                    <p className="FBD-info-sub FBD-info-normal">maximum force of friction (<Mather math="f_{s,max}"/>): {cStaticFrictionMax.toFixed(2)}</p>
+                                    <p className="FBD-info-sub FBD-info-normal">maximum velocity (<Mather math="v_{max}"/>): {cMaxVelocity.toFixed(2)}</p>
                                 </div>
                             </div>
                         )}
                         {circCar === false && (
                             <div className="FBD-container">
-                                <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} viewBox={{ x: [-2, 2], y: [-6, 4] }}>
-                                    <Text>TEST</Text>
+                                <Mafs pan={false} zoom={false} width={dimensions.width} height={dimensions.height} 
+                                    viewBox={{ x: [vlm[0] / 2 - viewBoxSize, vlm[0] / 2 + viewBoxSize], y: [vlm[1] / 2 - viewBoxSize, vlm[1] / 2 + viewBoxSize] }}
+                                >
+                                    <Circle
+                                        center={[vlm[0], vlm[1]]}
+                                        radius={vl.massRad}
+                                    />
+                                    <Plot.Parametric
+                                        t={[0, 2 * Math.PI]}
+                                        xy={(t) => [vl.rad * Math.cos(t), vl.rad * Math.sin(t)]}
+                                        color="gray"
+                                        style="dashed"
+                                    />
+                                    <Point
+                                        center={[0, 0]}
+                                    />
+                                    <Line.Segment
+                                        point1={[0, 0]}
+                                        point2={[vlm[0] - vl.massRad * vlmCos, vlm[1] - vl.massRad * vlmSin]}
+                                    />
+                                    <Line.Segment
+                                        point1={[0, 0]}
+                                        point2={[vl.rad, 0]}
+                                        style="dashed"
+                                        color="gray"
+                                    />
+                                    {latex(
+                                        [vl.rad / 2, -1],
+                                        String.raw`r`,
+                                        "gray"
+                                    )}
+                                    <Vector
+                                        tail={vlm}
+                                        tip={[vlm[0], vlm[1] - vlGrav]}
+                                    />
+                                    {latex(
+                                        [vlm[0], vlm[1] - vlGrav - 1],
+                                        String.raw`F_g`
+                                    )}
+                                    <Vector
+                                        tail={vlm}
+                                        tip={[vlm[0] - vldisplayedTension * vlmCos, vlm[1] - vldisplayedTension * vlmSin]}
+                                    />
+                                    {latex(
+                                        [vlm[0] - (vldisplayedTension + 1) * vlmCos, vlm[1] - (vldisplayedTension + 1) * vlmSin],
+                                        String.raw`F_T`
+                                    )}
+                                    {vlMass.element}
                                 </Mafs>
                                 <div className="FBD-info FBD-info-spring">
+                                    <div className="FBD-info-given"> given: <Mather math="g = 10 m / s^2"/></div>
                                     {createForm(
                                         (e) => {
                                             e.preventDefault();
-                                            setVsWeight(vsWeightTemp);
+                                            setVLWeight(vlWeightTemp);
                                         },
-                                        "weight (1-100):", vsWeightTemp, (e) => setVsWeightTemp(parseFloat(e.target.value)), 1, 100, 1)
+                                        <span>weight (10-100) (<Mather math="F_g" />): </span>, vlWeightTemp, (e) => setVLWeightTemp(parseFloat(e.target.value)), 10, 100, 1)
                                     }
+                                    {createForm(
+                                        (e) => {
+                                            e.preventDefault();
+                                            setVlRad(vlRadTemp);
+                                            if(vlTopVelTemp < Math.sqrt(10 * vlRadTemp).toFixed(1)) {
+                                                setVlTopVelTemp(Math.sqrt(10 * vlRadTemp).toFixed(1));
+                                                setVlTopVel(Math.sqrt(10 * vlRadTemp));
+                                            }
+                                        },
+                                        <span>radius (1-20) (<Mather math="r" />): </span>, vlRadTemp, (e) => setVlRadTemp(parseFloat(e.target.value)), 1, 20, 1)
+                                    }
+                                    {createForm(
+                                        (e) => {
+                                            e.preventDefault();
+                                            setVlTopVel(vlTopVelTemp);
+                                        },
+                                        <span>velocity at the top ({Math.sqrt(10 * vlRad).toFixed(1)}-{(Math.sqrt(10 * vlRad) + 50).toFixed(1)}) (<Mather math="v_{top}" />): </span>, vlTopVelTemp, (e) => setVlTopVelTemp(parseFloat(e.target.value)), Math.sqrt(10 * vlRad).toFixed(1), (Math.sqrt(10 * vlRad) + 50).toFixed(1), 0.1)
+                                    }
+                                    <p className="FBD-info-sub FBD-info-normal">velocity (<Mather math="v" />): {vlVelocity.toFixed(2)}</p>
+                                    <p className="FBD-info-sub FBD-info-normal">tension (<Mather math="F_T" />): {vlTension.toFixed(2)}</p>
+                                    <p className="FBD-info-sub FBD-info-normal">centripetal force (<Mather math="F_c" />): {vlCentripetalForce.toFixed(2)}</p>
                                 </div>
                             </div>
                         )}

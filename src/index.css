@@ -23,7 +23,7 @@ body{
   position: absolute;
   top: -1vh;
   height: 52vh;
-  width: 124vh;
+  width: 61vw;
   background: var(--softer-softer-dark-purple);
   z-index: -1;
   border-radius: 1vh;
@@ -142,9 +142,10 @@ body{
   transition: all 0.15s ease-in-out;
 }
 .startBtn{
-  position: absolute;
-  left: 105%;
-  top: 11.5vh;
+  position: fixed;
+  left: 87vw;
+  top: 70vh;
+  width: 10vw;
   font-size: 3vh;
   padding: 1vh;
   font-family: monospace;
@@ -285,9 +286,9 @@ body{
   max-width: 17vw;
   height: max-content;
   max-height: 38vh;
-  position: absolute;
-  top: -50vh;
-  left: 98%;
+  position: fixed;
+  top: 14vh;
+  left: 81vw;
   font-size: 2vh;
   padding: 1vh;
   font-family: monospace;

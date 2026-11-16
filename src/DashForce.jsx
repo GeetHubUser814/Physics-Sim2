@@ -1,6 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import { useRampStore } from './RampSimStore';
 import ForceFBD from './ForceFBD';
+import ForceGraph from './ForceGraph';
+import ForceDer from './ForceDer';
+import Mather from './Mather';
 
 function DashForce() {
 
@@ -9,6 +12,7 @@ function DashForce() {
     const [isOpenAtwood, setIsOpenAtwood] = useState(false);
     const [isOpenFBD, setIsOpenFBD] = useState(false);
     const [isOpenGraph, setIsOpenGraph] = useState(false);
+    const [isOpenEQ, setIsOpenEQ] = useState(false);
 
     const [FBDDisplay, setFBDDisplay] = useState({
         isRamp: false,
@@ -79,10 +83,11 @@ function DashForce() {
     function FBDBtn(){
         setSubForce("FBD");
         setIsOpenFBD((prev) => !prev);
-        if(isOpenAtwood || isOpenRamp || isOpenGraph){
+        if(isOpenAtwood || isOpenRamp || isOpenGraph || isOpenEQ){
             setIsOpenAtwood(false);
             setIsOpenRamp(false);
             setIsOpenGraph(false);
+            setIsOpenEQ(false);
         }
         window.dispatchEvent(closeCanvas);
         setFBDDisplay({
@@ -92,16 +97,21 @@ function DashForce() {
     function graphBtn(){
         setIsOpenGraph((prev) => !prev);
         setSubForce("graph");
-        if(isOpenAtwood || isOpenFBD || isOpenRamp){
+        if(isOpenAtwood || isOpenFBD || isOpenRamp || isOpenEQ){
             setIsOpenAtwood(false);
             setIsOpenFBD(false);
             setIsOpenRamp(false);
+            setIsOpenEQ(false);
         }
         setFBDDisplay({
             ...false,
         });
         window.dispatchEvent(closeCanvas);
-        console.log("graphBtn");
+    }
+    function eqBtn(){
+        setIsOpenEQ((prev) => !prev);
+        setIsOpenFBD(false);
+        setIsOpenGraph(false);
     }
 
     const setStoreRampSim = useRampStore((state) => state.setStoreRampSim);
@@ -194,14 +204,73 @@ function DashForce() {
             setIsRunning(false);
         }
     }
+    function equationsList(inputArray){
+        return(
+            <div className="eqContainer">
+                <div className="eqMemorizeContainer">
+                    <p><span className="eqMemorizeKey">*</span>: memorize</p>
+                    <p><span className="eqMemorizeKey eqGoodToKnowKey">*</span>: good to know</p>
+                </div>
+                {inputArray.map((_, rowIndex) => (
+                    <div className="eqSub" key={rowIndex}>
+                        {(inputArray[rowIndex][3] === 1) && (
+                            <p className="eqMemorize">*</p>
+                        )}
+                        {(inputArray[rowIndex][3] === 2) && (
+                            <p className="eqMemorize eqGoodToKnow">*</p>
+                        )}
+                        <p className="eqDesc">{inputArray[rowIndex][0]}</p>
+                        <p className="eqBorder">|</p>
+                        <p className="eq">
+                            {inputArray[rowIndex][1]}    
+                        </p>                    
 
+                        <button className="dashBtn" onClick={() => showDerivation(inputArray[rowIndex][2])}>derivation</button>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+    {/* maybe add niche equations such as atwood accel, atwood tension, ramp accel, orbital speed, max flat curve speed, min top of vl speed */}
+    const [derivationShow, setDerivationShow] = useState({
+        fma: false,
+        cm: false,
+        spring: false,
+        fg: false,
+        fBigG: false,
+        cent: false,
+    });
+    function showDerivation(show){
+        setDerivationShow((prev) => ({
+            ...prev,
+            [show]: true,
+        }))
+    }
+    function getDerivation(){
+        for(let i = 0; i < Object.keys(derivationShow).length; i++){
+            const key = Object.keys(derivationShow)[i];
+            if(derivationShow[key]){
+                return key;
+            }
+        }
+        return null;
+    }
+    function derivation(der){
+        return(
+            <div className="derBigContainer">
+                <div className="derContainer"></div>
+                <p className="derCloseBtn" onClick={() => setDerivationShow((prev) => ({...false}))}>X</p>
+                {der}
+            </div>
+        );
+    }
     return(
         <div>
             {isOpen && (
                 <div className="kinematicsBtns">
                     <button className="dashBtn" onClick={FBDBtn}>Free Body Diagrams</button>
                     <button className="dashBtn" onClick={graphBtn}>Graphs</button>
-                    <button className="dashBtn">Equations</button>{/*page with equations used, given equations on exam and niche equations*/}
+                    <button className="dashBtn" onClick={eqBtn}>Equations</button>{/*page with equations used, given equations on exam and niche equations*/}
                 </div>
             )}
             {(isOpen && isOpenRamp) && (
@@ -260,6 +329,38 @@ function DashForce() {
                 <div className="forceFBDContainer">
                     <ForceFBD show={getFBDDisplay()} />
                 </div>
+            )}
+            {(isOpen && isOpenGraph) && (
+                <div className="graphContainer">
+                    <ForceGraph/>
+                </div>
+            )}
+            {(isOpen && isOpenEQ) && (
+                equationsList([
+                    ["first kinematics equation", 
+                        <Mather math="v_f = v_0 + a t"/>
+                    , "fma", 1],
+                    ["second kinematics equation", 
+                        <Mather math="\Delta x = v_0 t + \frac{1}{2} a t^2"/>
+                    , "cm", 1],
+                    ["third kinematics equation",
+                        <Mather math="v_f^2 = v_0^2 + 2 a \Delta x"/>
+                    , "spring", 1],
+                    ["average velocity-displacement",
+                        <Mather math="{\large \frac{v_0 + v_f}{2} = \frac{x_f - x_0}{t}}"/>
+                    , "fg", 2],
+                    ["range (no elevation)",
+                        <Mather math="R = \frac{v_0^2 sin(2\theta)}{g}"/>
+                    , "fBigG"],
+                    ["max height",
+                        <Mather math="y_f = y_0 + \frac{( v_0 sin(\theta) )^2}{2g}"/>
+                    , "cent"]
+                ])
+            )}
+            {(isOpen && isOpenEQ && derivationShow.fma) && (
+                derivation(
+                <ForceDer eq={getDerivation()}/>
+                )
             )}
         </div>
     );

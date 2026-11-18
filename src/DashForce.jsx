@@ -337,24 +337,24 @@ function DashForce() {
             )}
             {(isOpen && isOpenEQ) && (
                 equationsList([
-                    ["first kinematics equation", 
-                        <Mather math="v_f = v_0 + a t"/>
+                    ["newton's second law", 
+                        <Mather math="\sum F = m a"/>
                     , "fma", 1],
-                    ["second kinematics equation", 
-                        <Mather math="\Delta x = v_0 t + \frac{1}{2} a t^2"/>
+                    ["center of mass", 
+                        <Mather math="x_{cm} = \frac{1}{M} \sum m_i x_i"/>
                     , "cm", 1],
-                    ["third kinematics equation",
-                        <Mather math="v_f^2 = v_0^2 + 2 a \Delta x"/>
+                    ["spring force",
+                        <Mather math="F_s = k \Delta x"/>
                     , "spring", 1],
-                    ["average velocity-displacement",
-                        <Mather math="{\large \frac{v_0 + v_f}{2} = \frac{x_f - x_0}{t}}"/>
-                    , "fg", 2],
-                    ["range (no elevation)",
-                        <Mather math="R = \frac{v_0^2 sin(2\theta)}{g}"/>
-                    , "fBigG"],
-                    ["max height",
-                        <Mather math="y_f = y_0 + \frac{( v_0 sin(\theta) )^2}{2g}"/>
-                    , "cent"]
+                    ["uniform force of gravity",
+                        <Mather math="F_g = mg"/>
+                    , "fg", 1],
+                    ["force of gravity",
+                        <Mather math="F_g = G \frac{M m }{R^2}"/>
+                    , "fBigG", 1],
+                    ["centripetal force",
+                        <Mather math="F_c = \frac{m v^2}{r}"/>
+                    , "cent", 1]
                 ])
             )}
             {(isOpen && isOpenEQ && derivationShow.fma) && (

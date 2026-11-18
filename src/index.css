@@ -45,7 +45,7 @@ body{
 }
 .slideOpener{
   position: absolute;
-  left: -4.1vh;
+  left: -4.2vh;
   width: 100vh;
   height: 3.5vh;
   transform: rotate(90deg);
@@ -579,7 +579,8 @@ body{
   height: 6vh;
   right: -0.5vw;
   padding: 0vh 1.2vw;
-  background: var(--softer-softer-dark-purple);
+  background: var(--solid-pink);
+  border-color: var(--solid-pink);
 }
 .eqSub button:hover{
   background: var(--softer-softer-dark-purple-hover);
@@ -588,7 +589,7 @@ body{
   position: relative;
   left: 0%;
   top: -0.1vh;
-  font-size: 10vh;
+  font-size: 11.1vh;
   color: var(--softer-softer-dark-purple);
 }
 .derBigContainer{
@@ -787,7 +788,7 @@ body{
   --hover-color: rgb(238, 203, 235);
   --text-color: rgb(94, 40, 85);
   --softer-softer-dark-purple: rgb(231, 136, 218);
-  --softer-softer-dark-purple-hover: rgb(234, 136, 221);
+  --softer-softer-dark-purple-hover: rgb(255, 151, 241);
   --softer-dark-purple: rgb(177, 103, 167);
   --ssdp2: rgb(250, 165, 239);
   --pinkish-red: rgb(251, 84, 168);
@@ -797,6 +798,7 @@ body{
   --dash-border-size: 1vh;
   --btn-border-radius: 3vh;
   --display-border-radius: 0.8vh;
+  --solid-pink: rgb(255, 107, 218);
 
   --btn-primary-color: rgb(249, 185, 255);
   --btn-border-color: var(--btn-primary-color);

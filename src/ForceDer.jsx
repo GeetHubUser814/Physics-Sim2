@@ -42,16 +42,11 @@ function ForceDer({eq}){
         <div className="der">
             {(show.fma) && (
                 writeDerivation(
-                    <span>First Kinematics Equation: <Mather math="v_f = v_0 + a t"/></span>,
+                    <span>Newton's Second Law: <Mather math="\sum F = ma"/></span>,
                     [
                         [<span>Using the Definition of Acceleration</span>, 
                             <span>
-                                The definition of uniform acceleration is <Mather math="a = \frac{\Delta v}{\Delta t}"/>.
-                                <br></br><br></br>
-                                Change is (new - old) so this becomes <Mather math="a = \frac{v_f - v_0}{t_f - t_0}"/>.
-                                <br></br><br></br>
-                                Assuming time starts at 0, we get <Mather math="a = \frac{v_f - v_0}{t}"/>, and rearranging 
-                                this gives <Mather math="v_f = v_0 + a t"/>
+
                             </span>
                         ]
                     ],
@@ -63,42 +58,8 @@ function ForceDer({eq}){
                     [
                         [<span>Using the Velocity vs. Time Graph</span>, 
                             <span>
-                                The graph of velocity vs time under constant acceleration is a linear graph, 
-                                and the area under this graph is equal to displacement. 
-                                <br></br><br></br>
-                                When we look at 
-                                this graph on the interval from some <Mather math="t_0"/> to some <Mather math="t_f"/>
-                                , we see that the area under the graph is a trapezoid, which we can split into a
-                                rectangle and a triangle. Thus, we can find the area under the graph (the displacement), by
-                                adding the areas of this triangle and this rectangle. 
-                                <br></br>
-                                <Icon size={300}/>
-                                <br></br>
-                                The rectangle has a base 
-                                of <Mather math="\Delta t"/> and a height of <Mather math="v_0"/>, but we will call
-                                the base just <Mather math="t"/>, thus the area of the rectangle is <Mather math="v_0t"/>.
-                                <br></br><br></br>
-                                The triangle also has a base of <Mather math="t"/> aswell as a height 
-                                of <Mather math="(v_f - v_0)"/> or <Mather math="\Delta v"/>, giving it an area of 
-                                <Mather math="\frac{1}{2} \Delta v t"/>. We can subsitute <Mather math="at"/> in 
-                                for <Mather math="\Delta v"/> (definition of acceleration), to give us the area 
-                                of the triangle as <Mather math="\frac{1}{2} a t^2"/>. 
-                                <br></br><br></br>
-                                Thus, adding the area of the 
-                                rectangle and the area of the triangle to find the displacement gives us the 
-                                equation <Mather math="\Delta x = v_0 t + \frac{1}{2} a t^2"/>.
-                                <br></br>
+
                             </span>,
-                        ],
-                        [<span>Using the Average Velocity-Displacement Equation and the First Kinematics Equation</span>,
-                            <span>
-                                The average velocity-displacement equation, derived in another section, can be written as <Mather math="\Delta x = \frac{v_0 + v_f}{2} t"/>. 
-                                <br></br><br></br>
-                                Substituting in the first kinematics equation <Mather math="v_f = v_0 + a t"/> into the average velocity-displacement equation gives us <Mather math="\Delta x = \frac{v_0 + (v_0 + a t)}{2} t"/>.
-                                <br></br><br></br>
-                                Simplifying this, we get <Mather math="\Delta x = v_0 t + \frac{1}{2} a t^2"/>.
-                            </span>
-                        
                         ]
                     ],
                 )
@@ -109,42 +70,9 @@ function ForceDer({eq}){
                     [
                         [<span>Using the First and Second Kinematics Equations</span>,
                             <span>
-                                The first kinematics equation can be written as <Mather math="t = \frac{v_f - v_0}{a}"/>.
-                                <br></br><br></br>
-                                Substituting this into the second kinematics equation <br></br>(<Mather math="\Delta x = v_0 t + \frac{1}{2} a t^2"/>) gives 
-                                us <Mather math="\Delta x = v_0 \frac{v_f - v_0}{a} + \frac{1}{2} a \left(\frac{v_f - v_0}{a}\right)^2"/>.
-                                <br></br><br></br>
-                                This simplifies to <Mather math="\Delta x = \frac{2 v_f v_0 - v_0^2 + (v_f - v_0)^2}{2 a}"/>.
-                                <br></br><br></br>
-                                This further simplifies to <Mather math="\Delta x = \frac{v_f^2 - v_0^2}{2 a}"/>.
-                                or <Mather math="v_f^2 = v_0^2 + 2 a \Delta x"/>.
+
                             </span>
                         
-                        ],
-                        [<span>Using the Average Velocity-Displacement Equation and the First Kinematics Equation</span>,
-                            <span>
-                                The average velocity-displacement equation, derived in another section, can be written as <Mather math="\Delta x = \frac{v_0 + v_f}{2} t"/>. 
-                                <br></br><br></br>
-                                Rearranging the first kinematics equation gives us <Mather math="t = \frac{v_f-v_0}{a}"/>
-                                <br></br><br></br>
-                                Substituting this into the average velocity-displacement equation gives us <Mather math="\Delta x = \frac{(v_0 + v_f)(v_f - v_0)}{2 a}"/>.
-                                <br></br><br></br>
-                                The numerator simplifies to a difference of squares, which gives us <Mather math="\Delta x = \frac{v_f^2 - v_0^2}{2 a}"/>, which
-                                simplifies to <Mather math="v_f^2 = v_0^2 + 2 a \Delta x"/>.
-                            </span>
-                        
-                        ],
-                        [<span>Using the Work Energy Theorem</span>,
-                            <span>
-                                The work-energy theorem states that the net work done on an object equals the change in its kinetic energy: <Mather math="W_{net} = \Delta K"/>.
-                                <br></br><br></br>
-                                The definition of net work is <Mather math="W_{net} = F_{net} \Delta x"/>, and using Newton's second law, <Mather math="F_{net} = m a"/>, we get <Mather math="W_{net} = m a \Delta x"/>.
-                                <br></br><br></br>
-                                Substituting in change in kinetic energy for work gives us <br></br> <Mather math="\frac{1}{2} m v_f^2 - \frac{1}{2} m v_0^2 = m a \Delta x"/>.
-                                <br></br><br></br>
-                                Dividing both sides by <Mather math="m"/> gives us <Mather math="\frac{1}{2} v_f^2 - \frac{1}{2} v_0^2 = a \Delta x"/>, and 
-                                solving for <Mather math="v_f^2"/> gives us <Mather math="v_f^2 = v_0^2 + 2 a \Delta x"/>.
-                            </span>
                         ]
 
                     ],
@@ -156,44 +84,8 @@ function ForceDer({eq}){
                     [
                         [<span>Using the Velocity vs Time Graph</span>,
                             <span>
-                                The graph of velocity vs time under constant acceleration is a linear graph, 
-                                and the area under this graph is equal to displacement. 
-                                <br></br><br></br>
-                                When we look at 
-                                this graph on the interval from some <Mather math="t_0"/> to some <Mather math="t_f"/>
-                                , we see that the area under the graph is a trapezoid, which we can split into a
-                                rectangle and a triangle. Thus, we can find the area under the graph (the displacement), by
-                                adding the areas of this triangle and this rectangle. 
-                                <br></br>
-                                <Icon size={300}/>
-                                <br></br>
-                                The rectangle has a base 
-                                of <Mather math="\Delta t"/> and a height of <Mather math="v_0"/>, but we will call
-                                the base just <Mather math="t"/>, thus the area of the rectangle is <Mather math="v_0t"/>.
-                                <br></br><br></br>
-                                The triangle also has a base of <Mather math="t"/> aswell as a height 
-                                of <Mather math="(v_f - v_0)"/> or <Mather math="\Delta v"/>, giving it an area of 
-                                <Mather math="\frac{1}{2} \Delta v t"/>.
-                                <br></br><br></br>
-                                Adding the areas of the rectangle and the triangle gives us the total displacement:
-                                <Mather math="\Delta x = v_0 t + \frac{1}{2} \Delta v t"/>, or <br></br> <Mather math="\Delta x = (v_0 + \frac{1}{2}v_f - \frac{1}{2}v_0) t"/>, 
-                                further simplifying to <Mather math="\Delta x = \frac{v_0 + v_f}{2} t"/> or <Mather math="\frac{v_0 + v_f}{2} = \frac{x_f - x_0}{t}"/>.
+
                             </span>
-                        ],
-                        [<span>Using the Definition of Average Velocity, the First Kinematics Equation, and the Second Kinemtics Equation</span>,
-                            <span>
-                                Average velocity under constant acceleration is <Mather math="v_{avg} = \frac{\Delta x}{\Delta t}"/>
-                                <br></br><br></br>
-                                Substituting the second kinematics equation (<Mather math="\Delta x = v_0 t + \frac{1}{2} a t^2"/>) into the definition of average velocity 
-                                gives us <Mather math="v_{avg} = \frac{v_0 t + \frac{1}{2} a t^2}{t}"/> or <Mather math="v_{avg} = v_0 + \frac{1}{2} a t"/>.
-                                <br></br><br></br>
-                                Using the first kinematics equation (<Mather math="v_f = v_0 + a t"/>), we can substitute <Mather math="a t = v_f - v_0"/> into the expression for average velocity, giving 
-                                us <Mather math="v_{avg} = v_0 + \frac{1}{2} (v_f - v_0)"/> or <Mather math="v_{avg} = \frac{v_0 + v_f}{2}"/>.
-                                <br></br><br></br>
-                                This proves that average velocity equals <Mather math="\frac{v_0 + v_f}{2}"/>. Thus circling back to the definition of average
-                                velocity (<Mather math="v_{avg} = \frac{\Delta x}{\Delta t}"/>), we get <br></br><Mather math="\frac{v_0 + v_f}{2} = \frac{x_f - x_0}{t}"/>.
-                            </span>
-                        
                         ]
                     ],
                 )
@@ -280,12 +172,12 @@ function ForceDer({eq}){
             )}
 
             {eqSelector([
-                ["first kinematics equation", "fma"],
-                ["second kinematics equation", "cm"],
-                ["third kinematics equation", "spring"],
-                ["average velocity-displacement equation", "fg"],
-                ["range equation", "fBigG"],
-                ["max height equation", "cent"],
+                ["newton's second law", "fma"],
+                ["center of mass", "cm"],
+                ["spring force", "spring"],
+                ["uniform force of gravity", "fg"],
+                ["force of gravity", "fBigG"],
+                ["centripetal force", "cent"],
             ])}
         </div>
     );

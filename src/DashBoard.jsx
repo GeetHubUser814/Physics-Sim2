@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import DashKinematics from './DashKinematics';
 import DashForce from './DashForce';
+import DashWEP from './DashWEP';
 
 function DashBoard(){
 
@@ -51,7 +52,9 @@ function DashBoard(){
             <div style={fStyle}>
                 <DashForce />
             </div>
-            <p style={wStyle}>Work, Energy, Power</p>
+            <div style={wStyle}>
+                <DashWEP />
+            </div>
             <p style={lStyle}>Linear Momentum</p>
         </div>
     );

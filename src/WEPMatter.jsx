@@ -5,13 +5,13 @@ const WEPMatter = () => {
     const sceneRef = useRef(null);    
 
     useEffect(() => {
-
+        /*
         window.addEventListener("WEPCanvas", WEPCanvasHS);
 
         window.addEventListener("fromForceBtn", otherHide);
         window.addEventListener("fromKinBtn", otherHide);
         window.addEventListener("fromLinearMBtn", otherHide);
-
+        */
         const {Engine, Render, Runner, Bodies, Composite} = Matter;
         const engine = Engine.create();
 

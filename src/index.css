@@ -532,28 +532,38 @@ body{
   top: 68vh;
 }
 .eqContainer{
-  position: absolute;
-  top: -58vh;
-  left: 2.8vw;
+  position: fixed;
+  top: 3vh;
+  left: 7vw;
   background-color: var(--primary-color);
   border: var(--dash-border-size) solid var(--border-color);
   height: 48vh;
-  width: 63vw;
-  padding: 2vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 80vw;
   gap: 1vh;
+}
+.eqSubContainer{
+  position: absolute;
+  margin: 0vh 0vw;
+  width: 80vw;
+  height: 48vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
   overflow-y: auto;
 }
 .eqSub{
+  position: relative;
   height: 9vh;
-  width: 40vw;
+  width: 35vw;
   font-size: 2vh;
+  font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.2vh 1vw;
+  margin: 1vh 0.5vw;
   border: var(--button-border-size) solid var(--softer-softer-dark-purple);
   border-radius: var(--equation-sub-border-radius);
   background-color: var(--btn-primary-color)
@@ -571,8 +581,8 @@ body{
   height: max-content;
   position: relative;
   top: 0.4vh;
-  right: 0vw;
-  font-size: 2.5vh;
+  left: 0vw;
+  font-size: 2.2vh;
 }
 .eqSub button{
   font-size: 1.8vh;
@@ -589,8 +599,10 @@ body{
   position: relative;
   left: 0%;
   top: -0.1vh;
-  font-size: 11.1vh;
-  color: var(--softer-softer-dark-purple);
+  height: 10vh;
+  width: 0.5vw;
+  margin: 0vh 1vw;
+  background-color: var(--softer-softer-dark-purple);
 }
 .derBigContainer{
   position: fixed;
@@ -612,9 +624,9 @@ body{
 }
 .derCloseBtn{
   color: white;
-  position: absolute;
+  position: fixed;
   right: 2vw;
-  top: -7%;
+  top: 0vh;
   font-family: monospace;
   font-size: 8vh;
   border: none;
@@ -672,8 +684,8 @@ body{
 }
 .eqMemorize{
   position: absolute;
-  left: 10vw;
-  margin-top: 3vh;
+  left: -1.2vw;
+  top: -2vh;
   font-size: 8vh;
   font-weight: bolder;
   color: var(--pinkish-red);
@@ -682,15 +694,17 @@ body{
   color: var(--softer-dark-purple);
 }
 .eqMemorizeContainer{
-  position: absolute;
+  position: fixed;
   font-size: 1.5vh;
-  left: 0vw;
-  top: 0vh;
+  right: 5vw;
+  top: 75vh;
   line-height: 1vh;
   width: max-content;
-  height: max-content;
-  border-radius: var(--btn-border-radius);
-  padding: 0vh 1vw;
+  height: 12vh;
+  border-radius: var(--display-border-radius);
+  padding: 1vh 1vw;
+  background: var(--primary-color);
+  border: var(--button-border-size) solid var(--border-color);
 }
 .eqMemorizeKey{
   font-weight: bolder;

@@ -211,23 +211,25 @@ function DashForce() {
                     <p><span className="eqMemorizeKey">*</span>: memorize</p>
                     <p><span className="eqMemorizeKey eqGoodToKnowKey">*</span>: good to know</p>
                 </div>
-                {inputArray.map((_, rowIndex) => (
-                    <div className="eqSub" key={rowIndex}>
-                        {(inputArray[rowIndex][3] === 1) && (
-                            <p className="eqMemorize">*</p>
-                        )}
-                        {(inputArray[rowIndex][3] === 2) && (
-                            <p className="eqMemorize eqGoodToKnow">*</p>
-                        )}
-                        <p className="eqDesc">{inputArray[rowIndex][0]}</p>
-                        <p className="eqBorder">|</p>
-                        <p className="eq">
-                            {inputArray[rowIndex][1]}    
-                        </p>                    
+                <div className="eqSubContainer">
+                    {inputArray.map((_, rowIndex) => (
+                        <div className="eqSub" key={rowIndex}>
+                            {(inputArray[rowIndex][3] === 1) && (
+                                <span className="eqMemorize">*</span>
+                            )}
+                            {(inputArray[rowIndex][3] === 2) && (
+                                <span className="eqMemorize eqGoodToKnow">*</span>
+                            )}
+                            <p className="eqDesc">{inputArray[rowIndex][0]}</p>
+                            <span className="eqBorder"></span>
+                            <p className="eq">
+                                {inputArray[rowIndex][1]}    
+                            </p>                    
 
-                        <button className="dashBtn" onClick={() => showDerivation(inputArray[rowIndex][2])}>derivation</button>
-                    </div>
-                ))}
+                            <button className="dashBtn" onClick={() => showDerivation(inputArray[rowIndex][2])}>explanation</button>
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     }
@@ -259,7 +261,7 @@ function DashForce() {
         return(
             <div className="derBigContainer">
                 <div className="derContainer"></div>
-                <p className="derCloseBtn" onClick={() => setDerivationShow((prev) => ({...false}))}>X</p>
+                <span className="derCloseBtn" onClick={() => setDerivationShow((prev) => ({...false}))}>✗</span>
                 {der}
             </div>
         );
@@ -298,11 +300,11 @@ function DashForce() {
             )}
             {(isOpen && isOpenFBD) && (
                 <div className="containerForm">
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isRamp: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Ramp FBD</button>
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isAtwood: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Atwood FBD</button>
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isSpring: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Spring FBD</button>
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isElevator: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Elevator FBD</button>
-                    <button className="dashBtn" onClick={() => {setFBDDisplay({...false, isCircular: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Circular Motion FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({isRamp: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Ramp FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({isAtwood: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Atwood FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({isSpring: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Spring FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({isElevator: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Elevator FBD</button>
+                    <button className="dashBtn" onClick={() => {setFBDDisplay({isCircular: true}), setIsOpenFBD(false), window.dispatchEvent(coverCanvas);}}>Circular Motion FBD</button>
                 </div>
             )}
             {(isOpen && FBDDisplay.isRamp) && (

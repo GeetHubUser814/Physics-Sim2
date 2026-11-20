@@ -14,13 +14,28 @@ function WEPDProj(){
             });
         });
     }, [])
+    const projPath = (x) => -0.01 * Math.pow(x + 27, 2);
+    const projBall = useMovablePoint([-28, -1], {
+        constrain: ([x, y]) => [x, projPath(x)]
+    });
     return(
         <div className="FBD-container">
-            <Mafs width={dimensions.width} height={dimensions.height}>
-                <Circle
-                    center={[0, 0]}
-                    radius={2}
+            <Mafs width={dimensions.width} height={dimensions.height} viewBox={{x: [-10, 10], y: [-10, 10]}} pan={false} zoom={false}>
+                {/* setting */}
+                <Line.Segment
+                    point1={[-28, -7]}
+                    point2={[100, -7]}
                 />
+                <Line.Segment
+                    point1={[-28, -7]}
+                    point2={[-28, -1]}
+                />
+                <Line.Segment
+                    point1={[-28, -1]}
+                    point2={[-100, -1]}
+                />
+                {/* setting */}
+                {projBall.element}
             </Mafs>
         </div>
     );

@@ -279,14 +279,21 @@ function DashKinematics() {
             </form>
         );
     }
-
+    const [hideSimResult, setHideSimResult] = useState(true);
     function repeatDisplay(inputArray, containerDiv){
         return(
             <div className={containerDiv}>
                 <div className="simResultLabel">Simulation Results</div>
                 {inputArray.map((_, rowIndex) => (
-                    <p key={rowIndex}><span className="simResultBold">{inputArray[rowIndex][0]}</span>: {inputArray[rowIndex][1]}</p>
+                    <span key={rowIndex} className="simResultMiniContainer">
+                        <span className="simResultBold">{inputArray[rowIndex][0]}</span>: 
+                        <span className={hideSimResult ? "a" : "simResultHide"}>
+                            {inputArray[rowIndex][1]}
+                        </span>
+                    </span>
                 ))}
+                <br></br>
+                <button className="dashBtn simResultHideBtn" onClick={() => setHideSimResult((prev) => !prev)}>{hideSimResult ? "hide" : "show"}</button>
             </div>
         );
     }
@@ -388,8 +395,8 @@ function DashKinematics() {
                     ["range", projRange],
                     ["time in air", projTime],
                     ["max height from elevation", projHeight],
-                    ["final velocity(magnitude)", projVelocityMag],
-                    ["final velocity(angle with horizontal)", projVelocityAngle]
+                    ["final velocity (magnitude)", projVelocityMag],
+                    ["final velocity (angle with horizontal)", projVelocityAngle]
                 ], "simResult")
             )}
 

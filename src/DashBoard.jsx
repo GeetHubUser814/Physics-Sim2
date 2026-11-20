@@ -45,7 +45,7 @@ function DashBoard(){
     const lStyle = {position: "absolute", display: hideName === "linear" ? "flex" : "none"};
     return(
         <div className={isOpen ? "dashOpen" : "dashClose"}>
-            <div className={isOpen ? "dashArrowOpen" : "dashArrowClose"} data-label="˅" bob="˄" onClick={hideShowDash}></div>
+            <div className={isOpen ? "dashArrowOpen" : "dashArrowClose"} data-label="" bob="" onClick={hideShowDash}></div>
             <div style={kStyle}>
                 <DashKinematics />
             </div>

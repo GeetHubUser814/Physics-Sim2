@@ -293,7 +293,7 @@ body{
   height: max-content;
   max-height: 38vh;
   position: fixed;
-  top: 14vh;
+  top: 10vh;
   left: 81vw;
   font-size: 2vh;
   padding: 1vh;
@@ -822,6 +822,18 @@ body{
   font-family: monospace;
   color: var(--pinkish-red);
   letter-spacing: 0.3vw;
+}
+.randomizeBtn{
+  position: absolute;
+  top: 20vh;
+  right: 0vw;
+  font-size: 2vh;
+}
+.eDiagramContainer{
+  position: absolute;
+  top: 62vh;
+  right: 1vw;
+  border: solid 0.67vh var(--ssdp2);
 }
 :root{
   --primary-color: rgb(252, 219, 252);

@@ -257,8 +257,37 @@ function DashKinematics() {
         * 
     */
 
-
-    function repeatInputDiv(inputArray){
+    function randomizeInput(arr, sim){
+        //Math.random() * (arr[i][6] - arr[i][5]) + arr[i][5]
+        //console.log(arr[0][0]);
+        if(sim === "proj"){
+            for(let i = 0; i < Object.keys(projectileSim).length; i++){
+                const key = Object.keys(projectileSim)[i];
+                setProjectileSim((prev) => ({
+                    ...prev,
+                    [key]: Math.max((Math.random() * (arr[i][2] - arr[i][1])).toFixed(1), 1),
+                }));
+            }
+        }else if(sim === "oneD"){
+            console.log(arr);
+            for(let i = 0; i < Object.keys(oneDSim).length; i++){
+                const key = Object.keys(oneDSim)[i];
+                if(arr[i][0] === "number"){
+                    setOneDSim((prev) => ({
+                        ...prev,
+                        [key]: Math.max((Math.random() * (arr[i][2] - arr[i][1])).toFixed(1), 1),
+                    }));
+                }else if(arr[i][0] === "checkbox"){
+                    setOneDSim((prev) => ({
+                        ...prev,
+                        [key]: arr[i][1],
+                    }));
+                }
+            }
+        }
+        
+    }
+    function repeatInputDiv(inputArray, sim){
         return(
             <form className="containerForm" onSubmit={handleSubmit}>
                 {inputArray.map((_, rowIndex) => (
@@ -276,6 +305,20 @@ function DashKinematics() {
                     </div>
                 ))}
                 <button className="submitBtn" type="submit">Submit</button>
+                <button className="randomizeBtn dashBtn" onClick={
+                    () => {
+                        let arr = [];
+                        for(let i = 0; i < inputArray.length; i++){
+                            if(inputArray[i][1] === "number"){
+                                arr.push([inputArray[i][1], inputArray[i][5], inputArray[i][6]]);
+                            }else{
+                                let r = parseInt(Math.random() * 2);
+                                arr.push([inputArray[i][1], r === 1 ? true : false]);
+                            }
+                        }
+                        randomizeInput(arr, sim);
+                    }
+                }>randomize</button>
             </form>
         );
     }
@@ -372,19 +415,19 @@ function DashKinematics() {
             )}
             {(isOpen && open.projectile) && (
                 repeatInputDiv([
-                    ["elevation", "number", "elevation", projectileSim.elevation, handleInputChangeProj, 0],
-                    ["velocity", "number", "velocity", projectileSim.velocity, handleInputChangeProj, 0],
+                    ["elevation", "number", "elevation", projectileSim.elevation, handleInputChangeProj, 0, 200],
+                    ["velocity", "number", "velocity", projectileSim.velocity, handleInputChangeProj, 0, 500],
                     ["angle of launch", "number", "launchAngle", projectileSim.launchAngle, handleInputChangeProj, 0, 89],
-                    ["acceleration due to gravity", "number", "gravAcceleration", projectileSim.gravAcceleration, handleInputChangeProj, 0.01]
-                ])
+                    ["acceleration due to gravity", "number", "gravAcceleration", projectileSim.gravAcceleration, handleInputChangeProj, 1, 20]
+                ], "proj")
             )}
             {(isOpen && open.oneDMotion) && (
                 repeatInputDiv([
-                    ["velocity", "number", "velocity", oneDSim.velocity, handleInputChangeOneD],
-                    ["acceleration", "number", "acceleration", oneDSim.acceleration, handleInputChangeOneD],
+                    ["velocity", "number", "velocity", oneDSim.velocity, handleInputChangeOneD, 1, 100],
+                    ["acceleration", "number", "acceleration", oneDSim.acceleration, handleInputChangeOneD, 0, 50],
                     ["acceleration in the same direction as velocity", "checkbox", "accelDirection", oneDSim.accelDirection, handleInputChangeOneD],
-                    ["time", "number", "time", oneDSim.time, handleInputChangeOneD]
-                ])
+                    ["time", "number", "time", oneDSim.time, handleInputChangeOneD, 1, 100]
+                ], "oneD")
             )}
             {(isOpen && (open.projectile || open.oneDMotion)) && (
                 <button className="startBtn" onClick={startSimulation}>{isRunning ? "Stop Simulation" : "Start Simulation"}</button>

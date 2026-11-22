@@ -528,7 +528,6 @@ function ForceFBD({ show }) {
                                     />
                                     <Polygon
                                         points={springMassPoints}
-
                                     />
                                     <Vector
                                         tail={[0, -2.75]}

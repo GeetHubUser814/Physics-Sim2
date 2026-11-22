@@ -32,15 +32,6 @@ function DashWEP() {
             }
         }
     }
-    function getDiagramDisplay(){
-        for(let i = 0; i < Object.keys(diagramDisplay).length; i++){
-            const key = Object.keys(diagramDisplay)[i];
-            if(diagramDisplay[key]){
-                return key;
-            }
-        }
-        return null;
-    }
     function dashOpenClose() {
         setIsOpen((prev) => !prev);
     }
@@ -62,10 +53,10 @@ function DashWEP() {
             )}
             {(isOpen && open.diagram) && (
                 <div className="containerForm">
-                    <button className="dashBtn" onClick={() => { setDiagramDisplay({ projectile: true }), setOpen((prev) => ({ ...prev, diagram: false })), window.dispatchEvent(coverCanvas); }}>Projectile</button>
-                    <button className="dashBtn" onClick={() => { setDiagramDisplay({ ramp: true }), setOpen((prev) => ({ ...prev, diagram: false })), window.dispatchEvent(coverCanvas); }}>Ramp</button>
-                    <button className="dashBtn" onClick={() => { setDiagramDisplay({ spring: true }), setOpen((prev) => ({ ...prev, diagram: false })), window.dispatchEvent(coverCanvas); }}>Spring</button>
-                    <button className="dashBtn" onClick={() => { setDiagramDisplay({ pendulum: true }), setOpen((prev) => ({ ...prev, diagram: false })), window.dispatchEvent(coverCanvas); }}>Pendulum</button>
+                    <button className="dashBtn" onClick={() => { setDiagramDisplay({ projectile: true }), setOpen((prev) => ({ ...prev, diagram: false }))}}>Projectile</button>
+                    <button className="dashBtn" onClick={() => { setDiagramDisplay({ ramp: true }), setOpen((prev) => ({ ...prev, diagram: false }))}}>Ramp</button>
+                    <button className="dashBtn" onClick={() => { setDiagramDisplay({ spring: true }), setOpen((prev) => ({ ...prev, diagram: false }))}}>Spring</button>
+                    <button className="dashBtn" onClick={() => { setDiagramDisplay({ pendulum: true }), setOpen((prev) => ({ ...prev, diagram: false }))}}>Pendulum</button>
                 </div>
             )}
             {(isOpen && diagramDisplay.projectile) && (

@@ -314,13 +314,14 @@ body{
   font-weight: bold;
   position: absolute;
   display: flex;
-  justify-self: center;
+  align-self: center;
   top: -4.67vh;
   background-color: var(--primary-color);
   padding: 0.2vh 2.5vw;
   border: var(--button-border-size) solid;
   border-radius: var(--btn-border-radius);
   border-color: var(--border-color);
+  width: max-content;
 }
 .simResultBold{
   font-weight: bold;
@@ -350,7 +351,7 @@ body{
 .graphContainer{
   position: absolute;
   top: -59vh;
-  left: 10vw;
+  left: 12vw;
   font-size: 1.5vh;
   border: 1.25vh solid;
   border-radius: 0.5vh;
@@ -608,7 +609,7 @@ body{
   position: relative;
   top: 0.4vh;
   left: 0vw;
-  font-size: 2.2vh;
+  font-size: 1vw;
 }
 .eqSub button{
   font-size: 1.8vh;
@@ -834,6 +835,15 @@ body{
   top: 62vh;
   right: 1vw;
   border: solid 0.67vh var(--ssdp2);
+}
+.diagramResetBtn{
+  position: absolute;
+  top: 47.67vh;
+  display: flex;
+  justify-self: center;
+}
+.diagramResetBtn button{
+  width: 10vw;
 }
 :root{
   --primary-color: rgb(252, 219, 252);

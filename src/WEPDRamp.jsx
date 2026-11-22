@@ -71,6 +71,7 @@ function WEPDRamp(){
     const MechEnergy = KEnergy + PEnergy;
 
     //bars
+    const purpleColor = "rgb(159, 118, 255)";
     const xAxisY = -7;
     const graphHorizontalInc = 3.5;
     const graphHorizontalArr = [xAxisY + graphHorizontalInc, xAxisY + graphHorizontalInc * 2, xAxisY + graphHorizontalInc * 3, xAxisY + graphHorizontalInc * 4];
@@ -88,7 +89,7 @@ function WEPDRamp(){
     //bad commit name so i make this comment to trigger change
     return(
         <div className="FBD-container">
-            <Mafs width={dimensions.width} height={dimensions.height} viewBox={{x: [-3, 3], y: [-3, 3]}}>
+            <Mafs width={dimensions.width} height={dimensions.height} viewBox={{x: [-3.5, 3.5], y: [-3.5, 3.5]}} pan={false} zoom={false}>
                 <Polygon
                     points={rampPoints}
                 />
@@ -100,16 +101,19 @@ function WEPDRamp(){
                         {latex(
                             [rMass.x + 0.6,
                             (rMass.y - 2) / 2],
-                            "h"
+                            "h",
+                            "cyan"
                         )}
                         <Line.Segment
                             point1={[rMass.x + 0.4, rMass.y]}
                             point2={[rMass.x + 0.4, -2]}
                             style="dashed"
+                            color="cyan"
                         />
                         <Line.Segment
                             point1={[rMass.x + 0.3, rMass.y]}
                             point2={[rMass.x + 0.5, rMass.y]}
+                            color="cyan"
                         />
                     </>
                 )}
@@ -118,46 +122,56 @@ function WEPDRamp(){
                         <Vector
                             tail={rMass.point}
                             tip={[rMass.x + diagramVelX, rMass.y - diagramVelY]}
+                            color="violet"
                         />
                         {latex(
                             [rMass.x + diagramVelX + 0.2, rMass.y - diagramVelY - 0.1],
-                            "v"
+                            "v",
+                            "violet"
                         )}
                         {latex(
-                            [(indicatorLeft[0] + indicatorRight[0]) / 2 - 2 * distIndicatorSmall * Math.sin(theta), (indicatorLeft[1] + indicatorRight[1]) / 2 - 2 * distIndicatorSmall * Math.cos(theta)],
-                            "d"
+                            [(indicatorLeft[0] + indicatorRight[0]) / 2 - 3 * distIndicatorSmall * Math.sin(theta), (indicatorLeft[1] + indicatorRight[1]) / 2 - 3 * distIndicatorSmall * Math.cos(theta)],
+                            "d",
+                            purpleColor
                         )}
                     
                         <Line.Segment
                             point1={indicatorLeft}
                             point2={indicatorRight}
                             style="dashed"
+                            color={purpleColor}
                         />
                         <Line.Segment
                             point1={[indicatorLeft[0] - distIndicatorSmall * Math.sin(theta), indicatorLeft[1] - distIndicatorSmall * Math.cos(theta)]}
                             point2={[indicatorLeft[0] + distIndicatorSmall * Math.sin(theta), indicatorLeft[1] + distIndicatorSmall * Math.cos(theta)]}
+                            color={purpleColor}
                         />
                         <Line.Segment
                             point1={[indicatorRight[0] - distIndicatorSmall * Math.sin(theta), indicatorRight[1] - distIndicatorSmall * Math.cos(theta)]}
                             point2={[indicatorRight[0] + distIndicatorSmall * Math.sin(theta), indicatorRight[1] + distIndicatorSmall * Math.cos(theta)]}
+                            color={purpleColor}
                         />
                     </>
                 )}
                 <Vector
                     tail={pointOfContact}
                     tip={frictionEnd}
+                    color={purpleColor}
                 />
                 <Vector
                     tail={rMass.point}
                     tip={[rMass.x, rMass.y - mass * 3]}
+                    color="cyan"
                 />
                 {latex(
                     [rMass.x, rMass.y - mass * 3 - 0.3],
-                    "F_g"
+                    "F_g",
+                    "cyan"
                 )}
                 {latex(
-                    [frictionEnd[0] - 0.3, frictionEnd[1] + 0.15],
-                    "F_f"
+                    [frictionEnd[0] - 0.3, frictionEnd[1] + 0.25],
+                    "F_f",
+                    purpleColor
                 )}
 
                 {rMass.element}
@@ -208,7 +222,7 @@ function WEPDRamp(){
                     />
                     <Polygon
                         points={FBar}
-                        color="rgb(150, 105, 255)"
+                        color={purpleColor}
                         fillOpacity={1}
                     />
                     {latex(

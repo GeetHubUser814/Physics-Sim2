@@ -38,8 +38,8 @@ function WEPDProj(){
     const projPath = (x) => Math.tan(pInfo.theta) * (x - pInfo.x) - (9.8 / (2 * Math.pow(pInfo.v * Math.cos(pInfo.theta), 2))) * Math.pow(x - pInfo.x, 2) + pInfo.y;
     const projBall = useMovablePoint([pInfo.x, pInfo.y], {
         constrain: ([x, y]) => {
-            const clampedX = Math.max(Math.min(x, pInfo.x + range), pInfo.x)
-            return [clampedX, projPath(clampedX)]
+            const clampedX = Math.max(Math.min(x, pInfo.x + range), pInfo.x);
+            return [Math.max(clampedX, projBall.x), projPath(Math.max(clampedX, projBall.x))];
         }
     });
     const velocityVectorScaler = 0.35;
@@ -95,11 +95,24 @@ function WEPDProj(){
                     color="violet"
                 />
                 <Line.Segment
-                    point1={projBall.point}
-                    point2={[projBall.point[0], pInfo.floorY]}
+                    point1={[projBall.x + 0.6, projBall.y]}
+                    point2={[projBall.point[0] + 0.6, pInfo.floorY]}
                     style="dashed"
                     color="cyan"
                 />
+                <Line.Segment
+                    point1={[projBall.x + 0.2, projBall.y]}
+                    point2={[projBall.x + 1, projBall.y]}
+                    color="cyan"
+                />
+                <Vector
+                    tail={projBall.point}
+                    tip={[projBall.x, projBall.y - 4]}
+                />
+                {latex(
+                    [projBall.x, projBall.y - 5],
+                    "F_g"
+                )}
                 {(projBall.point[1] > pInfo.floorY + 0.01) && (
                     latex(
                         [projBall.point[0] + 1,
@@ -117,6 +130,9 @@ function WEPDProj(){
 
                 {projBall.element}
             </Mafs>
+            <div className="diagramResetBtn">
+                <button className="dashBtn" onClick={() => projBall.setPoint([pInfo.x, pInfo.y])}>reset</button>
+            </div>
             <div className="eDiagramContainer">
                 <Mafs width={dimensions.width * 0.45} height={dimensions.height * 0.55} viewBox={{x: [-10, 10], y: [-10, 10]}}>
                     <Line.Segment

@@ -838,12 +838,12 @@ body{
 }
 .diagramResetBtn{
   position: absolute;
-  top: 47.67vh;
+  top: 47vh;
   display: flex;
   justify-self: center;
 }
 .diagramResetBtn button{
-  width: 10vw;
+  width: 15vw;
 }
 :root{
   --primary-color: rgb(252, 219, 252);

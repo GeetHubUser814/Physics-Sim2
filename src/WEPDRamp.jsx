@@ -85,6 +85,7 @@ function WEPDRamp(){
     const UBar = createBar(bars.UX - bars.halfW, bars.UX + bars.halfW, xAxisY, 0.743 * PEnergy + xAxisY);
     const FBar = createBar(bars.FX - bars.halfW, bars.FX + bars.halfW, xAxisY, 0.743 * FWork + xAxisY);
     const EBar = createBar(bars.EX - bars.halfW, bars.EX + bars.halfW, xAxisY, 0.743 * MechEnergy + xAxisY);
+    //bad commit name so i make this comment to trigger change
     return(
         <div className="FBD-container">
             <Mafs width={dimensions.width} height={dimensions.height} viewBox={{x: [-3, 3], y: [-3, 3]}}>

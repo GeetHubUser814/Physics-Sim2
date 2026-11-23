@@ -82,7 +82,7 @@ function WEPDRamp(){
         FX: 4,
         halfW: 2,
     }
-    const KBAr = createBar(bars.KX - bars.halfW, bars.KX + bars.halfW, xAxisY, 0.743 * KEnergy + xAxisY);
+    const KBar = createBar(bars.KX - bars.halfW, bars.KX + bars.halfW, xAxisY, 0.743 * KEnergy + xAxisY);
     const UBar = createBar(bars.UX - bars.halfW, bars.UX + bars.halfW, xAxisY, 0.743 * PEnergy + xAxisY);
     const FBar = createBar(bars.FX - bars.halfW, bars.FX + bars.halfW, xAxisY, 0.743 * FWork + xAxisY);
     const EBar = createBar(bars.EX - bars.halfW, bars.EX + bars.halfW, xAxisY, 0.743 * MechEnergy + xAxisY);
@@ -206,7 +206,7 @@ function WEPDRamp(){
 
                     ))}
                     <Polygon
-                        points={KBAr}
+                        points={KBar}
                         color="violet"
                         fillOpacity={1}
                     />

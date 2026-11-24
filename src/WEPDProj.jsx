@@ -108,10 +108,12 @@ function WEPDProj(){
                 <Vector
                     tail={projBall.point}
                     tip={[projBall.x, projBall.y - 4]}
+                    color="cyan"
                 />
                 {latex(
                     [projBall.x, projBall.y - 5],
-                    "F_g"
+                    "F_g",
+                    "cyan"
                 )}
                 {(projBall.point[1] > pInfo.floorY + 0.01) && (
                     latex(
